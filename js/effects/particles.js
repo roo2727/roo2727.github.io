@@ -20,7 +20,12 @@
     return min + Math.random() * (max - min);
   }
 
-  function createParticles(canvas) {
+  /**
+   * @param {HTMLCanvasElement} canvas
+   * @param {{density?: number}} [options] density: 기본 개수 대비 배율 (1 = 타이틀 화면)
+   */
+  function createParticles(canvas, options) {
+    var density = (options && options.density) || 1;
     var ctx = canvas.getContext('2d');
     var reduceMotion = global.matchMedia('(prefers-reduced-motion: reduce)');
     var w = 0;
@@ -82,7 +87,7 @@
     function populate() {
       items = [];
       Object.keys(COUNTS).forEach(function (kind) {
-        var n = Math.round(COUNTS[kind] * Math.min(1.2, Math.max(0.45, (w * h) / (1440 * 900))));
+        var n = Math.round(COUNTS[kind] * density * Math.min(1.2, Math.max(0.45, (w * h) / (1440 * 900))));
         for (var i = 0; i < n; i++) items.push(spawn(kind, true));
       });
     }

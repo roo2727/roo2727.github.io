@@ -15,8 +15,6 @@
 
   var logo = doc.getElementById('logo');
   var startBtn = doc.getElementById('start-btn');
-  var themeSwitch = doc.getElementById('theme-switch');
-  var langBtns = Array.prototype.slice.call(doc.querySelectorAll('[data-lang]'));
   var rippleSvg = doc.querySelector('.svg-defs');
 
   /* ---------- 초기 문구 적용 ---------- */
@@ -55,30 +53,10 @@
     LIFE.transition.go(LOBBY_URL);
   });
 
-  /* ---------- 언어 ---------- */
-  function syncLang() {
-    var lang = LIFE.i18n.get();
-    langBtns.forEach(function (btn) {
-      btn.setAttribute('aria-pressed', String(btn.getAttribute('data-lang') === lang));
-    });
-  }
-
-  langBtns.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      LIFE.i18n.set(btn.getAttribute('data-lang'));
-    });
-  });
-  doc.addEventListener('life:langchange', syncLang);
-  syncLang();
-
-  /* ---------- 테마 ---------- */
-  function syncTheme() {
-    themeSwitch.setAttribute('aria-checked', String(LIFE.theme.get() === 'night'));
-  }
-
-  themeSwitch.addEventListener('click', LIFE.theme.toggle);
-  doc.addEventListener('life:themechange', syncTheme);
-  syncTheme();
+  /* ---------- 언어 · 테마 ---------- */
+  var controls = LIFE.controls.bind(doc);
+  var langBtns = controls.langButtons;
+  var themeSwitch = controls.themeSwitches[0];
 
   /* ---------- 키보드 조작 ---------- */
   var menuOrder = [startBtn].concat(langBtns, [themeSwitch]);

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -30 300 290" width="300" height="290">
+  <!-- LIFE 임시 섬 일러스트: interests (night). js/config/worldmap.js 에서 경로만 바꿔 교체 -->
+  <defs>
+    <linearGradient id="rock" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#24324d"/><stop offset="1" stop-color="#151f33"/></linearGradient>
+    <filter id="glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="5"/></filter>
+  </defs>
+  <path d="M30 120 L57 145 L83 175 L110 193 L137 237 L163 236 L190 200 L217 158 L243 129 L270 120 Z" fill="url(#rock)"/><path d="M60 137 q10 20 4 34" stroke="#151f33" stroke-width="2" fill="none" opacity="0.5"/><path d="M95 142 q10 25 4 36" stroke="#151f33" stroke-width="2" fill="none" opacity="0.5"/><path d="M130 143 q10 15 4 44" stroke="#151f33" stroke-width="2" fill="none" opacity="0.5"/><path d="M165 142 q10 16 4 42" stroke="#151f33" stroke-width="2" fill="none" opacity="0.5"/><path d="M200 139 q10 25 4 32" stroke="#151f33" stroke-width="2" fill="none" opacity="0.5"/><path d="M235 139 q10 25 4 41" stroke="#151f33" stroke-width="2" fill="none" opacity="0.5"/><path d="M77 130 q-5 20 4 42" stroke="#2f6461" stroke-width="2" fill="none" opacity="0.8"/><path d="M128 130 q-4 20 2 50" stroke="#2f6461" stroke-width="2" fill="none" opacity="0.8"/><path d="M167 130 q-6 20 -1 31" stroke="#2f6461" stroke-width="2" fill="none" opacity="0.8"/><path d="M204 130 q-2 20 4 39" stroke="#2f6461" stroke-width="2" fill="none" opacity="0.8"/><path d="M28 168 l14 -4 l10 6 l-10 18 Z" fill="#24324d"/><path d="M262 178 l12 -3 l8 5 l-8 14 Z" fill="#24324d"/>
+  <ellipse cx="150" cy="120" rx="122" ry="28" fill="#3b4f72"/>
+  <ellipse cx="150" cy="116" rx="118" ry="25" fill="#2f6461"/>
+  <ellipse cx="140" cy="111" rx="92" ry="15" fill="#4f8f86" opacity="0.55"/>
+  
+  <rect x="114" y="84" width="72" height="32" fill="#c4d2e4"/>
+  <path d="M112 86 A38 38 0 0 1 188 86 Z" fill="#5a6f9a"/><path d="M146 50 h8 v36 h-8 Z" fill="#3e4f75" opacity="0.6"/>
+  <path d="M154 66 L196 34" stroke="#8a9cb8" stroke-width="7" stroke-linecap="round"/>
+  <rect x="124" y="96" width="12" height="12" rx="2" fill="#7ff5e6"/><rect x="124" y="96" width="12" height="12" rx="2" fill="#7ff5e6" opacity="0.5" filter="url(#glow)"/><rect x="164" y="96" width="12" height="12" rx="2" fill="#7ff5e6"/><rect x="164" y="96" width="12" height="12" rx="2" fill="#7ff5e6" opacity="0.5" filter="url(#glow)"/>
+  <g transform="translate(86 52)"><path d="M0 -16 L8 0 L0 16 L-8 0 Z" fill="#bfe9ff"/><path d="M0 -16 L8 0 L0 16 L-8 0 Z" fill="#7ff5e6" opacity="0.6" filter="url(#glow)"/></g>
+</svg>

@@ -76,3 +76,11 @@
   border-color: var(--c-frame-hi);
   box-shadow: 0 0 14px var(--c-glow);
 }
+
+.placeholder-card__tagline {
+  margin: 0 0 4px !important;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.24em;
+  color: var(--c-accent) !important;
+}

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -30 300 290" width="300" height="290">
+  <!-- LIFE 임시 섬 일러스트: activities (night). js/config/worldmap.js 에서 경로만 바꿔 교체 -->
+  <defs>
+    <linearGradient id="rock" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#24324d"/><stop offset="1" stop-color="#151f33"/></linearGradient>
+    <filter id="glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="5"/></filter>
+  </defs>
+  <path d="M30 120 L57 145 L83 159 L110 207 L137 225 L163 235 L190 189 L217 170 L243 131 L270 120 Z" fill="url(#rock)"/><path d="M60 141 q10 19 4 45" stroke="#151f33" stroke-width="2" fill="none" opacity="0.5"/><path d="M95 143 q10 15 4 38" stroke="#151f33" stroke-width="2" fill="none" opacity="0.5"/><path d="M130 143 q10 23 4 37" stroke="#151f33" stroke-width="2" fill="none" opacity="0.5"/><path d="M165 137 q10 25 4 30" stroke="#151f33" stroke-width="2" fill="none" opacity="0.5"/><path d="M200 141 q10 24 4 31" stroke="#151f33" stroke-width="2" fill="none" opacity="0.5"/><path d="M235 138 q10 18 4 39" stroke="#151f33" stroke-width="2" fill="none" opacity="0.5"/><path d="M78 130 q5 20 3 38" stroke="#2f6461" stroke-width="2" fill="none" opacity="0.8"/><path d="M126 130 q-5 20 -3 47" stroke="#2f6461" stroke-width="2" fill="none" opacity="0.8"/><path d="M165 130 q4 20 4 51" stroke="#2f6461" stroke-width="2" fill="none" opacity="0.8"/><path d="M196 130 q3 20 3 32" stroke="#2f6461" stroke-width="2" fill="none" opacity="0.8"/><path d="M25 168 l14 -4 l10 6 l-10 18 Z" fill="#24324d"/><path d="M262 178 l12 -3 l8 5 l-8 14 Z" fill="#24324d"/>
+  <ellipse cx="150" cy="120" rx="122" ry="28" fill="#3b4f72"/>
+  <ellipse cx="150" cy="116" rx="118" ry="25" fill="#2f6461"/>
+  <ellipse cx="140" cy="111" rx="92" ry="15" fill="#4f8f86" opacity="0.55"/>
+  
+  <path d="M86 114 L118 64 L150 114 Z" fill="#5a6f9a"/><path d="M118 64 L150 114 L132 114 Z" fill="#3e4f75"/><path d="M110 114 L118 92 L126 114 Z" fill="#151f33"/>
+  <path d="M150 114 L176 76 L202 114 Z" fill="#c4d2e4"/><path d="M176 76 L202 114 L188 114 Z" fill="#8a9cb8"/>
+  <path d="M214 114 V40" stroke="#8a9cb8" stroke-width="3"/><path d="M214 42 h34 l-8 10 l8 10 h-34 Z" fill="#5fe3d3"/>
+  <circle cx="168" cy="118" r="10" fill="#7ff5e6" opacity="0.6" filter="url(#glow)"/><path d="M162 120 L168 106 L174 120 Z" fill="#bfe9ff"/>
+</svg>
