@@ -268,14 +268,21 @@
    3. 타이틀 UI 레이아웃
    ========================================================================== */
 .title-ui {
+  /* 좌측 UI 컨테이너: 로고 · START · 설정 줄이 하나의 세로 중심축을 공유한다.
+     --logo-w: 로고 너비 (이전 대비 약 18% 확대)
+     --btn-w : START 버튼 너비 (이전 480px → 576px, 20% 확대. 로고보다 넓어지지 않음) */
+  --logo-w: clamp(330px, 44.8vw, 780px);
+  --btn-w: min(576px, var(--logo-w));
   position: relative;
   z-index: 10;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  width: min(640px, 46vw);
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--logo-w) * 0.1);
+  width: calc(var(--logo-w) + clamp(20px, 5.5vw, 110px));
   height: 100%;
-  padding: clamp(40px, 9vh, 110px) 0 clamp(40px, 13vh, 150px) clamp(20px, 5.5vw, 110px);
+  padding: clamp(24px, 6vh, 80px) 0 clamp(40px, 12vh, 140px) clamp(20px, 5.5vw, 110px);
 }
 
 /* ==========================================================================
@@ -294,12 +301,16 @@
    (전환할 때마다 등장 연출이 반복되지 않음)
    ========================================================================== */
 .logo {
-  --logo-w: clamp(280px, 38vw, 660px);
   position: relative;
   display: block;
+  flex: none;
   width: var(--logo-w);
   margin: 0;
   line-height: 0;
+  /* 시각적 중심 보정: 730px 캔버스에서 글자(L 왼쪽 x120 ~ E 오른쪽 x600)와
+     양옆 장식(x13 ~ x707)의 실제 중심은 x360 으로, 캔버스 중심(x365)보다 5px 왼쪽에 있다.
+     투명 여백이 아닌 보이는 그림의 중심이 축에 오도록 오른쪽으로 5/730 만큼 옮긴다. */
+  translate: 0.685% 0;
 }
 
 .logo__stage {
@@ -649,8 +660,9 @@
 .title-menu {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: clamp(18px, 3.2vh, 30px);
+  align-items: center;
+  gap: clamp(16px, 2.8vh, 28px);
+  width: var(--btn-w);
 }
 
 /* START 2.6초, 언어·낮밤 설정 2.9초에 차례로 등장 */
@@ -676,11 +688,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: min(480px, 100%);
+  width: 100%;
   aspect-ratio: 500 / 84;
   color: var(--c-label);
   font-family: var(--font-display);
-  font-size: clamp(1.125rem, 1.89vw, 1.71rem); /* 기존 clamp(1.25rem, 2.1vw, 1.9rem) 의 90% */
+  /* 글자는 버튼과 같은 비율(20%)로 커진다: 이전 clamp(1.125rem, 1.89vw, 1.71rem) × 1.2 */
+  font-size: clamp(1.35rem, 2.27vw, 2.05rem);
   font-weight: 500;
   letter-spacing: 0.1em;
   -webkit-tap-highlight-color: transparent;
@@ -867,12 +880,13 @@
 .settings-row {
   display: flex;
   align-items: center;
+  justify-content: center;
   flex-wrap: nowrap;
-  gap: 12px 14px;
-  width: min(480px, 100%);
+  gap: 12px 16px;
+  width: 100%;
   padding: 0 5%;
   color: var(--c-text);
-  font-size: 1.02rem;
+  font-size: 1.1rem; /* 이전 1.02rem → 약 8% 확대 */
 }
 
 .settings-row::before,
@@ -890,7 +904,7 @@
 
 .settings-row__divider {
   width: 1px;
-  height: 18px;
+  height: 20px;
   background: var(--c-frame);
   opacity: 0.5;
 }
@@ -904,8 +918,8 @@
 
 .setting__icon {
   position: relative;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   fill: none;
   stroke: var(--c-text);
   stroke-width: 1.5;
@@ -927,6 +941,26 @@
 
 .setting__label {
   text-shadow: 0 0 8px var(--c-veil);
+}
+
+/* 타이틀 화면에서만 언어·테마 조작을 약 8% 키운다 (디자인은 그대로, 로비 등 다른 페이지는 영향 없음) */
+.settings-row .seg__btn {
+  font-size: 0.93rem;
+  padding: 1px 10px;
+}
+
+.settings-row .switch {
+  width: 50px;
+  height: 26px;
+}
+
+.settings-row .switch__thumb {
+  width: 20px;
+  height: 20px;
+}
+
+.settings-row .switch[aria-checked='true'] .switch__thumb {
+  transform: translateX(24px);
 }
 
 /* ==========================================================================
@@ -961,6 +995,7 @@
    ========================================================================== */
 @media (max-width: 900px) {
   .title-ui {
+    --logo-w: min(88vw, 620px);
     width: 100%;
     padding-right: clamp(20px, 5.5vw, 110px);
   }
@@ -974,9 +1009,6 @@
     background: linear-gradient(90deg, var(--c-veil) 0%, color-mix(in srgb, var(--c-veil) 40%, transparent) 100%);
   }
 
-  .logo {
-    --logo-w: min(92vw, 560px);
-  }
 }
 
 @media (max-width: 540px) {
@@ -992,15 +1024,12 @@
     display: none;
   }
 
-  .title-menu {
-    align-items: center;
-    width: 100%;
-  }
 }
 
 @media (max-height: 620px) {
-  .logo {
-    --logo-w: clamp(260px, 72vh, 560px);
+  .title-ui {
+    --logo-w: clamp(300px, 85vh, 660px);
+    --btn-w: min(576px, var(--logo-w), 80vh);
   }
 }
 
