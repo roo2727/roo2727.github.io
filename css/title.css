@@ -279,10 +279,21 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: calc(var(--logo-w) * 0.1);
+  gap: calc(var(--logo-w) * 0.065);
   width: calc(var(--logo-w) + clamp(20px, 5.5vw, 110px));
   height: 100%;
   padding: clamp(24px, 6vh, 80px) 0 clamp(40px, 12vh, 140px) clamp(20px, 5.5vw, 110px);
+}
+
+/* ---------- 레이아웃 A / B (임시 비교, js/dev/layout-preview.js) ----------
+   두 안 모두 크기와 세로 중심축(로고의 실제 그림 중심 = 버튼 중심)은 같고, 세로 간격만 다르다.
+   A (기본): 위 규칙 그대로. 세 요소를 한 묶음으로 화면 가운데보다 약간 위에, 로고-버튼 간격 좁게.
+   B: 로고는 좌측 상단, START 와 설정 줄은 좌측 중하단에 두어 둘을 떨어뜨린다.
+      화면이 낮아지면 최소 간격(A 와 같은 값)까지만 붙는다. */
+:root[data-layout='b'] .title-ui {
+  justify-content: space-between;
+  padding-top: clamp(32px, 8vh, 110px);
+  padding-bottom: clamp(48px, 15vh, 170px);
 }
 
 /* ==========================================================================

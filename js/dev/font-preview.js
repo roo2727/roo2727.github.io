@@ -42,21 +42,31 @@
   var current = find(read());
   apply(current); // 화면이 그려지기 전에 적용 (깜빡임 방지)
 
-  function buildPanel() {
+  // 개발용 패널(오른쪽 아래). 레이아웃 비교(layout-preview.js)와 같은 패널을 함께 쓴다.
+  function getPanel() {
+    var panel = doc.getElementById('dev-panel');
+    if (panel) return panel;
     var style = doc.createElement('style');
     style.textContent =
-      '.dev-font{position:fixed;right:12px;bottom:12px;z-index:9999;display:flex;align-items:center;gap:8px;' +
+      '#dev-panel{position:fixed;right:12px;bottom:12px;z-index:9999;display:flex;flex-direction:column;gap:6px;' +
       'padding:6px 10px;border:1px dashed rgba(255,255,255,.45);border-radius:6px;background:rgba(10,16,24,.72);' +
       "color:#e8f0f8;font:12px/1.2 'Pretendard',system-ui,sans-serif;backdrop-filter:blur(4px)}" +
-      '.dev-font select{font:inherit;color:#111;background:#f4f4f4;border:0;border-radius:4px;padding:3px 4px}' +
-      '.dev-font select:focus-visible{outline:2px solid #6fe3d6;outline-offset:1px}' +
-      '@media (max-width:520px){.dev-font{left:12px;right:12px;justify-content:space-between}}';
+      '.dev-row{display:flex;align-items:center;justify-content:space-between;gap:8px}' +
+      '#dev-panel select{font:inherit;color:#111;background:#f4f4f4;border:0;border-radius:4px;padding:3px 4px}' +
+      '#dev-panel select:focus-visible{outline:2px solid #6fe3d6;outline-offset:1px}' +
+      '@media (max-width:520px){#dev-panel{left:12px;right:12px}}';
     doc.head.appendChild(style);
+    panel = doc.createElement('div');
+    panel.id = 'dev-panel';
+    panel.setAttribute('role', 'group');
+    panel.setAttribute('aria-label', '개발 확인용 (임시)');
+    doc.body.appendChild(panel);
+    return panel;
+  }
 
+  function buildPanel() {
     var box = doc.createElement('div');
-    box.className = 'dev-font';
-    box.setAttribute('role', 'group');
-    box.setAttribute('aria-label', '한글 폰트 비교 (임시)');
+    box.className = 'dev-row';
 
     var label = doc.createElement('label');
     label.htmlFor = 'dev-font-select';
@@ -82,8 +92,11 @@
 
     box.appendChild(label);
     box.appendChild(select);
-    doc.body.appendChild(box);
+    var panel = getPanel();
+    panel.insertBefore(box, panel.firstChild);
   }
+
+  global.LIFE_DEV_PANEL = getPanel;
 
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', buildPanel);
   else buildPanel();
