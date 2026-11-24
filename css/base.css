@@ -26,13 +26,31 @@
 @property --c-fade        { syntax: '<color>'; inherits: true; initial-value: #02060c; }
 @property --c-chip        { syntax: '<color>'; inherits: true; initial-value: rgba(10, 40, 50, 0.55); }
 
+/* 빛의계승자체 (펀플로·산돌, 무료 / 상업적 사용 가능, 웹사이트 임베딩 '조건부 허용').
+   폰트 파일은 저장소에 포함하지 않는다. 설치되어 있으면 local(), 없으면 assets/fonts/ 의 파일,
+   그것도 없으면 Gowun Batang 으로 대체된다. assets/fonts/README.md 참고. */
+@font-face {
+  font-family: 'HeirofLight';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    local('Sandoll HeirofLight Regular'),
+    local('SandollHeirofLight-Regular'),
+    local('빛의계승자체 Regular'),
+    url('../assets/fonts/HeirofLight-Regular.woff2') format('woff2'),
+    url('../assets/fonts/HeirofLight-Regular.otf') format('opentype');
+}
+
 :root {
   --theme-duration: 1.5s;
   --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
 
+  /* 영문 메인 UI: Cinzel Medium / 한글 메인 UI: 빛의계승자체 Regular / 본문·보조 UI: Pretendard */
   --font-display: 'Cinzel', 'Cormorant Garamond', 'Times New Roman', serif;
-  --font-body: 'Cormorant Garamond', 'Gowun Batang', Georgia, serif;
-  --font-ko: 'Gowun Batang', 'Nanum Myeongjo', serif;
+  --font-ko-display: 'HeirofLight', 'Gowun Batang', 'Nanum Myeongjo', serif;
+  --font-body: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+  --font-ko: var(--font-body);
 
   transition:
     --c-text var(--theme-duration) var(--ease-soft),

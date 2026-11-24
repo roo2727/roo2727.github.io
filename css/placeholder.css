@@ -43,7 +43,7 @@
 }
 
 :root[lang='ko'] .placeholder-card h1 {
-  font-family: var(--font-ko);
+  font-family: var(--font-ko-display);
 }
 
 .placeholder-card p {

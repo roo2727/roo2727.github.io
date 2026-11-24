@@ -680,9 +680,9 @@
   aspect-ratio: 500 / 84;
   color: var(--c-label);
   font-family: var(--font-display);
-  font-size: clamp(1.25rem, 2.1vw, 1.9rem);
-  font-weight: 600;
-  letter-spacing: 0.168em; /* 이전 0.24em 에서 30% 축소 */
+  font-size: clamp(1.125rem, 1.89vw, 1.71rem); /* 기존 clamp(1.25rem, 2.1vw, 1.9rem) 의 90% */
+  font-weight: 500;
+  letter-spacing: 0.1em;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -706,40 +706,34 @@
 .stop-charge-1 { stop-color: var(--btn-charge-1); }
 .stop-charge-2 { stop-color: var(--btn-charge-2); }
 
-/* 금속 테두리 색: 테마의 프레임 색에서 파생 (낮 금속 / 밤 은빛 금속) */
-.stop-metal-hi { stop-color: var(--c-frame-hi); }
-.stop-metal    { stop-color: var(--c-frame); }
-.stop-metal-lo { stop-color: color-mix(in srgb, var(--c-frame) 55%, #1a1a1a); }
-
 .frame-panel { fill: url(#btn-panel); }
 
+/* 테두리: 이전 버전 디자인 */
 .frame-outer {
   fill: none;
-  stroke: url(#btn-metal);
-  stroke-width: 3;
+  stroke: var(--c-frame);
+  stroke-width: 2.2;
   vector-effect: non-scaling-stroke;
+  transition: stroke 0.4s;
 }
 
 .frame-inner {
   fill: none;
-  stroke: url(#btn-metal);
+  stroke: var(--c-frame);
   stroke-width: 1;
-  opacity: 0.6;
+  opacity: 0.5;
   vector-effect: non-scaling-stroke;
 }
 
 .frame-orn path {
   fill: none;
-  stroke: url(#btn-metal);
+  stroke: var(--c-frame);
   stroke-width: 1.6;
-  stroke-linecap: round;
   vector-effect: non-scaling-stroke;
 }
 
 .frame-orn .frame-gem {
-  fill: url(#btn-metal);
-  stroke: color-mix(in srgb, var(--c-frame) 60%, #222);
-  stroke-width: 0.6;
+  fill: var(--c-accent-2);
 }
 
 /* --- 마력 충전 (약 0.48초, 왼쪽 → 오른쪽) --- */
@@ -806,31 +800,35 @@
   vector-effect: non-scaling-stroke;
 }
 
+/* 아이콘과 글자는 같은 색, 버튼 세로 중앙에 맞춘다 */
 .menu-btn__icon {
   position: absolute;
   left: 17%;
   top: 50%;
-  width: 0.8em;
-  height: 0.8em;
+  width: 0.72em;
+  height: 0.72em;
   transform: translateY(-50%);
   fill: currentColor;
-  filter: drop-shadow(0 0 6px var(--c-glow));
 }
 
+/* START 글자: 기존 대비 90% 크기, 자간 0.10em, 과한 그림자·발광 없음 */
 .menu-btn__label {
   position: relative;
+  display: block;
   padding-left: 0.4em;
-  text-shadow:
-    0 1px 1px rgba(0, 0, 0, 0.35),
-    0 0 8px var(--glow-a);
+  line-height: 1;
+  font-weight: 500; /* Cinzel Medium */
+  letter-spacing: 0.1em;
 }
 
-/* 한글: 마루부리(네이버 CDN) → Noto Serif KR → 기본 한글 글꼴. 자간은 이전(0.32em)보다 30% 축소 */
 :root[lang='ko'] .menu-btn__label {
-  font-family: 'MaruBuri', 'Noto Serif KR', var(--font-ko);
-  font-weight: 600;
-  letter-spacing: 0.224em;
+  font-family: var(--font-ko-display);
+  font-weight: 400; /* 빛의계승자체 Regular */
+  letter-spacing: 0.1em;
 }
+
+.page-title .menu-btn { color: #e8f0f8; transition: color var(--theme-duration) var(--ease-soft); }
+:root[data-theme='day'] .page-title .menu-btn { color: #795b32; }
 
 /* 마우스 오버 / 키보드 포커스: 은은한 테두리 빛만 (강한 발광은 충전 완료 때만) */
 .menu-btn:hover .menu-btn__frame,
@@ -839,6 +837,13 @@
     drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35))
     drop-shadow(0 0 5px var(--glow-a));
   transition: filter 0.3s var(--ease-soft);
+}
+
+.menu-btn:hover .frame-outer,
+.menu-btn:focus-visible .frame-outer,
+.menu-btn:hover .frame-orn path,
+.menu-btn:focus-visible .frame-orn path {
+  stroke: var(--c-frame-hi);
 }
 
 /* 충전 완료: 테두리 발광 강화 후 페이지 전환 (크기 변화 없음) */

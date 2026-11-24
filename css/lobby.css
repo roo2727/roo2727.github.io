@@ -113,7 +113,7 @@
 }
 
 :root[lang='ko'] .map-title__name {
-  font-family: var(--font-ko);
+  font-family: var(--font-ko-display);
   letter-spacing: 0.12em;
 }
 
