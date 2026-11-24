@@ -251,99 +251,98 @@
 }
 
 /* ==========================================================================
-   4. LIFE 로고
+   4. LIFE 로고 (assets/ui/logo-day.png, logo-night.png)
+   원본 이미지 2172 × 724. 글자 띠(LIFE)는 세로 270~625px, 가로 약 21~79% 구간.
    ========================================================================== */
 .logo {
-  --logo-size: clamp(4.2rem, 10vw, 10.5rem);
+  /* 화면 크기에 맞춰 너비만 정하고 높이는 이미지 비율로 결정 */
+  --logo-w: clamp(280px, 40vw, 720px);
+  --reveal-delay: 0.3s;
+  --reveal-dur: 2.6s;
   position: relative;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: var(--logo-size);
-  font-weight: 600;
-  line-height: 1;
-}
-
-.logo__row {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.12em;
-  margin-top: 0.55em;
-}
-
-.logo__word {
-  position: relative;
-  display: inline-block;
-  white-space: nowrap;
-  letter-spacing: 0.03em;
-}
-
-.logo__chars,
-.logo__shine,
-.logo__reflection {
   display: block;
+  width: var(--logo-w);
+  margin: 0 0 0 -2%;
+  line-height: 0;
 }
 
-/* --- 글자가 서서히 형성되는 애니메이션 --- */
-.logo__char {
-  display: inline-block;
-  opacity: 0;
-  color: transparent;
-  background: linear-gradient(180deg, var(--c-logo-hi) 8%, var(--c-logo-mid) 46%, var(--c-logo-lo) 62%, var(--c-logo-hi) 96%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  animation: char-form 1.8s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
-  animation-delay: calc(0.4s + var(--i) * 0.3s);
+.logo__art {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 2172 / 724;
 }
 
-.logo__chars {
-  filter:
-    drop-shadow(0 2px 0 var(--c-logo-edge))
-    drop-shadow(0 0 22px var(--c-glow));
+.logo__img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
-@keyframes char-form {
+/* --- 처음 접속 시: 마스크가 왼쪽에서 오른쪽으로 번지며 로고가 형성된다 ---
+   부드러운 경계(투명 → 불투명)를 가진 그라디언트 마스크를 옮기고,
+   동시에 흐림을 걷어내 글자가 '맺히는' 느낌을 준다. */
+.logo__art .logo__img,
+.logo__reflection-band .logo__img {
+  -webkit-mask-image: linear-gradient(100deg, #000 0%, #000 40%, rgba(0, 0, 0, 0.35) 47%, transparent 56%);
+  mask-image: linear-gradient(100deg, #000 0%, #000 40%, rgba(0, 0, 0, 0.35) 47%, transparent 56%);
+  -webkit-mask-size: 320% 100%;
+  mask-size: 320% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: 100% 0;
+  mask-position: 100% 0;
+  animation: logo-reveal var(--reveal-dur) cubic-bezier(0.45, 0.05, 0.25, 1) var(--reveal-delay) forwards;
+}
+
+@keyframes logo-reveal {
   0% {
-    opacity: 0;
-    filter: blur(18px);
-    transform: translateY(0.12em) scale(1.35);
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+    filter: blur(10px) brightness(1.6);
   }
-  55% {
-    opacity: 1;
-    filter: blur(3px);
+  60% {
+    filter: blur(2px) brightness(1.2);
   }
   100% {
-    opacity: 1;
-    filter: blur(0);
-    transform: none;
+    -webkit-mask-position: 0% 0;
+    mask-position: 0% 0;
+    filter: blur(0) brightness(1);
   }
 }
 
-/* --- 완성 후 은은하게 지나가는 빛 --- */
+/* 테마 전환: 두 이미지는 base.css 의 .only-day / .only-night 로 1.5초 교차 페이드 */
+
+/* --- 완성 후 은은하게 지나가는 빛 (로고 알파로 마스킹) --- */
 .logo__shine {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  color: transparent;
-  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.95) 49%, rgba(255, 255, 255, 0.4) 52%, transparent 60%);
+  inset: 0;
+  background: linear-gradient(105deg, transparent 42%, rgba(255, 255, 255, 0.75) 50%, transparent 58%);
   background-size: 300% 100%;
   background-position: 100% 0;
-  -webkit-background-clip: text;
-  background-clip: text;
-  opacity: 0;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  mix-blend-mode: soft-light;
   pointer-events: none;
+  visibility: hidden;
 }
 
-.logo__char-ghost {
-  display: inline-block;
+.logo__shine.only-day {
+  -webkit-mask-image: url('../assets/ui/logo-day.png');
+  mask-image: url('../assets/ui/logo-day.png');
+}
+
+.logo__shine.only-night {
+  -webkit-mask-image: url('../assets/ui/logo-night.png');
+  mask-image: url('../assets/ui/logo-night.png');
 }
 
 .logo.is-formed .logo__shine {
-  opacity: 1;
+  visibility: visible;
   animation: shine 7s ease-in-out 0.3s infinite;
 }
 
@@ -353,150 +352,40 @@
   100% { background-position: 0% 0; }
 }
 
-/* --- 물에 비친 반사 --- */
+/* --- 물 반사: 글자 띠만 잘라 뒤집고, 기존 SVG 물결 필터(#water-ripple)로 일렁이게 --- */
 .logo__reflection {
   position: absolute;
-  top: 100%;
   left: 0;
+  top: 86%;
   width: 100%;
-  margin-top: -0.3em;
-  opacity: 0.42;
+  aspect-ratio: 2172 / 355;
+  opacity: 0.4;
   transform: scaleY(-1);
-  transform-origin: 50% 50%;
-  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.35) 35%, transparent 72%);
-  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.35) 35%, transparent 72%);
+  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.35) 35%, transparent 75%);
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.35) 35%, transparent 75%);
   filter: url('#water-ripple') blur(0.6px);
   pointer-events: none;
   animation: ripple 5s ease-in-out infinite alternate;
 }
 
-@keyframes ripple {
-  0%   { transform: scaleY(-1) translateX(0) scaleX(1); }
-  50%  { transform: scaleY(-0.97) translateX(0.01em) scaleX(1.012); }
-  100% { transform: scaleY(-1.02) translateX(-0.01em) scaleX(0.994); }
-}
-
-.logo__waterline {
-  position: absolute;
-  top: 100%;
-  left: -12%;
-  right: -12%;
-  height: 2px;
-  margin-top: -0.3em;
-  background: linear-gradient(90deg, transparent, var(--c-accent) 30%, var(--c-frame-hi) 50%, var(--c-accent) 70%, transparent);
-  box-shadow: 0 0 12px var(--c-glow);
-  opacity: 0;
-  transform: scaleX(0.2);
-  transition: opacity 1.4s var(--ease-soft), transform 1.8s var(--ease-soft);
-}
-
-.logo.is-formed .logo__waterline {
-  opacity: 0.6;
-  transform: none;
-}
-
-/* --- 날개 장식 (—✦ LIFE ✦—) --- */
-.logo__wing {
-  position: relative;
-  width: 0.55em;
-  height: 1px;
-  opacity: 0;
-  animation: fade-in 1.6s var(--ease-soft) 1.6s forwards;
-}
-
-.logo__wing--l { background: linear-gradient(90deg, transparent, var(--c-frame)); }
-.logo__wing--r { background: linear-gradient(270deg, transparent, var(--c-frame)); }
-
-.logo__wing::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  width: 0.09em;
-  height: 0.09em;
-  background: var(--c-frame-hi);
-  box-shadow: 0 0 10px var(--c-glow);
-  transform: translateY(-50%) rotate(45deg);
-}
-.logo__wing--l::after { right: 0.12em; }
-.logo__wing--r::after { left: 0.12em; }
-
-/* --- 상단 문장(별/태양) 장식 --- */
-.logo__crest {
-  position: absolute;
-  left: 50%;
-  bottom: 68%;
-  width: 2.6em;
-  height: 0.98em;
-  transform: translateX(-50%);
-  opacity: 0;
-  animation: crest-in 2s var(--ease-soft) 1.4s forwards;
-  pointer-events: none;
-}
-
-.logo__crest .logo__ornament {
+/* 원본 이미지 중 세로 270~625px 구간만 보이도록 잘라낸다 */
+.logo__reflection-band {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
+  overflow: hidden;
+  /* 좌우 날개 장식은 빼고 L~E 글자 폭(약 21%~79%)만 남긴다 */
+  -webkit-mask-image: linear-gradient(90deg, transparent 19.5%, #000 22.5%, #000 78.5%, transparent 81%);
+  mask-image: linear-gradient(90deg, transparent 19.5%, #000 22.5%, #000 78.5%, transparent 81%);
 }
 
-.orn-line {
-  stroke: var(--c-frame);
-  stroke-width: 1.4;
-  opacity: 0.85;
-}
-.orn-line--faint { opacity: 0.35; }
-
-.orn-star {
-  fill: var(--c-frame-hi);
-  filter: drop-shadow(0 0 6px var(--c-glow));
-}
-.orn-star--sm { opacity: 0.8; }
-
-.orn-gem {
-  fill: var(--c-accent);
-  filter: drop-shadow(0 0 6px var(--c-glow));
+.logo__reflection-band .logo__img {
+  top: -76.06%; /* 270 / 355 */
 }
 
-.orn-constellation path {
-  stroke: var(--c-accent-2);
-  stroke-width: 0.8;
-  stroke-dasharray: 3 3;
-  opacity: 0.6;
-}
-.orn-constellation circle { fill: var(--c-frame-hi); }
-
-.orn-rays path {
-  stroke: var(--c-accent);
-  stroke-width: 2.2;
-  stroke-linecap: round;
-}
-.orn-sun {
-  fill: none;
-  stroke: var(--c-frame);
-  stroke-width: 2;
-  filter: drop-shadow(0 0 8px var(--c-glow));
-}
-.orn-sun-core { fill: var(--c-frame-hi); }
-.orn-cloud {
-  fill: var(--c-accent-2);
-  stroke: var(--c-frame);
-  stroke-width: 1.2;
-  opacity: 0.9;
-}
-
-.only-night .orn-star:first-of-type,
-.orn-rays {
-  transform-origin: 200px 74px;
-}
-.orn-rays {
-  animation: spin 40s linear infinite;
-}
-
-@keyframes crest-in {
-  from { opacity: 0; transform: translateX(-50%) translateY(0.08em) scale(0.92); }
-  to   { opacity: 1; transform: translateX(-50%); }
+@keyframes ripple {
+  0%   { transform: scaleY(-1) translateX(0) scaleX(1); }
+  50%  { transform: scaleY(-0.97) translateX(0.2%) scaleX(1.012); }
+  100% { transform: scaleY(-1.02) translateX(-0.2%) scaleX(0.994); }
 }
 
 /* ==========================================================================
@@ -765,7 +654,7 @@
   }
 
   .logo {
-    --logo-size: clamp(3.6rem, 20vw, 7rem);
+    --logo-w: min(92vw, 560px);
   }
 }
 
@@ -790,7 +679,7 @@
 
 @media (max-height: 620px) {
   .logo {
-    --logo-size: clamp(3.4rem, 16vh, 7rem);
+    --logo-w: clamp(260px, 72vh, 560px);
   }
 }
 

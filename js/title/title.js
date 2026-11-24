@@ -1,7 +1,7 @@
 /**
  * LIFE — title.js
  * 타이틀 화면의 동작을 연결한다.
- *   - 로고 형성 완료 감지 → 빛 지나가는 효과 시작
+ *   - 로고 이미지 형성(마스크) 완료 감지 → 빛 지나가는 효과 시작
  *   - START: 페이드아웃 후 메인 로비로 이동
  *   - 언어(KR/EN), 낮/밤 테마 전환
  *   - 키보드 조작(↑↓ 메뉴 이동, ←→ 언어 선택, T 테마 전환)
@@ -21,17 +21,25 @@
   LIFE.i18n.translate();
 
   /* ---------- 로고 ---------- */
+  // 로고 이미지의 마스크 형성 애니메이션(logo-reveal)이 끝나면 빛 효과 시작
+  var formed = false;
   function markFormed() {
+    if (formed) return;
+    formed = true;
     logo.classList.add('is-formed');
   }
 
-  var chars = logo.querySelectorAll('.logo__chars .logo__char');
-  var lastChar = chars[chars.length - 1];
   if (reduceMotion.matches) {
     markFormed();
   } else {
-    lastChar.addEventListener('animationend', markFormed, { once: true });
-    global.setTimeout(markFormed, 3600); // 안전장치
+    logo.querySelector('.logo__art').addEventListener('animationend', function (e) {
+      if (e.animationName === 'logo-reveal') markFormed();
+    });
+    // 안전장치: 이미지 로드 지연 등으로 이벤트를 놓쳐도 시작되도록
+    var style = global.getComputedStyle(logo);
+    var total = (parseFloat(style.getPropertyValue('--reveal-delay')) || 0.3) +
+                (parseFloat(style.getPropertyValue('--reveal-dur')) || 2.6);
+    global.setTimeout(markFormed, total * 1000 + 600);
   }
 
   // 물결 반사 SVG 애니메이션은 모션 감소 시 정지

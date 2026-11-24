@@ -49,48 +49,21 @@
     <h1 class="logo" id="logo">
       <span class="visually-hidden">LIFE</span>
 
-      <span class="logo__row" aria-hidden="true">
-        <span class="logo__wing logo__wing--l"></span>
-        <span class="logo__word">
-          <span class="logo__crest" aria-hidden="true">
-            <!-- 밤: 별과 별자리 -->
-            <svg class="logo__ornament only-night" viewBox="0 0 400 150" fill="none">
-              <path class="orn-line" d="M70 150 A150 150 0 0 1 330 150" />
-              <path class="orn-line orn-line--faint" d="M110 150 A110 112 0 0 1 290 150" />
-              <g class="orn-constellation">
-                <path d="M262 46 L292 62 L318 52 L338 78" />
-                <circle cx="262" cy="46" r="2" /><circle cx="292" cy="62" r="2.4" />
-                <circle cx="318" cy="52" r="1.8" /><circle cx="338" cy="78" r="2.2" />
-              </g>
-              <path class="orn-star" d="M200 4 L206 62 L238 74 L206 86 L200 148 L194 86 L162 74 L194 62 Z" />
-              <circle class="orn-gem" cx="200" cy="74" r="4" />
-              <path class="orn-star orn-star--sm" d="M118 52 L120 62 L130 64 L120 66 L118 76 L116 66 L106 64 L116 62 Z" />
-            </svg>
-            <!-- 낮: 태양과 구름 문양 -->
-            <svg class="logo__ornament only-day" viewBox="0 0 400 150" fill="none">
-              <path class="orn-line" d="M70 150 A150 150 0 0 1 330 150" />
-              <path class="orn-line orn-line--faint" d="M110 150 A110 112 0 0 1 290 150" />
-              <g class="orn-rays">
-                <path d="M200 10 V36 M200 112 V138 M136 74 H162 M238 74 H264 M155 29 L173 47 M227 101 L245 119 M245 29 L227 47 M173 101 L155 119" />
-              </g>
-              <circle class="orn-sun" cx="200" cy="74" r="24" />
-              <circle class="orn-sun-core" cx="200" cy="74" r="9" />
-              <path class="orn-cloud" d="M276 70 q8 -14 22 -6 q10 -12 24 0 q14 -2 12 12 H274 q-8 -2 2 -6 Z" />
-              <path class="orn-cloud" d="M70 92 q6 -10 18 -4 q8 -10 20 0 q10 0 8 10 H68 q-6 -2 2 -6 Z" />
-            </svg>
-          </span>
-          <span class="logo__chars">
-            <span class="logo__char" style="--i:0">L</span><span class="logo__char" style="--i:1">I</span><span class="logo__char" style="--i:2">F</span><span class="logo__char" style="--i:3">E</span>
-          </span>
-          <span class="logo__shine">
-            <span class="logo__char-ghost">L</span><span class="logo__char-ghost">I</span><span class="logo__char-ghost">F</span><span class="logo__char-ghost">E</span>
-          </span>
-          <span class="logo__reflection">
-            <span class="logo__char" style="--i:0">L</span><span class="logo__char" style="--i:1">I</span><span class="logo__char" style="--i:2">F</span><span class="logo__char" style="--i:3">E</span>
-          </span>
-          <span class="logo__waterline"></span>
+      <!-- 로고 이미지: 낮/밤 두 장을 겹쳐 두고 테마에 따라 교차 전환 -->
+      <span class="logo__art" aria-hidden="true">
+        <img class="logo__img only-day" src="assets/ui/logo-day.png" alt="" width="2172" height="724" decoding="async">
+        <img class="logo__img only-night" src="assets/ui/logo-night.png" alt="" width="2172" height="724" decoding="async">
+        <!-- 완성 후 지나가는 빛: 로고 모양으로 마스킹 -->
+        <span class="logo__shine only-day"></span>
+        <span class="logo__shine only-night"></span>
+      </span>
+
+      <!-- 물 반사: LIFE 글자 띠만 잘라서 뒤집는다 (상단 장식 제외) -->
+      <span class="logo__reflection" aria-hidden="true">
+        <span class="logo__reflection-band">
+          <img class="logo__img only-day" src="assets/ui/logo-day.png" alt="" width="2172" height="724" decoding="async">
+          <img class="logo__img only-night" src="assets/ui/logo-night.png" alt="" width="2172" height="724" decoding="async">
         </span>
-        <span class="logo__wing logo__wing--r"></span>
       </span>
     </h1>
 
