@@ -33,6 +33,7 @@ js/
   lobby/                   월드맵 전용 (map.js 그리기, lobby.js 동작)
   pages/placeholder.js     임시 페이지 초기화 (지역 방문 기록)
 assets/
+  ui/logo/day, night/      타이틀 레이어 로고 (L·I·F·E, 중앙, 궤도 별, 좌우 장식, 반사용 letters-only). 반달선은 index.html 인라인 SVG
   illustration/            타이틀 우측 일러스트 (현재 임시 SVG)
   worldmap/                월드맵 배경과 섬 이미지, 낮/밤 각각 (현재 임시 SVG)
 ```

@@ -49,35 +49,56 @@
     <h1 class="logo" id="logo">
       <span class="visually-hidden">LIFE</span>
 
-      <!-- 로고 이미지: 낮/밤 두 벌을 겹쳐 두고 테마에 따라 교차 전환.
-           처음 등장할 때는 이미지를 L·I·F·E·장식 조각으로 잘라 차례로 형성하고,
-           형성이 끝나면 조각 대신 온전한 이미지(.logo__full)를 보여 준다. -->
-      <span class="logo__art" aria-hidden="true">
+      <!-- 레이어 로고: 730 × 270 공통 좌표계. 모든 레이어는 같은 캔버스 크기로
+           겹쳐 있으며(투명 여백 유지), 각각 독립적으로 애니메이션한다. -->
+      <span class="logo__stage" aria-hidden="true">
+        <!-- day: 레이어 순서는 리소스 README 의 합성 순서를 따른다 -->
         <span class="logo__theme logo__theme--day only-day">
-          <span class="logo__full"><img class="logo__img" src="assets/ui/logo-day.png" alt="" width="2172" height="724" decoding="async"></span>
-          <span class="logo__piece logo__piece--l"><img class="logo__img" src="assets/ui/logo-day.png" alt="" width="2172" height="724" decoding="async"></span>
-          <span class="logo__piece logo__piece--i"><img class="logo__img" src="assets/ui/logo-day.png" alt="" width="2172" height="724" decoding="async"></span>
-          <span class="logo__piece logo__piece--f"><img class="logo__img" src="assets/ui/logo-day.png" alt="" width="2172" height="724" decoding="async"></span>
-          <span class="logo__piece logo__piece--e"><img class="logo__img" src="assets/ui/logo-day.png" alt="" width="2172" height="724" decoding="async"></span>
-          <span class="logo__piece logo__piece--orn"><img class="logo__img" src="assets/ui/logo-day.png" alt="" width="2172" height="724" decoding="async"></span>
-          <span class="logo__shine"></span>
+          <svg class="logo__layer logo__arc logo__arc--outer" viewBox="0 0 730 270" preserveAspectRatio="none" focusable="false">
+            <defs><linearGradient id="logo-day-arc1-grad"><stop stop-color="#a78a60" stop-opacity=".35"/><stop offset=".67" stop-color="#f5da9b"/><stop offset="1" stop-color="#a78a60" stop-opacity=".35"/></linearGradient></defs>
+            <path d="M 217 224 C 207 157 233 94 287 61 C 360 15 452 51 501 139" fill="none" stroke="url(#logo-day-arc1-grad)" stroke-width="1.35" pathLength="1"/>
+          </svg>
+          <svg class="logo__layer logo__arc logo__arc--inner" viewBox="0 0 730 270" preserveAspectRatio="none" focusable="false">
+            <defs><linearGradient id="logo-day-arc2-grad"><stop stop-color="#a78a60" stop-opacity=".35"/><stop offset=".67" stop-color="#f5da9b"/><stop offset="1" stop-color="#a78a60" stop-opacity=".35"/></linearGradient></defs>
+            <path d="M 225 144 C 255 97 306 73 354 73 C 404 73 444 94 475 126" fill="none" stroke="url(#logo-day-arc2-grad)" stroke-width="0.85" pathLength="1"/>
+          </svg>
+          <span class="logo__layer logo__letter logo__letter--l"><img class="logo__img" src="assets/ui/logo/day/L.png" alt="" width="730" height="270" decoding="async"></span>
+          <span class="logo__layer logo__letter logo__letter--i"><img class="logo__img" src="assets/ui/logo/day/I.png" alt="" width="730" height="270" decoding="async"></span>
+          <span class="logo__layer logo__letter logo__letter--f"><img class="logo__img" src="assets/ui/logo/day/F.png" alt="" width="730" height="270" decoding="async"></span>
+          <span class="logo__layer logo__letter logo__letter--e"><img class="logo__img" src="assets/ui/logo/day/E.png" alt="" width="730" height="270" decoding="async"></span>
+          <span class="logo__layer logo__aura"></span>
+          <span class="logo__layer logo__center"><img class="logo__img" src="assets/ui/logo/day/center.png" alt="" width="730" height="270" decoding="async"></span>
+          <span class="logo__layer logo__star logo__star--1"><img class="logo__img" src="assets/ui/logo/day/orbit-star-1.png" alt="" width="730" height="270" decoding="async"></span>
+          <span class="logo__layer logo__star logo__star--2"><img class="logo__img" src="assets/ui/logo/day/orbit-star-2.png" alt="" width="730" height="270" decoding="async"></span>
+          <span class="logo__layer logo__side logo__side--left"><img class="logo__img" src="assets/ui/logo/day/left.png" alt="" width="730" height="270" decoding="async"></span>
+          <span class="logo__layer logo__side logo__side--right"><img class="logo__img" src="assets/ui/logo/day/right.png" alt="" width="730" height="270" decoding="async"></span>
         </span>
+        <!-- night: 레이어 순서는 리소스 README 의 합성 순서를 따른다 -->
         <span class="logo__theme logo__theme--night only-night">
-          <span class="logo__full"><img class="logo__img" src="assets/ui/logo-night.png" alt="" width="2172" height="724" decoding="async"></span>
-          <span class="logo__piece logo__piece--l"><img class="logo__img" src="assets/ui/logo-night.png" alt="" width="2172" height="724" decoding="async"></span>
-          <span class="logo__piece logo__piece--i"><img class="logo__img" src="assets/ui/logo-night.png" alt="" width="2172" height="724" decoding="async"></span>
-          <span class="logo__piece logo__piece--f"><img class="logo__img" src="assets/ui/logo-night.png" alt="" width="2172" height="724" decoding="async"></span>
-          <span class="logo__piece logo__piece--e"><img class="logo__img" src="assets/ui/logo-night.png" alt="" width="2172" height="724" decoding="async"></span>
-          <span class="logo__piece logo__piece--orn"><img class="logo__img" src="assets/ui/logo-night.png" alt="" width="2172" height="724" decoding="async"></span>
-          <span class="logo__shine"></span>
+          <svg class="logo__layer logo__arc logo__arc--outer" viewBox="0 0 730 270" preserveAspectRatio="none" focusable="false">
+            <defs><linearGradient id="logo-night-arc1-grad"><stop stop-color="#728a99" stop-opacity=".35"/><stop offset=".67" stop-color="#e4edf4"/><stop offset="1" stop-color="#3a566b" stop-opacity=".35"/></linearGradient></defs>
+            <path d="M 217 224 C 207 157 233 94 287 61 C 360 15 452 51 501 139" fill="none" stroke="url(#logo-night-arc1-grad)" stroke-width="1.35" pathLength="1"/>
+          </svg>
+          <svg class="logo__layer logo__arc logo__arc--inner" viewBox="0 0 730 270" preserveAspectRatio="none" focusable="false">
+            <defs><linearGradient id="logo-night-arc2-grad"><stop stop-color="#728a99" stop-opacity=".35"/><stop offset=".67" stop-color="#e4edf4"/><stop offset="1" stop-color="#3a566b" stop-opacity=".35"/></linearGradient></defs>
+            <path d="M 225 144 C 255 97 306 73 354 73 C 404 73 444 94 475 126" fill="none" stroke="url(#logo-night-arc2-grad)" stroke-width="0.85" pathLength="1"/>
+          </svg>
+          <span class="logo__layer logo__letter logo__letter--l"><img class="logo__img" src="assets/ui/logo/night/L.png" alt="" width="730" height="270" decoding="async"></span>
+          <span class="logo__layer logo__letter logo__letter--i"><img class="logo__img" src="assets/ui/logo/night/I.png" alt="" width="730" height="270" decoding="async"></span>
+          <span class="logo__layer logo__letter logo__letter--f"><img class="logo__img" src="assets/ui/logo/night/F.png" alt="" width="730" height="270" decoding="async"></span>
+          <span class="logo__layer logo__letter logo__letter--e"><img class="logo__img" src="assets/ui/logo/night/E.png" alt="" width="730" height="270" decoding="async"></span>
+          <span class="logo__layer logo__aura"></span>
+          <span class="logo__layer logo__center"><img class="logo__img" src="assets/ui/logo/night/center.png" alt="" width="730" height="270" decoding="async"></span>
+          <span class="logo__layer logo__star logo__star--1"><img class="logo__img" src="assets/ui/logo/night/orbit-star-1.png" alt="" width="730" height="270" decoding="async"></span>
+          <span class="logo__layer logo__star logo__star--2"><img class="logo__img" src="assets/ui/logo/night/orbit-star-2.png" alt="" width="730" height="270" decoding="async"></span>
+          <span class="logo__layer logo__side logo__side--left"><img class="logo__img" src="assets/ui/logo/night/left.png" alt="" width="730" height="270" decoding="async"></span>
+          <span class="logo__layer logo__side logo__side--right"><img class="logo__img" src="assets/ui/logo/night/right.png" alt="" width="730" height="270" decoding="async"></span>
         </span>
-      </span>
 
-      <!-- 물 반사: LIFE 글자 띠만 잘라서 뒤집는다 (상단 장식 제외) -->
-      <span class="logo__reflection" aria-hidden="true">
-        <span class="logo__reflection-band">
-          <img class="logo__img logo__img--day only-day" src="assets/ui/logo-day.png" alt="" width="2172" height="724" decoding="async">
-          <img class="logo__img logo__img--night only-night" src="assets/ui/logo-night.png" alt="" width="2172" height="724" decoding="async">
+        <!-- 물 반사: letters-only.png 만 뒤집어 LIFE 글자만 비친다 -->
+        <span class="logo__reflection">
+          <img class="logo__img only-day" src="assets/ui/logo/day/letters-only.png" alt="" width="730" height="270" decoding="async">
+          <img class="logo__img only-night" src="assets/ui/logo/night/letters-only.png" alt="" width="730" height="270" decoding="async">
         </span>
       </span>
     </h1>
@@ -96,6 +117,10 @@
               <stop offset="0.5" stop-color="#fff" stop-opacity="0.55" />
               <stop offset="1" stop-color="#fff" stop-opacity="0" />
             </linearGradient>
+            <linearGradient id="btn-charge" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" class="stop-charge-1" />
+              <stop offset="1" class="stop-charge-2" />
+            </linearGradient>
             <clipPath id="btn-clip">
               <path d="M52 6 H448 L476 42 L448 78 H52 L24 42 Z" />
             </clipPath>
@@ -103,6 +128,19 @@
           <path class="frame-panel" d="M52 6 H448 L476 42 L448 78 H52 L24 42 Z" />
           <g clip-path="url(#btn-clip)">
             <rect class="frame-sheen" x="-160" y="0" width="140" height="84" />
+          </g>
+          <!-- 클릭 시 왼쪽에서 오른쪽으로 차오르는 색 (경계면은 잔잔한 물결) -->
+          <g clip-path="url(#btn-clip)">
+            <g class="frame-charge">
+              <path class="frame-charge__fill" d="M-520 0 H0 Q7 10.5 0 21 T0 42 T0 63 T0 84 H-520 Z">
+                <animate attributeName="d" dur="0.7s" repeatCount="indefinite"
+                  values="M-520 0 H0 Q7 10.5 0 21 T0 42 T0 63 T0 84 H-520 Z;M-520 0 H0 Q-7 10.5 0 21 T0 42 T0 63 T0 84 H-520 Z;M-520 0 H0 Q7 10.5 0 21 T0 42 T0 63 T0 84 H-520 Z" />
+              </path>
+              <path class="frame-charge__edge" d="M0 0 Q7 10.5 0 21 T0 42 T0 63 T0 84">
+                <animate attributeName="d" dur="0.7s" repeatCount="indefinite"
+                  values="M0 0 Q7 10.5 0 21 T0 42 T0 63 T0 84;M0 0 Q-7 10.5 0 21 T0 42 T0 63 T0 84;M0 0 Q7 10.5 0 21 T0 42 T0 63 T0 84" />
+              </path>
+            </g>
           </g>
           <path class="frame-outer" d="M52 6 H448 L476 42 L448 78 H52 L24 42 Z" />
           <path class="frame-inner" d="M58 12 H442 L464 42 L442 72 H58 L36 42 Z" />

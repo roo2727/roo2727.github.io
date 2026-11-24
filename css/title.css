@@ -11,6 +11,34 @@
   height: 100dvh;
 }
 
+/* START 버튼 전용 색 (낮·밤 전환 시 함께 1.5초 보간) */
+@property --btn-idle-1   { syntax: '<color>'; inherits: true; initial-value: rgba(34, 48, 56, 0.88); }
+@property --btn-idle-2   { syntax: '<color>'; inherits: true; initial-value: rgba(14, 22, 30, 0.92); }
+@property --btn-charge-1 { syntax: '<color>'; inherits: true; initial-value: #49dccb; }
+@property --btn-charge-2 { syntax: '<color>'; inherits: true; initial-value: #11727b; }
+
+.page-title {
+  transition:
+    --btn-idle-1 var(--theme-duration) var(--ease-soft),
+    --btn-idle-2 var(--theme-duration) var(--ease-soft),
+    --btn-charge-1 var(--theme-duration) var(--ease-soft),
+    --btn-charge-2 var(--theme-duration) var(--ease-soft);
+}
+
+:root[data-theme='night'] .page-title {
+  --btn-idle-1: rgba(34, 48, 56, 0.88);
+  --btn-idle-2: rgba(14, 22, 30, 0.92);
+  --btn-charge-1: #49dccb;
+  --btn-charge-2: #11727b;
+}
+
+:root[data-theme='day'] .page-title {
+  --btn-idle-1: rgba(246, 242, 232, 0.92);
+  --btn-idle-2: rgba(221, 213, 195, 0.9);
+  --btn-charge-1: #ffe49c;
+  --btn-charge-2: #cf9a36;
+}
+
 /* ==========================================================================
    1. 배경 세계
    ========================================================================== */
@@ -251,241 +279,249 @@
 }
 
 /* ==========================================================================
-   4. LIFE 로고 (assets/ui/logo-day.png, logo-night.png)
-   원본 이미지 2172 × 724 (두 장 동일 캔버스).
-   측정값 (원본 px)
-     글자 윗선 y=270, 아랫선: 낮 631 / 밤 614  → 낮 글자가 약 5% 더 길다
-     글자 경계 x: L | I = 836, I | F = 1038, F | E = 1370
-     글자 영역: x 467~1712, y 250~642 (그 밖은 장식)
+   4. LIFE 로고 — 레이어 리소스 (assets/ui/logo/day, night)
+   모든 레이어는 730 × 270 공통 캔버스. 투명 여백을 자르지 않고
+   inset:0 / 100% 로 겹쳐 원본 조립 형태(assembled.png)를 그대로 재현한다.
+
+   최초 접속 타임라인 (초)
+     0.3 L · 0.5 I · 0.7 F · 0.9 E          글자 형성
+     1.1 바깥 반달선 · 1.3 안쪽 반달선       선 그리기 (stroke-dashoffset)
+     1.6 중앙 태양/별 · 1.8~1.95 궤도 별     등장
+     2.0 왼쪽 · 2.15 오른쪽 장식             바깥으로 펼쳐짐
+     2.3 물 반사 · 2.6 START · 2.9 설정 UI
+   낮·밤 두 벌은 동시에 같은 타임라인으로 재생되고, 테마 전환은 교차 페이드만 한다.
+   (전환할 때마다 등장 연출이 반복되지 않음)
    ========================================================================== */
 .logo {
-  /* 화면 크기에 맞춰 너비만 정하고 높이는 이미지 비율로 결정 */
-  --logo-w: clamp(280px, 40vw, 720px);
-
-  /* 낮·밤 글자 높이 맞춤: 두 이미지를 글자 윗선(y=270) 기준으로 세로 보정해
-     아랫선이 같은 위치(약 y=622)에 오게 한다. 이미지를 바꾸면 이 값만 다시 맞춘다. */
-  --logo-day-sy: 0.976;
-  --logo-night-sy: 1.024;
-  --logo-letter-top: 37.29%; /* 270 / 724 */
-
-  /* 등장 연출 타이밍 */
-  --letter-dur: 1.4s;
-  --letter-gap: 0.35s;
-  --letter-start: 0.3s;
-  --orn-delay: 1.75s;
-  --orn-dur: 1.6s; /* 형성 완료 = orn-delay + orn-dur (title.js 가 읽는다) */
-
+  --logo-w: clamp(280px, 38vw, 660px);
   position: relative;
   display: block;
   width: var(--logo-w);
-  margin: 0 0 0 -2%;
+  margin: 0;
   line-height: 0;
 }
 
-.logo__art {
+.logo__stage {
   position: relative;
   display: block;
   width: 100%;
-  aspect-ratio: 2172 / 724;
+  aspect-ratio: 730 / 270;
 }
 
 .logo__theme,
-.logo__full,
-.logo__piece {
+.logo__layer {
   position: absolute;
   inset: 0;
-}
-
-.logo__theme--day,
-.logo__img--day {
-  transform: scaleY(var(--logo-day-sy));
-  transform-origin: 50% var(--logo-letter-top);
-}
-
-.logo__theme--night,
-.logo__img--night {
-  transform: scaleY(var(--logo-night-sy));
-  transform-origin: 50% var(--logo-letter-top);
+  width: 100%;
+  height: 100%;
 }
 
 .logo__img {
   position: absolute;
-  left: 0;
-  top: 0;
+  inset: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
   user-select: none;
   -webkit-user-drag: none;
 }
 
-/* 테마 전환: .only-day / .only-night (base.css) 로 1.5초 교차 페이드 */
-
-/* --------------------------------------------------------------------------
-   글자별 형성: 이미지를 조각으로 잘라(clip-path) 하나씩 맺히게 한다
-   -------------------------------------------------------------------------- */
-.logo__full {
-  visibility: hidden;
+.logo__arc {
+  overflow: visible;
 }
 
-.logo.is-formed .logo__full {
-  visibility: visible;
-}
-
-.logo.is-formed .logo__piece {
-  display: none;
-}
-
-.logo__piece--l   { --n: 0; clip-path: inset(34.53% 61.51% 11.33% 21.5%); }
-.logo__piece--i   { --n: 1; clip-path: inset(34.53% 52.21% 11.33% 38.49%); }
-.logo__piece--f   { --n: 2; clip-path: inset(34.53% 36.92% 11.33% 47.79%); }
-.logo__piece--e   { --n: 3; clip-path: inset(34.53% 21.2% 11.33% 63.08%); }
-
-/* 장식 = 전체에서 글자 영역을 뺀 나머지 (evenodd 로 구멍 뚫기) */
-.logo__piece--orn {
-  clip-path: polygon(evenodd,
-    0 0, 100% 0, 100% 100%, 0 100%, 0 0,
-    21.5% 34.53%, 78.8% 34.53%, 78.8% 88.67%, 21.5% 88.67%, 21.5% 34.53%);
-}
-
-/* 각 글자: 마스크가 글자 안에서 왼쪽→오른쪽으로 번지며, 흐림이 걷히고 제자리로 내려앉는다 */
-.logo__piece .logo__img {
+/* ---------- 글자: 아래에서 위로 차오르는 마스크 + 투명도 + 미세한 빛 ---------- */
+.logo__letter {
   opacity: 0;
-  -webkit-mask-image: linear-gradient(100deg, #000 0%, #000 40%, rgba(0, 0, 0, 0.35) 47%, transparent 56%);
-  mask-image: linear-gradient(100deg, #000 0%, #000 40%, rgba(0, 0, 0, 0.35) 47%, transparent 56%);
-  -webkit-mask-size: 320% 100%;
-  mask-size: 320% 100%;
+  -webkit-mask-image: linear-gradient(to top, #000 45%, transparent 55%);
+  mask-image: linear-gradient(to top, #000 45%, transparent 55%);
+  -webkit-mask-size: 100% 300%;
+  mask-size: 100% 300%;
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
-  -webkit-mask-position: 100% 0;
-  mask-position: 100% 0;
-  animation: letter-form var(--letter-dur) cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
-  animation-delay: calc(var(--letter-start) + var(--n) * var(--letter-gap));
+  -webkit-mask-position: 0 10%;
+  mask-position: 0 10%;
+  animation: letter-form 0.95s cubic-bezier(0.3, 0.6, 0.2, 1) forwards;
 }
 
-/* 글자 조각의 마스크는 조각 폭이 아니라 이미지 전체 폭 기준이라,
-   각 글자 위치에서 스윕이 시작·끝나도록 위치 범위를 글자별로 지정 */
-.logo__piece--l .logo__img { --from: 72%; --to: 40%; }
-.logo__piece--i .logo__img { --from: 65%; --to: 36%; }
-.logo__piece--f .logo__img { --from: 60%; --to: 29%; }
-.logo__piece--e .logo__img { --from: 53%; --to: 22%; }
+.logo__letter--l { animation-delay: 0.3s; }
+.logo__letter--i { animation-delay: 0.5s; }
+.logo__letter--f { animation-delay: 0.7s; }
+.logo__letter--e { animation-delay: 0.9s; }
 
 @keyframes letter-form {
   0% {
     opacity: 0;
-    -webkit-mask-position: var(--from) 0;
-    mask-position: var(--from) 0;
-    filter: blur(6px) brightness(1.7);
-    transform: translateY(1.5%);
+    -webkit-mask-position: 0 10%;
+    mask-position: 0 10%;
+    filter: brightness(1.9) blur(1.5px);
   }
-  35% {
+  30% {
     opacity: 1;
-  }
-  70% {
-    filter: blur(1px) brightness(1.15);
   }
   100% {
     opacity: 1;
-    -webkit-mask-position: var(--to) 0;
-    mask-position: var(--to) 0;
-    filter: blur(0) brightness(1);
-    transform: none;
+    -webkit-mask-position: 0 72%;
+    mask-position: 0 72%;
+    filter: brightness(1) blur(0);
   }
 }
 
-/* 장식: 글자가 모두 맺힌 뒤 은은하게 떠오른다 */
-.logo__piece--orn .logo__img {
-  -webkit-mask-image: none;
-  mask-image: none;
-  animation: logo-orn-in var(--orn-dur) var(--ease-soft) var(--orn-delay) forwards;
+/* ---------- 반달선: 실제로 그려지는 선 ---------- */
+.logo__arc path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: arc-draw 1.1s cubic-bezier(0.45, 0, 0.25, 1) forwards;
 }
 
-@keyframes logo-orn-in {
-  0% {
-    opacity: 0;
-    filter: blur(8px) brightness(1.5);
-    transform: translateY(1%) scale(0.985);
-  }
-  100% {
-    opacity: 1;
-    filter: blur(0) brightness(1);
-    transform: none;
-  }
+.logo__arc--outer path { animation-delay: 1.1s; }
+.logo__arc--inner path { animation-delay: 1.3s; animation-duration: 0.95s; }
+
+@keyframes arc-draw {
+  to { stroke-dashoffset: 0; }
 }
 
-/* --- 완성 후 은은하게 지나가는 빛 (로고 알파로 마스킹) --- */
-.logo__shine {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(105deg, transparent 42%, rgba(255, 255, 255, 0.75) 50%, transparent 58%);
-  background-size: 300% 100%;
-  background-position: 100% 0;
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  mix-blend-mode: soft-light;
+/* ---------- 중앙 태양(낮) / 별(밤) ---------- */
+.logo__center {
+  opacity: 0;
+  animation: center-in 0.9s var(--ease-soft) 1.6s forwards;
+}
+
+@keyframes center-in {
+  0%   { opacity: 0; filter: brightness(2.2); }
+  100% { opacity: 1; filter: brightness(1); }
+}
+
+/* 중앙 뒤의 빛 (리소스와 별개인 CSS 광원, 중심 = 원본 좌표 355, 75) */
+.logo__aura {
+  opacity: 0;
   pointer-events: none;
-  visibility: hidden;
+  animation: fade-to 1.2s var(--ease-soft) 1.7s forwards;
 }
 
-.logo__theme--day .logo__shine {
-  -webkit-mask-image: url('../assets/ui/logo-day.png');
-  mask-image: url('../assets/ui/logo-day.png');
+.logo__aura::before {
+  content: '';
+  position: absolute;
+  left: 48.63%;
+  top: 27.78%;
+  width: 34%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.logo__theme--night .logo__shine {
-  -webkit-mask-image: url('../assets/ui/logo-night.png');
-  mask-image: url('../assets/ui/logo-night.png');
+/* 낮: 태양에서 빛이 퍼진다 */
+.logo__theme--day .logo__aura::before {
+  background:
+    repeating-conic-gradient(from 0deg, rgba(255, 240, 200, 0.5) 0deg 3deg, rgba(255, 240, 200, 0) 3deg 15deg);
+  -webkit-mask-image: radial-gradient(circle, #000 8%, transparent 62%);
+  mask-image: radial-gradient(circle, #000 8%, transparent 62%);
+  animation: sun-rays 36s linear infinite, sun-breathe 5s ease-in-out infinite alternate;
 }
 
-.logo.is-formed .logo__shine {
-  visibility: visible;
-  animation: shine 7s ease-in-out 0.3s infinite;
+/* 밤: 은은한 달빛·별빛 후광 */
+.logo__theme--night .logo__aura::before {
+  width: 26%;
+  background: radial-gradient(circle, rgba(200, 235, 255, 0.45) 0%, rgba(120, 200, 230, 0.15) 35%, transparent 65%);
+  animation: night-glow 4.5s ease-in-out infinite alternate;
 }
 
-@keyframes shine {
-  0% { background-position: 100% 0; }
-  32% { background-position: 0% 0; }
-  100% { background-position: 0% 0; }
+@keyframes sun-rays {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* --- 물 반사: 글자 띠만 잘라 뒤집고, 기존 SVG 물결 필터(#water-ripple)로 일렁이게 --- */
+@keyframes sun-breathe {
+  from { opacity: 0.7; }
+  to   { opacity: 1; }
+}
+
+@keyframes night-glow {
+  from { opacity: 0.55; }
+  to   { opacity: 1; }
+}
+
+/* 밤 중앙 별은 등장 후 은은하게 빛난다 */
+.logo__theme--night .logo__center .logo__img {
+  animation: star-glow 4.5s ease-in-out 2.6s infinite alternate;
+}
+
+@keyframes star-glow {
+  from { filter: drop-shadow(0 0 0 rgba(180, 235, 255, 0)); }
+  to   { filter: drop-shadow(0 0 6px rgba(180, 235, 255, 0.7)); }
+}
+
+/* ---------- 궤도 위 개별 별: 순차 등장 후 각자 반짝임 ---------- */
+.logo__star {
+  opacity: 0;
+}
+
+.logo__star--2 { animation: fade-to 0.6s var(--ease-soft) 1.8s forwards; }
+.logo__star--1 { animation: fade-to 0.6s var(--ease-soft) 1.95s forwards; }
+
+.logo__star .logo__img {
+  animation: twinkle 2.8s ease-in-out 2.6s infinite;
+}
+
+.logo__star--1 .logo__img { animation-duration: 3.4s; animation-delay: 3.1s; }
+
+.logo__theme--day .logo__star .logo__img {
+  animation-duration: 5s; /* 낮에는 더 느리고 은은하게 */
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 1; filter: brightness(1); }
+  45%      { opacity: 0.45; filter: brightness(0.9); }
+  55%      { opacity: 1; filter: brightness(1.6); }
+}
+
+/* ---------- 좌우 장식: 안쪽에서 바깥으로 펼쳐짐 (각각 독립) ---------- */
+.logo__side {
+  opacity: 0;
+}
+
+.logo__side--left {
+  clip-path: inset(0 84.38% 0 15.62%);  /* 안쪽 끝 x=114 에서 시작 */
+  animation: side-open 0.9s cubic-bezier(0.3, 0.6, 0.2, 1) 2s forwards;
+}
+
+.logo__side--right {
+  clip-path: inset(0 16.85% 0 83.15%);  /* 안쪽 끝 x=607 에서 시작 */
+  animation: side-open 0.9s cubic-bezier(0.3, 0.6, 0.2, 1) 2.15s forwards;
+}
+
+@keyframes side-open {
+  0%   { opacity: 0; }
+  25%  { opacity: 1; }
+  100% { opacity: 1; clip-path: inset(0 0 0 0); }
+}
+
+@keyframes fade-to {
+  to { opacity: 1; }
+}
+
+/* ---------- 물 반사: letters-only.png, 글자 아랫선(y≈263) 기준으로 뒤집기 ---------- */
 .logo__reflection {
   position: absolute;
-  left: 0;
-  top: 86%;
-  width: 100%;
-  aspect-ratio: 2172 / 355;
+  inset: 0;
   opacity: 0;
   transform: scaleY(-1);
-  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.35) 35%, transparent 75%);
-  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.35) 35%, transparent 75%);
-  filter: url('#water-ripple') blur(0.6px);
+  transform-origin: 50% 97.4%;
+  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9) 2%, rgba(0, 0, 0, 0.35) 22%, transparent 48%);
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9) 2%, rgba(0, 0, 0, 0.35) 22%, transparent 48%);
+  filter: url('#water-ripple') blur(0.5px);
   pointer-events: none;
   animation:
-    reflection-in 2s var(--ease-soft) 1.2s forwards,
+    reflection-in 1.2s var(--ease-soft) 2.3s forwards,
     ripple 5s ease-in-out infinite alternate;
 }
 
 @keyframes reflection-in {
-  to { opacity: 0.4; }
-}
-
-/* 원본 이미지 중 글자 띠(세로 270~625px, 가로 약 21~79%)만 남긴다 */
-.logo__reflection-band {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent 19.5%, #000 22.5%, #000 78.5%, transparent 81%);
-  mask-image: linear-gradient(90deg, transparent 19.5%, #000 22.5%, #000 78.5%, transparent 81%);
-}
-
-.logo__reflection-band .logo__img {
-  top: -76.06%; /* 270 / 355 */
+  to { opacity: 0.42; }
 }
 
 @keyframes ripple {
   0%   { transform: scaleY(-1) translateX(0) scaleX(1); }
-  50%  { transform: scaleY(-0.97) translateX(0.2%) scaleX(1.012); }
-  100% { transform: scaleY(-1.02) translateX(-0.2%) scaleX(0.994); }
+  50%  { transform: scaleY(-0.97) translateX(0.2%) scaleX(1.01); }
+  100% { transform: scaleY(-1.02) translateX(-0.2%) scaleX(0.995); }
 }
 
 /* ==========================================================================
@@ -496,10 +532,18 @@
   flex-direction: column;
   align-items: flex-start;
   gap: clamp(18px, 3.2vh, 30px);
-  opacity: 0;
-  transform: translateY(14px);
-  animation: menu-in 1.2s var(--ease-soft) 2.2s forwards;
 }
+
+/* START 2.6초, 언어·낮밤 설정 2.9초에 차례로 등장 */
+.title-menu > .menu-btn,
+.title-menu > .settings-row {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: menu-in 1s var(--ease-soft) forwards;
+}
+
+.title-menu > .menu-btn     { animation-delay: 2.6s; }
+.title-menu > .settings-row { animation-delay: 2.9s; }
 
 @keyframes menu-in {
   to { opacity: 1; transform: none; }
@@ -521,7 +565,6 @@
   font-weight: 600;
   letter-spacing: 0.24em;
   -webkit-tap-highlight-color: transparent;
-  transition: transform 0.25s var(--ease-soft);
 }
 
 .menu-btn:focus-visible {
@@ -544,8 +587,11 @@
   to   { filter: drop-shadow(0 0 6px var(--glow-a)) drop-shadow(0 0 16px var(--glow-a)); }
 }
 
-.stop-panel-1 { stop-color: var(--c-panel-1); }
-.stop-panel-2 { stop-color: var(--c-panel-2); }
+/* 기본 상태: 저채도 내부색 / 클릭 시 차오르는 색: 낮 금빛, 밤 청록빛 */
+.stop-panel-1  { stop-color: var(--btn-idle-1); }
+.stop-panel-2  { stop-color: var(--btn-idle-2); }
+.stop-charge-1 { stop-color: var(--btn-charge-1); }
+.stop-charge-2 { stop-color: var(--btn-charge-2); }
 
 .frame-panel { fill: url(#btn-panel); }
 
@@ -581,6 +627,29 @@
   opacity: 0.35;
 }
 
+/* --- 충전 효과 (약 0.48초) --- */
+.frame-charge {
+  transform: translateX(0);
+}
+
+.menu-btn.is-charging .frame-charge {
+  transform: translateX(520px);
+  transition: transform 0.48s cubic-bezier(0.4, 0.1, 0.35, 1);
+}
+
+.frame-charge__fill {
+  fill: url(#btn-charge);
+  opacity: 0.92;
+}
+
+.frame-charge__edge {
+  fill: none;
+  stroke: var(--c-frame-hi);
+  stroke-width: 1.4;
+  opacity: 0.7;
+  vector-effect: non-scaling-stroke;
+}
+
 .menu-btn__icon {
   position: absolute;
   left: 17%;
@@ -609,9 +678,8 @@
 .menu-btn:focus-visible .menu-btn__frame {
   animation: none;
   filter:
-    drop-shadow(0 0 3px var(--c-glow))
-    drop-shadow(0 0 12px var(--c-glow))
-    drop-shadow(0 0 28px var(--glow-a));
+    drop-shadow(0 0 3px var(--glow-a))
+    drop-shadow(0 0 12px var(--glow-a));
 }
 
 .menu-btn:hover .frame-outer,
@@ -631,15 +699,18 @@
   to   { transform: translateX(700px); }
 }
 
-.menu-btn:active {
-  transform: scale(0.985);
+/* 충전 완료: 짧은 발광 후 페이지 전환 (크기 변화 없음) */
+.menu-btn.is-charged .menu-btn__frame {
+  animation: none;
+  filter:
+    drop-shadow(0 0 5px var(--c-frame-hi))
+    drop-shadow(0 0 22px var(--c-glow))
+    brightness(1.15);
+  transition: filter 0.15s ease-out;
 }
 
-.menu-btn.is-pressed .menu-btn__frame {
-  filter:
-    drop-shadow(0 0 6px var(--c-frame-hi))
-    drop-shadow(0 0 30px var(--c-glow))
-    brightness(1.3);
+.menu-btn[aria-disabled='true'] {
+  cursor: default;
 }
 
 /* ---------- 언어 · 테마 설정 줄 ---------- */
@@ -787,8 +858,12 @@
    8. 모션 감소
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
-  .logo__shine {
-    display: none;
+  .menu-btn.is-charging .frame-charge {
+    transition: none;
+  }
+
+  .logo__aura::before {
+    animation: none !important;
   }
 
   .illustration__layer .illustration__media {

@@ -1,8 +1,8 @@
 /**
  * LIFE — title.js
  * 타이틀 화면의 동작을 연결한다.
- *   - 로고 글자별 형성(L·I·F·E → 장식) 완료 감지 → 빛 지나가는 효과 시작
- *   - START: 페이드아웃 후 메인 로비로 이동
+ *   - 레이어 로고 등장 완료 감지 (is-formed)
+ *   - START: 충전 효과 후 페이드아웃, 메인 로비로 이동
  *   - 언어(KR/EN), 낮/밤 테마 전환
  *   - 키보드 조작(↑↓ 메뉴 이동, ←→ 언어 선택, T 테마 전환)
  */
@@ -21,8 +21,8 @@
   LIFE.i18n.translate();
 
   /* ---------- 로고 ---------- */
-  // 로고는 L·I·F·E 글자 조각이 차례로 맺힌 뒤 장식(logo-orn-in)이 떠오르며 완성된다.
-  // 완성되면 조각 대신 온전한 이미지로 바꾸고 빛 효과를 시작한다.
+  // 레이어 로고의 마지막 단계(물 반사 등장 reflection-in)가 끝나면 완성으로 표시한다.
+  // 각 레이어의 등장 타이밍은 css/title.css 4장의 타임라인 참고.
   var formed = false;
   function markFormed() {
     if (formed) return;
@@ -33,14 +33,10 @@
   if (reduceMotion.matches) {
     markFormed();
   } else {
-    logo.querySelector('.logo__art').addEventListener('animationend', function (e) {
-      if (e.animationName === 'logo-orn-in') markFormed();
+    logo.addEventListener('animationend', function (e) {
+      if (e.animationName === 'reflection-in') markFormed();
     });
-    // 안전장치: 숨겨진 테마 쪽 이벤트만 오거나 이미지 로드가 늦어도 완성되도록
-    var style = global.getComputedStyle(logo);
-    var total = (parseFloat(style.getPropertyValue('--orn-delay')) || 1.75) +
-                (parseFloat(style.getPropertyValue('--orn-dur')) || 1.6);
-    global.setTimeout(markFormed, total * 1000 + 500);
+    global.setTimeout(markFormed, 4000); // 안전장치 (2.3초 + 1.2초 이후)
   }
 
   // 물결 반사 SVG 애니메이션은 모션 감소 시 정지
@@ -56,10 +52,32 @@
   LIFE.particles.create(doc.getElementById('particles'));
   LIFE.illustration.mount(doc.getElementById('illustration'));
 
-  /* ---------- START ---------- */
+  /* ---------- START: 왼쪽→오른쪽 충전(0.48초) → 짧은 발광 → 이동 ---------- */
+  var CHARGE_MS = 480;
+  var FLASH_MS = 180;
+  var starting = false;
+
   startBtn.addEventListener('click', function () {
-    startBtn.classList.add('is-pressed');
-    LIFE.transition.go(LOBBY_URL);
+    if (starting) return; // 중복 클릭 방지
+    starting = true;
+    startBtn.setAttribute('aria-disabled', 'true');
+    startBtn.classList.add('is-charging');
+
+    var quick = reduceMotion.matches;
+    global.setTimeout(function () {
+      startBtn.classList.add('is-charged');
+      global.setTimeout(function () {
+        LIFE.transition.go(LOBBY_URL);
+      }, quick ? 0 : FLASH_MS);
+    }, quick ? 0 : CHARGE_MS);
+  });
+
+  // 뒤로 가기로 돌아오면 버튼 상태 초기화
+  global.addEventListener('pageshow', function (e) {
+    if (!e.persisted) return;
+    starting = false;
+    startBtn.removeAttribute('aria-disabled');
+    startBtn.classList.remove('is-charging', 'is-charged');
   });
 
   /* ---------- 언어 · 테마 ---------- */
