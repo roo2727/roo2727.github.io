@@ -1,0 +1,109 @@
+/* ==========================================================================
+   LIFE — regions/intro.css
+   01 자기소개 전용 배치. 공통 컴포넌트는 css/detail.css.
+   데스크톱: 왼쪽 약 38% 는 일러스트(나무 아래 캐릭터), 오른쪽에 정보 영역.
+   ========================================================================== */
+
+.page-intro .detail-bg {
+  --bg-focus: 20% 50%;
+  --shade-from: 28%;
+  --shade-to: 42%;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 2.4vh, 28px);
+  width: min(61%, 1080px);
+  margin: clamp(-34px, -3vh, -10px) 0 0 auto; /* 헤더 옆으로 제목을 조금 끌어올린다 */
+  padding-right: clamp(0px, 0.6vw, 12px);
+}
+
+/* 제목 곡선: 제목 아래에서 시작해 오른쪽 위로 감아 올라간다 */
+.page-intro .d-title__swoosh {
+  left: 2%;
+  top: 34%;
+  width: 92%;
+  height: 50%;
+}
+
+/* 정보 영역: 20칸 격자에 두 행을 서로 다른 비율로 배치 (시안 기준)
+   1행: 기본 정보 8 : 자기소개 12 / 2행: 성격 및 장단점 12 : 좌우명 8 */
+.intro__grid {
+  display: grid;
+  grid-template-columns: repeat(20, minmax(0, 1fr));
+  --col-gap: clamp(28px, 3vw, 52px);
+  gap: 32px 0; /* 섹션 간격 32px. 열 간격은 오른쪽 열의 안쪽 여백으로 준다 (20칸 격자 비율 유지) */
+  align-items: start;
+}
+
+.intro__basic  { grid-column: 1 / span 8; }
+.intro__story  { grid-column: 9 / -1; }
+.intro__traits { grid-column: 1 / span 12; }
+.intro__motto  { grid-column: 13 / -1; }
+
+/* 열 사이 세로 구분선 (아주 옅게) */
+.intro__story,
+.intro__motto {
+  position: relative;
+  padding-left: var(--col-gap);
+}
+
+.intro__story::before,
+.intro__motto::before {
+  content: '';
+  position: absolute;
+  left: calc(var(--col-gap) / 2);
+  top: 6px;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg, var(--d-line), transparent);
+}
+
+/* ---------- 반응형 ---------- */
+@media (max-width: 1280px) {
+  .intro {
+    width: min(64%, 1080px);
+  }
+
+  .intro__basic  { grid-column: 1 / span 9; }
+  .intro__story  { grid-column: 10 / -1; }
+  .intro__traits { grid-column: 1 / -1; }
+  .intro__motto  { grid-column: 1 / -1; padding-left: 0; }
+
+  .intro__motto::before {
+    display: none;
+  }
+
+  .intro__motto .d-quote {
+    max-width: 520px;
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 900px) {
+  .intro {
+    width: 100%;
+    margin: 34vh 0 0; /* 위쪽은 일러스트가 보이도록 비워 둔다 */
+    padding: 0;
+  }
+
+  .intro__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .intro__basic,
+  .intro__story,
+  .intro__traits,
+  .intro__motto {
+    grid-column: 1;
+  }
+
+  .intro__story {
+    padding-left: 0;
+  }
+
+  .intro__story::before {
+    display: none;
+  }
+}
