@@ -286,7 +286,7 @@
    최초 접속 타임라인 (초)
      0.3 L · 0.5 I · 0.7 F · 0.9 E          글자 형성 (TITLE 1 방식: 흐림·확대 → 선명)
      2.6~                                   글자 위로 빛이 지나감 (7초 주기)
-     1.1 바깥 반달선 · 1.3 안쪽 반달선       선 그리기 (stroke-dashoffset)
+     1.1 바깥 반달선 · 1.3 안쪽 반달선       선 그리기 (밤: stroke-dashoffset / 낮: PNG 원형 마스크)
      1.6 중앙 태양/별 · 1.8~1.95 궤도 별     등장
      2.0 왼쪽 · 2.15 오른쪽 장식             바깥으로 펼쳐짐
      2.3 물 반사 · 2.6 START · 2.9 설정 UI
@@ -338,10 +338,10 @@
   animation: char-form 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
 }
 
-.logo__letter--l { animation-delay: 0.3s; transform-origin: 25.6% 70.2%; }
-.logo__letter--i { animation-delay: 0.5s; transform-origin: 41.3% 73.9%; }
-.logo__letter--f { animation-delay: 0.7s; transform-origin: 56.5% 73.9%; }
-.logo__letter--e { animation-delay: 0.9s; transform-origin: 73.9% 73.9%; }
+.logo__letter--l { animation-delay: 0.3s; transform-origin: 26.2% 61.7%; }
+.logo__letter--i { animation-delay: 0.5s; transform-origin: 42.5% 66.8%; }
+.logo__letter--f { animation-delay: 0.7s; transform-origin: 56.9% 66.8%; }
+.logo__letter--e { animation-delay: 0.9s; transform-origin: 75.5% 66.8%; }
 
 @keyframes char-form {
   0% {
@@ -521,15 +521,74 @@
   to { opacity: 1; }
 }
 
-/* ---------- 물 반사: letters-only.png, 글자 아랫선(y≈263) 기준으로 뒤집기 ---------- */
+/* ---------- 글자 레이어 좌표계 (LIFE-logo-rebuilt-v4: 1400 × 600) ----------
+   새 글자는 1400 × 600 캔버스, 기준선 y=533. 로고 스테이지(730 × 270)에 맞춰
+   글자 폭(x 224~1183)이 기존 글자 자리(x 120~600)에, 기준선이 y=263 에 오도록 배치.
+   배율 0.5005 → 캔버스 원점 (7.9, -3.8), 크기 700.7 × 300.3 */
+.logo__theme .logo__letter,
+.logo__theme .logo__shine,
+.logo__reflection {
+  inset: auto;
+  left: 1.08%;
+  top: -1.41%;
+  width: 95.99%;
+  height: 111.22%;
+}
+
+/* ---------- 낮 반달선 (PNG, 2172 × 724 캔버스, 두 장 같은 좌표계) ----------
+   바깥 반달선 양 끝(원본 x 170 / 1980, y 627)이 L 왼쪽~E 오른쪽(스테이지 x 130~600),
+   글자 중간 높이(y 195)에 오도록 배율 0.26 으로 배치. 꼭대기는 스테이지 (365, 69.7).
+   원점 (82.6, 32), 크기 564.7 × 188.2 */
+.logo__arcimg {
+  inset: auto;
+  left: 11.32%;
+  top: 11.85%;
+  width: 77.36%;
+  height: 69.7%;
+  --arc-sweep: 0deg;
+  -webkit-mask-image: conic-gradient(from 298deg at var(--arc-cx) var(--arc-cy), #000 0deg, #000 calc(var(--arc-sweep) - 4deg), transparent var(--arc-sweep));
+  mask-image: conic-gradient(from 298deg at var(--arc-cx) var(--arc-cy), #000 0deg, #000 calc(var(--arc-sweep) - 4deg), transparent var(--arc-sweep));
+  animation: arc-sweep 1.1s cubic-bezier(0.45, 0, 0.25, 1) 1.1s forwards;
+}
+
+/* 원호 중심 (원본 좌표 기준 측정값): 바깥 (1086, 1256), 안쪽 (1086, 1057) */
+.logo__arcimg--outer { --arc-cx: 50%; --arc-cy: 173.5%; }
+.logo__arcimg--inner { --arc-cx: 50%; --arc-cy: 146%; animation-delay: 1.3s; animation-duration: 0.95s; }
+
+@property --arc-sweep { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+
+@keyframes arc-sweep {
+  from { --arc-sweep: 0deg; }
+  to   { --arc-sweep: 128deg; }
+}
+
+/* ---------- 낮 반달선 가운데 장식 (887 × 1774) ----------
+   원형 중심(이미지 50%, 46.7%)을 바깥 반달선 꼭대기(스테이지 365, 69.7)에 맞춤, 높이 150 기준 */
+.logo__center--sun {
+  inset: auto;
+  left: 44.86%;
+  top: -0.11%;
+  width: 10.27%;
+  height: 55.56%;
+}
+
+/* 낮 궤도 별: 새 바깥 반달선 위로 옮김 (원 중심 365, 358.6 / 반지름 288.9) */
+.logo__theme--day .logo__star--1 { transform: translate(-0.34%, 2.96%); }
+.logo__theme--day .logo__star--2 { transform: translate(-2.36%, -27.07%); }
+
+.logo__theme--day .logo__aura::before {
+  left: 50%;
+  top: 25.8%;
+}
+
+/* ---------- 물 반사: letters-only.png, 글자 기준선(원본 y=533 → 88.83%)에서 뒤집기 ---------- */
 .logo__reflection {
   position: absolute;
-  inset: 0;
   opacity: 0;
   transform: scaleY(-1);
-  transform-origin: 50% 97.4%;
-  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9) 2%, rgba(0, 0, 0, 0.35) 22%, transparent 48%);
-  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9) 2%, rgba(0, 0, 0, 0.35) 22%, transparent 48%);
+  transform-origin: 50% 88.83%;
+  -webkit-mask-image: linear-gradient(to top, transparent 9%, rgba(0, 0, 0, 0.9) 11.5%, rgba(0, 0, 0, 0.35) 28%, transparent 52%);
+  mask-image: linear-gradient(to top, transparent 9%, rgba(0, 0, 0, 0.9) 11.5%, rgba(0, 0, 0, 0.35) 28%, transparent 52%);
   filter: url('#water-ripple') blur(0.5px);
   pointer-events: none;
   animation:
