@@ -8,7 +8,9 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=Gowun+Batang:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=Gowun+Batang:wght@400;700&family=Noto+Serif+KR:wght@500;600;700&display=swap">
+  <!-- 마루부리 (네이버 한글한글 아름답게). 불러오지 못하면 Noto Serif KR 로 대체 -->
+  <link rel="stylesheet" href="https://hangeul.pstatic.net/hangeul_static/css/maru-buri.css">
 
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/title.css">
@@ -103,50 +105,75 @@
     <div class="title-menu" role="group" data-i18n-attr="aria-label:title.menu" aria-label="타이틀 메뉴">
 
       <button class="menu-btn" id="start-btn" type="button">
+        <!-- 판타지풍 금속 프레임 (디자인 시안의 START 버튼을 SVG 로 재현) -->
         <svg class="menu-btn__frame" viewBox="0 0 500 84" preserveAspectRatio="none" aria-hidden="true">
           <defs>
             <linearGradient id="btn-panel" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0" class="stop-panel-1" />
               <stop offset="1" class="stop-panel-2" />
             </linearGradient>
-            <linearGradient id="btn-sheen" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="#fff" stop-opacity="0" />
-              <stop offset="0.5" stop-color="#fff" stop-opacity="0.55" />
-              <stop offset="1" stop-color="#fff" stop-opacity="0" />
+            <!-- 금속 질감: 위 밝음 → 가운데 어두움 → 아래 반사광 -->
+            <linearGradient id="btn-metal" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" class="stop-metal-hi" />
+              <stop offset="0.35" class="stop-metal" />
+              <stop offset="0.55" class="stop-metal-lo" />
+              <stop offset="0.8" class="stop-metal" />
+              <stop offset="1" class="stop-metal-hi" />
             </linearGradient>
-            <linearGradient id="btn-charge" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" class="stop-charge-1" />
-              <stop offset="1" class="stop-charge-2" />
+            <!-- 충전 색: 뒤쪽은 옅고, 흘러드는 앞쪽으로 갈수록 짙어진다 -->
+            <linearGradient id="btn-charge" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" class="stop-charge-2" stop-opacity="0.05" />
+              <stop offset="0.6" class="stop-charge-2" stop-opacity="0.28" />
+              <stop offset="0.9" class="stop-charge-1" stop-opacity="0.48" />
+              <stop offset="1" class="stop-charge-1" stop-opacity="0.6" />
             </linearGradient>
+            <filter id="btn-edge-blur" x="-200%" y="-20%" width="500%" height="140%">
+              <feGaussianBlur stdDeviation="4" />
+            </filter>
             <clipPath id="btn-clip">
-              <path d="M52 6 H448 L476 42 L448 78 H52 L24 42 Z" />
+              <path d="M44 9 H456 C466 9 470 13 474 20 L486 42 L474 64 C470 71 466 75 456 75 H44 C34 75 30 71 26 64 L14 42 L26 20 C30 13 34 9 44 9 Z" />
             </clipPath>
           </defs>
-          <path class="frame-panel" d="M52 6 H448 L476 42 L448 78 H52 L24 42 Z" />
-          <g clip-path="url(#btn-clip)">
-            <rect class="frame-sheen" x="-160" y="0" width="140" height="84" />
-          </g>
-          <!-- 클릭 시 왼쪽에서 오른쪽으로 차오르는 색 (경계면은 잔잔한 물결) -->
+
+          <path class="frame-panel" d="M44 9 H456 C466 9 470 13 474 20 L486 42 L474 64 C470 71 466 75 456 75 H44 C34 75 30 71 26 64 L14 42 L26 20 C30 13 34 9 44 9 Z" />
+
+          <!-- 클릭 시 왼쪽에서 오른쪽으로 마력이 흘러드는 충전 -->
           <g clip-path="url(#btn-clip)">
             <g class="frame-charge">
-              <path class="frame-charge__fill" d="M-520 0 H0 Q7 10.5 0 21 T0 42 T0 63 T0 84 H-520 Z">
-                <animate attributeName="d" dur="0.7s" repeatCount="indefinite"
-                  values="M-520 0 H0 Q7 10.5 0 21 T0 42 T0 63 T0 84 H-520 Z;M-520 0 H0 Q-7 10.5 0 21 T0 42 T0 63 T0 84 H-520 Z;M-520 0 H0 Q7 10.5 0 21 T0 42 T0 63 T0 84 H-520 Z" />
+              <path class="frame-charge__fill" d="M-520 0 H0 Q8 10.5 0 21 T0 42 T0 63 T0 84 H-520 Z">
+                <animate attributeName="d" dur="0.8s" repeatCount="indefinite"
+                  values="M-520 0 H0 Q8 10.5 0 21 T0 42 T0 63 T0 84 H-520 Z;M-520 0 H0 Q-8 10.5 0 21 T0 42 T0 63 T0 84 H-520 Z;M-520 0 H0 Q8 10.5 0 21 T0 42 T0 63 T0 84 H-520 Z" />
               </path>
-              <path class="frame-charge__edge" d="M0 0 Q7 10.5 0 21 T0 42 T0 63 T0 84">
-                <animate attributeName="d" dur="0.7s" repeatCount="indefinite"
-                  values="M0 0 Q7 10.5 0 21 T0 42 T0 63 T0 84;M0 0 Q-7 10.5 0 21 T0 42 T0 63 T0 84;M0 0 Q7 10.5 0 21 T0 42 T0 63 T0 84" />
+              <g class="frame-charge__flow">
+                <path d="M-560 30 q20 -5 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0" />
+                <path d="M-580 54 q20 5 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0" />
+              </g>
+              <g class="frame-charge__motes"><circle class="mote" cx="-142" cy="45" r="1.5" style="--d:0.54s"/><circle class="mote" cx="-258" cy="27" r="1.5" style="--d:0.76s"/><circle class="mote" cx="-240" cy="23" r="1.2" style="--d:0.17s"/><circle class="mote" cx="-167" cy="61" r="0.8" style="--d:0.71s"/><circle class="mote" cx="-126" cy="40" r="1" style="--d:0.75s"/><circle class="mote" cx="-252" cy="21" r="0.8" style="--d:0.23s"/><circle class="mote" cx="-82" cy="19" r="1.5" style="--d:0.39s"/><circle class="mote" cx="-182" cy="27" r="1" style="--d:0.77s"/><circle class="mote" cx="-156" cy="50" r="1.5" style="--d:0.79s"/><circle class="mote" cx="-129" cy="44" r="0.8" style="--d:0.85s"/><circle class="mote" cx="-103" cy="29" r="1.2" style="--d:0.04s"/><circle class="mote" cx="-174" cy="23" r="0.8" style="--d:1.02s"/><circle class="mote" cx="-123" cy="64" r="0.8" style="--d:0.26s"/><circle class="mote" cx="-279" cy="21" r="1.5" style="--d:1.18s"/><circle class="mote" cx="-126" cy="22" r="1" style="--d:0.93s"/><circle class="mote" cx="-90" cy="22" r="1.2" style="--d:0.02s"/></g>
+              <path class="frame-charge__glow" d="M0 0 Q8 10.5 0 21 T0 42 T0 63 T0 84" filter="url(#btn-edge-blur)">
+                <animate attributeName="d" dur="0.8s" repeatCount="indefinite"
+                  values="M0 0 Q8 10.5 0 21 T0 42 T0 63 T0 84;M0 0 Q-8 10.5 0 21 T0 42 T0 63 T0 84;M0 0 Q8 10.5 0 21 T0 42 T0 63 T0 84" />
+              </path>
+              <path class="frame-charge__edge" d="M0 0 Q8 10.5 0 21 T0 42 T0 63 T0 84">
+                <animate attributeName="d" dur="0.8s" repeatCount="indefinite"
+                  values="M0 0 Q8 10.5 0 21 T0 42 T0 63 T0 84;M0 0 Q-8 10.5 0 21 T0 42 T0 63 T0 84;M0 0 Q8 10.5 0 21 T0 42 T0 63 T0 84" />
               </path>
             </g>
           </g>
-          <path class="frame-outer" d="M52 6 H448 L476 42 L448 78 H52 L24 42 Z" />
-          <path class="frame-inner" d="M58 12 H442 L464 42 L442 72 H58 L36 42 Z" />
+
+          <!-- 금속 테두리 (이중선) -->
+          <path class="frame-outer" d="M44 9 H456 C466 9 470 13 474 20 L486 42 L474 64 C470 71 466 75 456 75 H44 C34 75 30 71 26 64 L14 42 L26 20 C30 13 34 9 44 9 Z" />
+          <path class="frame-inner" d="M48 15 H452 C459 15 462 18 465 23 L475 42 L465 61 C462 66 459 69 452 69 H48 C41 69 38 66 35 61 L25 42 L35 23 C38 18 41 15 48 15 Z" />
+
+          <!-- 장식: 양 끝 소용돌이와 별, 위·아래 가운데 보석 -->
           <g class="frame-orn">
-            <path d="M24 42 Q34 26 52 20 M24 42 Q34 58 52 64" />
-            <path d="M476 42 Q466 26 448 20 M476 42 Q466 58 448 64" />
-            <path class="frame-gem" d="M11 42 L17 32 L23 42 L17 52 Z" />
-            <path class="frame-gem" d="M489 42 L483 32 L477 42 L483 52 Z" />
-            <path d="M0 42 H11 M489 42 H500" />
+            <path d="M26 20 C19 13 10 16 11 23 C12 27 17 27 18 24" />
+            <path d="M26 64 C19 71 10 68 11 61 C12 57 17 57 18 60" />
+            <path d="M474 20 C481 13 490 16 489 23 C488 27 483 27 482 24" />
+            <path d="M474 64 C481 71 490 68 489 61 C488 57 483 57 482 60" />
+            <path class="frame-gem" d="M6 32 L8.5 39.5 L16 42 L8.5 44.5 L6 52 L3.5 44.5 L-4 42 L3.5 39.5 Z" />
+            <path class="frame-gem" d="M494 32 L496.5 39.5 L504 42 L496.5 44.5 L494 52 L491.5 44.5 L484 42 L491.5 39.5 Z" />
+            <path class="frame-gem" d="M250 4 L254.5 9 L250 14 L245.5 9 Z" />
+            <path class="frame-gem" d="M250 70 L254.5 75 L250 80 L245.5 75 Z" />
           </g>
         </svg>
         <svg class="menu-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5 L20 12 L6 20.5 Z" /></svg>

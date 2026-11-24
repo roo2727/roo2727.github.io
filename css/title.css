@@ -682,7 +682,7 @@
   font-family: var(--font-display);
   font-size: clamp(1.25rem, 2.1vw, 1.9rem);
   font-weight: 600;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.168em; /* 이전 0.24em 에서 30% 축소 */
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -696,76 +696,113 @@
   width: 100%;
   height: 100%;
   overflow: visible;
-  filter: drop-shadow(0 0 4px var(--glow-a)) drop-shadow(0 0 14px var(--glow-b));
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35));
   transition: filter 0.4s var(--ease-soft);
-  animation: idle-glow 3.4s ease-in-out infinite alternate;
 }
 
-@keyframes idle-glow {
-  from { filter: drop-shadow(0 0 3px var(--glow-a)) drop-shadow(0 0 0 transparent); }
-  to   { filter: drop-shadow(0 0 6px var(--glow-a)) drop-shadow(0 0 16px var(--glow-a)); }
-}
-
-/* 기본 상태: 저채도 내부색 / 클릭 시 차오르는 색: 낮 금빛, 밤 청록빛 */
+/* 기본 상태: 저채도 내부색 / 충전 색: 낮 금빛, 밤 청록빛 */
 .stop-panel-1  { stop-color: var(--btn-idle-1); }
 .stop-panel-2  { stop-color: var(--btn-idle-2); }
 .stop-charge-1 { stop-color: var(--btn-charge-1); }
 .stop-charge-2 { stop-color: var(--btn-charge-2); }
 
+/* 금속 테두리 색: 테마의 프레임 색에서 파생 (낮 금속 / 밤 은빛 금속) */
+.stop-metal-hi { stop-color: var(--c-frame-hi); }
+.stop-metal    { stop-color: var(--c-frame); }
+.stop-metal-lo { stop-color: color-mix(in srgb, var(--c-frame) 55%, #1a1a1a); }
+
 .frame-panel { fill: url(#btn-panel); }
 
 .frame-outer {
   fill: none;
-  stroke: var(--c-frame);
-  stroke-width: 2.2;
+  stroke: url(#btn-metal);
+  stroke-width: 3;
   vector-effect: non-scaling-stroke;
-  transition: stroke 0.4s;
 }
 
 .frame-inner {
   fill: none;
-  stroke: var(--c-frame);
+  stroke: url(#btn-metal);
   stroke-width: 1;
-  opacity: 0.5;
+  opacity: 0.6;
   vector-effect: non-scaling-stroke;
 }
 
 .frame-orn path {
   fill: none;
-  stroke: var(--c-frame);
+  stroke: url(#btn-metal);
   stroke-width: 1.6;
+  stroke-linecap: round;
   vector-effect: non-scaling-stroke;
 }
 
 .frame-orn .frame-gem {
-  fill: var(--c-accent-2);
+  fill: url(#btn-metal);
+  stroke: color-mix(in srgb, var(--c-frame) 60%, #222);
+  stroke-width: 0.6;
 }
 
-.frame-sheen {
-  fill: url(#btn-sheen);
-  opacity: 0.35;
-}
-
-/* --- 충전 효과 (약 0.48초) --- */
+/* --- 마력 충전 (약 0.48초, 왼쪽 → 오른쪽) --- */
 .frame-charge {
   transform: translateX(0);
 }
 
 .menu-btn.is-charging .frame-charge {
-  transform: translateX(520px);
+  transform: translateX(530px);
   transition: transform 0.48s cubic-bezier(0.4, 0.1, 0.35, 1);
 }
 
 .frame-charge__fill {
   fill: url(#btn-charge);
-  opacity: 0.92;
+}
+
+/* 충전 영역 안의 은은한 물결: 앞쪽으로 흘러든다 */
+.frame-charge__flow path {
+  fill: none;
+  stroke: var(--btn-charge-1);
+  stroke-width: 1;
+  opacity: 0.22;
+  vector-effect: non-scaling-stroke;
+}
+
+.menu-btn.is-charging .frame-charge__flow {
+  animation: charge-flow 0.6s linear infinite;
+}
+
+@keyframes charge-flow {
+  from { transform: translateX(0); }
+  to   { transform: translateX(80px); }
+}
+
+/* 아주 작은 빛 입자 */
+.frame-charge__motes .mote {
+  fill: var(--btn-charge-1);
+  opacity: 0;
+}
+
+.menu-btn.is-charging .frame-charge__motes .mote {
+  animation: mote-drift 0.7s ease-out var(--d, 0s) infinite;
+}
+
+@keyframes mote-drift {
+  0%   { opacity: 0;    transform: translateX(-10px); }
+  40%  { opacity: 0.9; }
+  100% { opacity: 0;    transform: translateX(24px); }
+}
+
+/* 경계면: 흰 실선 대신 부드러운 빛 번짐 + 아주 옅은 선 */
+.frame-charge__glow {
+  fill: none;
+  stroke: var(--btn-charge-1);
+  stroke-width: 12;
+  opacity: 0.45;
 }
 
 .frame-charge__edge {
   fill: none;
   stroke: var(--c-frame-hi);
-  stroke-width: 1.4;
-  opacity: 0.7;
+  stroke-width: 0.8;
+  opacity: 0.25;
   vector-effect: non-scaling-stroke;
 }
 
@@ -783,49 +820,38 @@
 .menu-btn__label {
   position: relative;
   padding-left: 0.4em;
-  text-shadow: 0 0 12px var(--c-glow);
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.35),
+    0 0 8px var(--glow-a);
 }
 
+/* 한글: 마루부리(네이버 CDN) → Noto Serif KR → 기본 한글 글꼴. 자간은 이전(0.32em)보다 30% 축소 */
 :root[lang='ko'] .menu-btn__label {
-  font-family: var(--font-ko);
-  font-weight: 700;
-  letter-spacing: 0.32em;
+  font-family: 'MaruBuri', 'Noto Serif KR', var(--font-ko);
+  font-weight: 600;
+  letter-spacing: 0.224em;
 }
 
-/* 마우스 오버 / 키보드 포커스: 테두리 발광 */
+/* 마우스 오버 / 키보드 포커스: 은은한 테두리 빛만 (강한 발광은 충전 완료 때만) */
 .menu-btn:hover .menu-btn__frame,
 .menu-btn:focus-visible .menu-btn__frame {
-  animation: none;
   filter:
-    drop-shadow(0 0 3px var(--glow-a))
-    drop-shadow(0 0 12px var(--glow-a));
+    drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35))
+    drop-shadow(0 0 5px var(--glow-a));
+  transition: filter 0.3s var(--ease-soft);
 }
 
-.menu-btn:hover .frame-outer,
-.menu-btn:focus-visible .frame-outer,
-.menu-btn:hover .frame-orn path,
-.menu-btn:focus-visible .frame-orn path {
-  stroke: var(--c-frame-hi);
-}
-
-.menu-btn:hover .frame-sheen,
-.menu-btn:focus-visible .frame-sheen {
-  animation: sheen 1.6s var(--ease-soft) infinite;
-}
-
-@keyframes sheen {
-  from { transform: translateX(0); }
-  to   { transform: translateX(700px); }
-}
-
-/* 충전 완료: 짧은 발광 후 페이지 전환 (크기 변화 없음) */
+/* 충전 완료: 테두리 발광 강화 후 페이지 전환 (크기 변화 없음) */
 .menu-btn.is-charged .menu-btn__frame {
-  animation: none;
   filter:
-    drop-shadow(0 0 5px var(--c-frame-hi))
-    drop-shadow(0 0 22px var(--c-glow))
-    brightness(1.15);
+    drop-shadow(0 0 3px var(--c-frame-hi))
+    drop-shadow(0 0 14px var(--c-glow))
+    brightness(1.12);
   transition: filter 0.15s ease-out;
+}
+
+.menu-btn.is-charged .frame-charge__glow {
+  opacity: 0.7;
 }
 
 .menu-btn[aria-disabled='true'] {
