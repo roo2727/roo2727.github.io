@@ -17,8 +17,8 @@
 
 :root,
 :root[data-theme='night'] {
-  --r-card: rgba(8, 22, 34, 0.72);
-  --r-card-2: rgba(6, 30, 40, 0.6);
+  --r-card: rgba(8, 22, 34, 0.84);
+  --r-card-2: rgba(6, 30, 40, 0.78);
   --r-line: rgba(185, 199, 210, 0.28);
   --r-line-hi: rgba(95, 227, 211, 0.55);
   --r-tag: rgba(95, 227, 211, 0.12);
@@ -28,7 +28,7 @@
 }
 
 :root[data-theme='day'] {
-  --r-card: rgba(255, 252, 243, 0.86);
+  --r-card: rgba(255, 252, 243, 0.92);
   --r-card-2: rgba(250, 240, 214, 0.75);
   --r-line: rgba(160, 120, 50, 0.3);
   --r-line-hi: rgba(197, 143, 38, 0.6);
@@ -36,6 +36,12 @@
   --r-heading: #4a3612;
   --r-body: #4b3d26;
   --r-veil: rgba(255, 249, 235, 0.55);
+}
+
+:root[data-theme='day'] .info,
+:root[data-theme='day'] .card {
+  border-color: rgba(160, 120, 50, 0.42);
+  box-shadow: 0 8px 28px rgba(120, 88, 30, 0.14), 0 1px 0 rgba(255, 255, 255, 0.6) inset;
 }
 
 .page-region {
@@ -80,6 +86,8 @@ body.page-region {
   position: absolute;
   inset: 0;
   background:
+    /* 배경의 달·해 빛이 정보 영역 오른쪽 위로 번지지 않도록 그 자리를 한 번 더 덮는다 */
+    radial-gradient(38% 42% at 72% 14%, var(--r-veil), transparent 100%),
     radial-gradient(120% 80% at 30% 0%, transparent 0%, var(--r-veil) 70%),
     var(--r-veil);
 }
@@ -302,9 +310,10 @@ body.page-region {
 
 .sec-title__en {
   font-family: var(--font-display);
-  font-size: 0.72rem;
-  letter-spacing: 0.24em;
-  color: var(--c-text-dim);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: color-mix(in srgb, var(--c-accent) 70%, var(--r-body));
 }
 
 /* ==========================================================================
@@ -321,8 +330,9 @@ body.page-region {
 .info {
   min-width: 0;
   padding: clamp(24px, 2.6vw, 40px) clamp(24px, 3vw, 48px);
+  border: 1px solid var(--r-line);
   border-radius: 4px;
-  background: linear-gradient(180deg, var(--r-card), color-mix(in srgb, var(--r-card-2) 70%, transparent));
+  background: linear-gradient(180deg, var(--r-card), var(--r-card-2));
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
 }
@@ -335,10 +345,11 @@ body.page-region {
 
 /* ---------- 프로필 카드 ---------- */
 .profile {
-  position: sticky;
-  top: 20px;
+  /* 오른쪽 정보 영역과 높이를 맞추고 내용은 세로 가운데에 둔다 */
+  align-self: stretch;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   text-align: center;
   padding-top: clamp(24px, 3vw, 36px);
@@ -347,7 +358,7 @@ body.page-region {
 
 .profile__portrait {
   position: relative;
-  width: min(220px, 70%);
+  width: min(260px, 76%);
   aspect-ratio: 5 / 6;
   margin-bottom: 18px;
   border: 1px solid var(--r-line-hi);
@@ -370,13 +381,6 @@ body.page-region {
 
 .profile__portrait svg {
   fill: color-mix(in srgb, var(--c-text-dim) 35%, transparent);
-}
-
-.profile__class {
-  margin: 0 0 4px;
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-  color: var(--c-accent);
 }
 
 .profile__name {
@@ -499,9 +503,9 @@ body.page-region {
 
 .stat dt {
   margin-bottom: 4px;
-  font-size: 0.85rem;
+  font-size: 0.94rem;
   letter-spacing: 0.04em;
-  color: var(--c-text-dim);
+  color: color-mix(in srgb, var(--r-body) 78%, transparent);
 }
 
 .stat dd {
@@ -515,10 +519,17 @@ body.page-region {
   margin: 0;
 }
 
+.traits {
+  display: grid;
+  grid-template-columns: max-content 1fr; /* 왼쪽 칸은 가장 긴 항목 이름에 맞춘다 */
+  column-gap: 28px;
+}
+
 .trait {
   display: grid;
-  grid-template-columns: 11em 1fr;
-  gap: 8px 24px;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  gap: 8px 28px;
   align-items: baseline;
   padding: 16px 0;
   border-bottom: 1px solid var(--r-line);
@@ -600,8 +611,10 @@ body.page-region {
 .motto__quote p::before,
 .motto__quote p::after {
   font-family: var(--font-display);
+  font-size: 1.6em;
+  line-height: 0;
+  vertical-align: -0.28em;
   color: var(--c-accent);
-  opacity: 0.75;
 }
 
 .motto__quote p::before { content: '\201C\2009'; }
@@ -621,6 +634,7 @@ body.page-region {
    5. 반응형 (데스크톱 우선)
    ========================================================================== */
 @media (max-width: 1080px) {
+  .traits,
   .trait {
     grid-template-columns: 1fr;
   }
@@ -632,7 +646,7 @@ body.page-region {
   }
 
   .profile {
-    position: static;
+    align-self: start;
   }
 
   .region-head {

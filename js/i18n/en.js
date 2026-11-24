@@ -75,7 +75,6 @@
     'about.next': 'Next: School & Major',
     'about.profileAlt': 'Profile image (placeholder)',
     'about.profileImage': 'Profile image',
-    'about.class': 'Apprentice Adventurer',
     'about.name': '[Name]',
     'about.nameEn': '[English Name]',
     'about.oneLine': '[One sentence that introduces you]',

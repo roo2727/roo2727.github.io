@@ -76,7 +76,6 @@
     'about.next': '다음: 학교 및 전공',
     'about.profileAlt': '프로필 이미지 (임시)',
     'about.profileImage': '프로필 이미지',
-    'about.class': '견습 모험가',
     'about.name': '[이름]',
     'about.nameEn': '[English Name]',
     'about.oneLine': '[나를 한 줄로 소개하는 문장을 적어 주세요]',
