@@ -252,13 +252,29 @@
 
 /* ==========================================================================
    4. LIFE 로고 (assets/ui/logo-day.png, logo-night.png)
-   원본 이미지 2172 × 724. 글자 띠(LIFE)는 세로 270~625px, 가로 약 21~79% 구간.
+   원본 이미지 2172 × 724 (두 장 동일 캔버스).
+   측정값 (원본 px)
+     글자 윗선 y=270, 아랫선: 낮 631 / 밤 614  → 낮 글자가 약 5% 더 길다
+     글자 경계 x: L | I = 836, I | F = 1038, F | E = 1370
+     글자 영역: x 467~1712, y 250~642 (그 밖은 장식)
    ========================================================================== */
 .logo {
   /* 화면 크기에 맞춰 너비만 정하고 높이는 이미지 비율로 결정 */
   --logo-w: clamp(280px, 40vw, 720px);
-  --reveal-delay: 0.3s;
-  --reveal-dur: 2.6s;
+
+  /* 낮·밤 글자 높이 맞춤: 두 이미지를 글자 윗선(y=270) 기준으로 세로 보정해
+     아랫선이 같은 위치(약 y=622)에 오게 한다. 이미지를 바꾸면 이 값만 다시 맞춘다. */
+  --logo-day-sy: 0.976;
+  --logo-night-sy: 1.024;
+  --logo-letter-top: 37.29%; /* 270 / 724 */
+
+  /* 등장 연출 타이밍 */
+  --letter-dur: 1.4s;
+  --letter-gap: 0.35s;
+  --letter-start: 0.3s;
+  --orn-delay: 1.75s;
+  --orn-dur: 1.6s; /* 형성 완료 = orn-delay + orn-dur (title.js 가 읽는다) */
+
   position: relative;
   display: block;
   width: var(--logo-w);
@@ -273,6 +289,25 @@
   aspect-ratio: 2172 / 724;
 }
 
+.logo__theme,
+.logo__full,
+.logo__piece {
+  position: absolute;
+  inset: 0;
+}
+
+.logo__theme--day,
+.logo__img--day {
+  transform: scaleY(var(--logo-day-sy));
+  transform-origin: 50% var(--logo-letter-top);
+}
+
+.logo__theme--night,
+.logo__img--night {
+  transform: scaleY(var(--logo-night-sy));
+  transform-origin: 50% var(--logo-letter-top);
+}
+
 .logo__img {
   position: absolute;
   left: 0;
@@ -283,11 +318,38 @@
   -webkit-user-drag: none;
 }
 
-/* --- 처음 접속 시: 마스크가 왼쪽에서 오른쪽으로 번지며 로고가 형성된다 ---
-   부드러운 경계(투명 → 불투명)를 가진 그라디언트 마스크를 옮기고,
-   동시에 흐림을 걷어내 글자가 '맺히는' 느낌을 준다. */
-.logo__art .logo__img,
-.logo__reflection-band .logo__img {
+/* 테마 전환: .only-day / .only-night (base.css) 로 1.5초 교차 페이드 */
+
+/* --------------------------------------------------------------------------
+   글자별 형성: 이미지를 조각으로 잘라(clip-path) 하나씩 맺히게 한다
+   -------------------------------------------------------------------------- */
+.logo__full {
+  visibility: hidden;
+}
+
+.logo.is-formed .logo__full {
+  visibility: visible;
+}
+
+.logo.is-formed .logo__piece {
+  display: none;
+}
+
+.logo__piece--l   { --n: 0; clip-path: inset(34.53% 61.51% 11.33% 21.5%); }
+.logo__piece--i   { --n: 1; clip-path: inset(34.53% 52.21% 11.33% 38.49%); }
+.logo__piece--f   { --n: 2; clip-path: inset(34.53% 36.92% 11.33% 47.79%); }
+.logo__piece--e   { --n: 3; clip-path: inset(34.53% 21.2% 11.33% 63.08%); }
+
+/* 장식 = 전체에서 글자 영역을 뺀 나머지 (evenodd 로 구멍 뚫기) */
+.logo__piece--orn {
+  clip-path: polygon(evenodd,
+    0 0, 100% 0, 100% 100%, 0 100%, 0 0,
+    21.5% 34.53%, 78.8% 34.53%, 78.8% 88.67%, 21.5% 88.67%, 21.5% 34.53%);
+}
+
+/* 각 글자: 마스크가 글자 안에서 왼쪽→오른쪽으로 번지며, 흐림이 걷히고 제자리로 내려앉는다 */
+.logo__piece .logo__img {
+  opacity: 0;
   -webkit-mask-image: linear-gradient(100deg, #000 0%, #000 40%, rgba(0, 0, 0, 0.35) 47%, transparent 56%);
   mask-image: linear-gradient(100deg, #000 0%, #000 40%, rgba(0, 0, 0, 0.35) 47%, transparent 56%);
   -webkit-mask-size: 320% 100%;
@@ -296,26 +358,59 @@
   mask-repeat: no-repeat;
   -webkit-mask-position: 100% 0;
   mask-position: 100% 0;
-  animation: logo-reveal var(--reveal-dur) cubic-bezier(0.45, 0.05, 0.25, 1) var(--reveal-delay) forwards;
+  animation: letter-form var(--letter-dur) cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  animation-delay: calc(var(--letter-start) + var(--n) * var(--letter-gap));
 }
 
-@keyframes logo-reveal {
+/* 글자 조각의 마스크는 조각 폭이 아니라 이미지 전체 폭 기준이라,
+   각 글자 위치에서 스윕이 시작·끝나도록 위치 범위를 글자별로 지정 */
+.logo__piece--l .logo__img { --from: 72%; --to: 40%; }
+.logo__piece--i .logo__img { --from: 65%; --to: 36%; }
+.logo__piece--f .logo__img { --from: 60%; --to: 29%; }
+.logo__piece--e .logo__img { --from: 53%; --to: 22%; }
+
+@keyframes letter-form {
   0% {
-    -webkit-mask-position: 100% 0;
-    mask-position: 100% 0;
-    filter: blur(10px) brightness(1.6);
+    opacity: 0;
+    -webkit-mask-position: var(--from) 0;
+    mask-position: var(--from) 0;
+    filter: blur(6px) brightness(1.7);
+    transform: translateY(1.5%);
   }
-  60% {
-    filter: blur(2px) brightness(1.2);
+  35% {
+    opacity: 1;
+  }
+  70% {
+    filter: blur(1px) brightness(1.15);
   }
   100% {
-    -webkit-mask-position: 0% 0;
-    mask-position: 0% 0;
+    opacity: 1;
+    -webkit-mask-position: var(--to) 0;
+    mask-position: var(--to) 0;
     filter: blur(0) brightness(1);
+    transform: none;
   }
 }
 
-/* 테마 전환: 두 이미지는 base.css 의 .only-day / .only-night 로 1.5초 교차 페이드 */
+/* 장식: 글자가 모두 맺힌 뒤 은은하게 떠오른다 */
+.logo__piece--orn .logo__img {
+  -webkit-mask-image: none;
+  mask-image: none;
+  animation: logo-orn-in var(--orn-dur) var(--ease-soft) var(--orn-delay) forwards;
+}
+
+@keyframes logo-orn-in {
+  0% {
+    opacity: 0;
+    filter: blur(8px) brightness(1.5);
+    transform: translateY(1%) scale(0.985);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0) brightness(1);
+    transform: none;
+  }
+}
 
 /* --- 완성 후 은은하게 지나가는 빛 (로고 알파로 마스킹) --- */
 .logo__shine {
@@ -331,12 +426,12 @@
   visibility: hidden;
 }
 
-.logo__shine.only-day {
+.logo__theme--day .logo__shine {
   -webkit-mask-image: url('../assets/ui/logo-day.png');
   mask-image: url('../assets/ui/logo-day.png');
 }
 
-.logo__shine.only-night {
+.logo__theme--night .logo__shine {
   -webkit-mask-image: url('../assets/ui/logo-night.png');
   mask-image: url('../assets/ui/logo-night.png');
 }
@@ -359,21 +454,26 @@
   top: 86%;
   width: 100%;
   aspect-ratio: 2172 / 355;
-  opacity: 0.4;
+  opacity: 0;
   transform: scaleY(-1);
   -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.35) 35%, transparent 75%);
   mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.35) 35%, transparent 75%);
   filter: url('#water-ripple') blur(0.6px);
   pointer-events: none;
-  animation: ripple 5s ease-in-out infinite alternate;
+  animation:
+    reflection-in 2s var(--ease-soft) 1.2s forwards,
+    ripple 5s ease-in-out infinite alternate;
 }
 
-/* 원본 이미지 중 세로 270~625px 구간만 보이도록 잘라낸다 */
+@keyframes reflection-in {
+  to { opacity: 0.4; }
+}
+
+/* 원본 이미지 중 글자 띠(세로 270~625px, 가로 약 21~79%)만 남긴다 */
 .logo__reflection-band {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  /* 좌우 날개 장식은 빼고 L~E 글자 폭(약 21%~79%)만 남긴다 */
   -webkit-mask-image: linear-gradient(90deg, transparent 19.5%, #000 22.5%, #000 78.5%, transparent 81%);
   mask-image: linear-gradient(90deg, transparent 19.5%, #000 22.5%, #000 78.5%, transparent 81%);
 }

@@ -1,7 +1,7 @@
 /**
  * LIFE — title.js
  * 타이틀 화면의 동작을 연결한다.
- *   - 로고 이미지 형성(마스크) 완료 감지 → 빛 지나가는 효과 시작
+ *   - 로고 글자별 형성(L·I·F·E → 장식) 완료 감지 → 빛 지나가는 효과 시작
  *   - START: 페이드아웃 후 메인 로비로 이동
  *   - 언어(KR/EN), 낮/밤 테마 전환
  *   - 키보드 조작(↑↓ 메뉴 이동, ←→ 언어 선택, T 테마 전환)
@@ -21,7 +21,8 @@
   LIFE.i18n.translate();
 
   /* ---------- 로고 ---------- */
-  // 로고 이미지의 마스크 형성 애니메이션(logo-reveal)이 끝나면 빛 효과 시작
+  // 로고는 L·I·F·E 글자 조각이 차례로 맺힌 뒤 장식(logo-orn-in)이 떠오르며 완성된다.
+  // 완성되면 조각 대신 온전한 이미지로 바꾸고 빛 효과를 시작한다.
   var formed = false;
   function markFormed() {
     if (formed) return;
@@ -33,13 +34,13 @@
     markFormed();
   } else {
     logo.querySelector('.logo__art').addEventListener('animationend', function (e) {
-      if (e.animationName === 'logo-reveal') markFormed();
+      if (e.animationName === 'logo-orn-in') markFormed();
     });
-    // 안전장치: 이미지 로드 지연 등으로 이벤트를 놓쳐도 시작되도록
+    // 안전장치: 숨겨진 테마 쪽 이벤트만 오거나 이미지 로드가 늦어도 완성되도록
     var style = global.getComputedStyle(logo);
-    var total = (parseFloat(style.getPropertyValue('--reveal-delay')) || 0.3) +
-                (parseFloat(style.getPropertyValue('--reveal-dur')) || 2.6);
-    global.setTimeout(markFormed, total * 1000 + 600);
+    var total = (parseFloat(style.getPropertyValue('--orn-delay')) || 1.75) +
+                (parseFloat(style.getPropertyValue('--orn-dur')) || 1.6);
+    global.setTimeout(markFormed, total * 1000 + 500);
   }
 
   // 물결 반사 SVG 애니메이션은 모션 감소 시 정지

@@ -49,20 +49,35 @@
     <h1 class="logo" id="logo">
       <span class="visually-hidden">LIFE</span>
 
-      <!-- 로고 이미지: 낮/밤 두 장을 겹쳐 두고 테마에 따라 교차 전환 -->
+      <!-- 로고 이미지: 낮/밤 두 벌을 겹쳐 두고 테마에 따라 교차 전환.
+           처음 등장할 때는 이미지를 L·I·F·E·장식 조각으로 잘라 차례로 형성하고,
+           형성이 끝나면 조각 대신 온전한 이미지(.logo__full)를 보여 준다. -->
       <span class="logo__art" aria-hidden="true">
-        <img class="logo__img only-day" src="assets/ui/logo-day.png" alt="" width="2172" height="724" decoding="async">
-        <img class="logo__img only-night" src="assets/ui/logo-night.png" alt="" width="2172" height="724" decoding="async">
-        <!-- 완성 후 지나가는 빛: 로고 모양으로 마스킹 -->
-        <span class="logo__shine only-day"></span>
-        <span class="logo__shine only-night"></span>
+        <span class="logo__theme logo__theme--day only-day">
+          <span class="logo__full"><img class="logo__img" src="assets/ui/logo-day.png" alt="" width="2172" height="724" decoding="async"></span>
+          <span class="logo__piece logo__piece--l"><img class="logo__img" src="assets/ui/logo-day.png" alt="" width="2172" height="724" decoding="async"></span>
+          <span class="logo__piece logo__piece--i"><img class="logo__img" src="assets/ui/logo-day.png" alt="" width="2172" height="724" decoding="async"></span>
+          <span class="logo__piece logo__piece--f"><img class="logo__img" src="assets/ui/logo-day.png" alt="" width="2172" height="724" decoding="async"></span>
+          <span class="logo__piece logo__piece--e"><img class="logo__img" src="assets/ui/logo-day.png" alt="" width="2172" height="724" decoding="async"></span>
+          <span class="logo__piece logo__piece--orn"><img class="logo__img" src="assets/ui/logo-day.png" alt="" width="2172" height="724" decoding="async"></span>
+          <span class="logo__shine"></span>
+        </span>
+        <span class="logo__theme logo__theme--night only-night">
+          <span class="logo__full"><img class="logo__img" src="assets/ui/logo-night.png" alt="" width="2172" height="724" decoding="async"></span>
+          <span class="logo__piece logo__piece--l"><img class="logo__img" src="assets/ui/logo-night.png" alt="" width="2172" height="724" decoding="async"></span>
+          <span class="logo__piece logo__piece--i"><img class="logo__img" src="assets/ui/logo-night.png" alt="" width="2172" height="724" decoding="async"></span>
+          <span class="logo__piece logo__piece--f"><img class="logo__img" src="assets/ui/logo-night.png" alt="" width="2172" height="724" decoding="async"></span>
+          <span class="logo__piece logo__piece--e"><img class="logo__img" src="assets/ui/logo-night.png" alt="" width="2172" height="724" decoding="async"></span>
+          <span class="logo__piece logo__piece--orn"><img class="logo__img" src="assets/ui/logo-night.png" alt="" width="2172" height="724" decoding="async"></span>
+          <span class="logo__shine"></span>
+        </span>
       </span>
 
       <!-- 물 반사: LIFE 글자 띠만 잘라서 뒤집는다 (상단 장식 제외) -->
       <span class="logo__reflection" aria-hidden="true">
         <span class="logo__reflection-band">
-          <img class="logo__img only-day" src="assets/ui/logo-day.png" alt="" width="2172" height="724" decoding="async">
-          <img class="logo__img only-night" src="assets/ui/logo-night.png" alt="" width="2172" height="724" decoding="async">
+          <img class="logo__img logo__img--day only-day" src="assets/ui/logo-day.png" alt="" width="2172" height="724" decoding="async">
+          <img class="logo__img logo__img--night only-night" src="assets/ui/logo-night.png" alt="" width="2172" height="724" decoding="async">
         </span>
       </span>
     </h1>
