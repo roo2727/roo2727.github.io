@@ -182,7 +182,10 @@ body.page-region {
   border-radius: 3px;
   background: var(--r-tag);
   color: var(--r-heading);
-  font-size: 0.95rem;
+  font-family: var(--font-ko-display);
+  font-weight: var(--font-ko-display-weight);
+  font-size: 0.98rem;
+  letter-spacing: 0.04em;
   text-decoration: none;
   transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
 }
@@ -263,7 +266,7 @@ body.page-region {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .sec-title::after {
@@ -287,7 +290,7 @@ body.page-region {
   margin: 0;
   font-family: var(--font-ko-display);
   font-weight: var(--font-ko-display-weight);
-  font-size: 1.18rem;
+  font-size: 1.25rem;
   letter-spacing: 0.06em;
   color: var(--r-heading);
 }
@@ -310,15 +313,24 @@ body.page-region {
 .about {
   display: grid;
   grid-template-columns: 35fr 65fr;
-  gap: clamp(18px, 2vw, 28px);
+  gap: clamp(28px, 3vw, 48px) clamp(24px, 3vw, 44px);
   align-items: start;
 }
 
+/* 우측 정보 영역: 섹션마다 상자를 두지 않고 옅은 판 하나 위에 얇은 선으로 나눈다 */
 .info {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(14px, 1.8vh, 20px);
   min-width: 0;
+  padding: clamp(24px, 2.6vw, 40px) clamp(24px, 3vw, 48px);
+  border-radius: 4px;
+  background: linear-gradient(180deg, var(--r-card), color-mix(in srgb, var(--r-card-2) 70%, transparent));
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.info-sec + .info-sec {
+  margin-top: clamp(32px, 4vh, 44px);
+  padding-top: clamp(28px, 3.6vh, 40px);
+  border-top: 1px solid var(--r-line);
 }
 
 /* ---------- 프로필 카드 ---------- */
@@ -358,22 +370,6 @@ body.page-region {
 
 .profile__portrait svg {
   fill: color-mix(in srgb, var(--c-text-dim) 35%, transparent);
-}
-
-.profile__badge {
-  position: absolute;
-  left: 50%;
-  bottom: 10px;
-  transform: translateX(-50%);
-  padding: 2px 12px;
-  border: 1px solid var(--r-line-hi);
-  border-radius: 999px;
-  background: var(--r-card);
-  font-family: var(--font-display);
-  font-size: 0.78rem;
-  letter-spacing: 0.1em;
-  color: var(--c-accent);
-  white-space: nowrap;
 }
 
 .profile__class {
@@ -456,68 +452,92 @@ body.page-region {
   color: var(--r-heading);
 }
 
-/* ---------- 1. 기본 정보 ---------- */
-.stats {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px 24px;
-  margin: 0;
-}
-
-.stat {
-  display: grid;
-  grid-template-columns: 5.5em 1fr;
-  align-items: baseline;
-  gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px dashed var(--r-line);
-}
-
-.stat dt {
-  font-size: 0.88rem;
-  color: var(--c-text-dim);
-}
-
-.stat dd {
-  margin: 0;
-  font-size: 1.02rem;
-  font-weight: 500;
-  color: var(--r-heading);
-}
-
-/* ---------- 2. 자기소개 본문 ---------- */
-.prose p {
-  margin: 0 0 0.9em;
-  font-size: 1rem;
-  line-height: 1.8;
+/* ---------- 본문: Pretendard Regular 17px, 줄간격 1.75 ---------- */
+.prose p,
+.stat dd,
+.trait dd,
+.motto__text {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 1.0625rem; /* 17px */
+  line-height: 1.75;
   word-break: keep-all;
+}
+
+.prose p {
+  margin: 0 0 1em;
 }
 
 .prose p:last-child {
   margin-bottom: 0;
 }
 
-/* ---------- 3. 성격 및 장단점 ---------- */
-.traits {
+/* 자기소개 문단: 가장 먼저 읽히도록 한 단계 크게 */
+.prose--lead p {
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.8;
+  color: var(--r-heading);
+}
+
+/* ---------- 기본 정보: 이름 없이 학교 · 전공 · 학년 한 줄 ---------- */
+.stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
+  gap: 0;
+  margin: 0;
+}
+
+.stat {
+  padding: 2px 20px;
+  border-left: 1px solid var(--r-line);
+}
+
+.stat:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.stat dt {
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  color: var(--c-text-dim);
+}
+
+.stat dd {
+  margin: 0;
+  font-weight: 500;
+  color: var(--r-heading);
+}
+
+/* ---------- 성격 및 장단점: 세로형 (항목 | 내용), 얇은 구분선 ---------- */
+.traits {
+  margin: 0;
 }
 
 .trait {
-  padding: 14px 16px;
-  border: 1px solid var(--r-line);
-  border-top: 2px solid var(--r-line-hi);
-  border-radius: 3px;
-  background: var(--r-tag);
+  display: grid;
+  grid-template-columns: 11em 1fr;
+  gap: 8px 24px;
+  align-items: baseline;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--r-line);
+}
+
+.trait:first-child {
+  padding-top: 0;
+}
+
+.trait:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
 }
 
 .trait__title {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin: 0 0 8px;
-  font-size: 0.98rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--r-heading);
 }
@@ -531,50 +551,61 @@ body.page-region {
   stroke-width: 1.6;
   stroke-linecap: round;
   stroke-linejoin: round;
+  transform: translateY(1px);
 }
 
-.trait p {
+.trait dd {
   margin: 0;
-  font-size: 0.94rem;
-  line-height: 1.7;
-  word-break: keep-all;
 }
 
-/* ---------- 4. 가치관 및 좌우명: 강조된 인용문 ---------- */
+/* ---------- 가치관 및 좌우명: 하단 전체 너비에서 따로 강조 ---------- */
+.motto-sec {
+  grid-column: 1 / -1;
+  padding: clamp(36px, 5vh, 56px) clamp(24px, 6vw, 120px);
+  border-top: 1px solid var(--r-line);
+  background: radial-gradient(60% 100% at 50% 50%, var(--r-tag), transparent 75%);
+  text-align: center;
+}
+
+.sec-title--center {
+  justify-content: center;
+}
+
+.sec-title--center::after {
+  display: none;
+}
+
 .motto {
-  margin: 0;
+  max-width: 760px;
+  margin: 0 auto;
 }
 
 .motto__quote {
   position: relative;
-  margin: 0 0 14px;
-  padding: 18px 24px 18px 56px;
-  border-left: 2px solid var(--c-accent);
-  background: linear-gradient(90deg, var(--r-tag), transparent 85%);
-}
-
-.motto__quote::before {
-  content: '\201C';
-  position: absolute;
-  left: 16px;
-  top: 2px;
-  font-family: var(--font-display);
-  font-size: 3.2rem;
-  line-height: 1;
-  color: var(--c-accent);
-  opacity: 0.7;
+  margin: 8px 0 18px;
+  padding: 0;
 }
 
 .motto__quote p {
   margin: 0;
   font-family: var(--font-ko-display);
   font-weight: var(--font-ko-display-weight);
-  font-size: clamp(1.2rem, 1.7vw, 1.45rem);
-  line-height: 1.5;
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+  line-height: 1.45;
   letter-spacing: 0.03em;
   color: var(--r-heading);
   word-break: keep-all;
 }
+
+.motto__quote p::before,
+.motto__quote p::after {
+  font-family: var(--font-display);
+  color: var(--c-accent);
+  opacity: 0.75;
+}
+
+.motto__quote p::before { content: '\201C\2009'; }
+.motto__quote p::after  { content: '\2009\201D'; }
 
 :root[lang='en'] .motto__quote p {
   font-family: var(--font-display);
@@ -582,16 +613,15 @@ body.page-region {
 }
 
 .motto__text {
-  font-size: 0.98rem;
-  line-height: 1.8;
-  word-break: keep-all;
+  margin: 0;
+  color: var(--r-body);
 }
 
 /* ==========================================================================
    5. 반응형 (데스크톱 우선)
    ========================================================================== */
 @media (max-width: 1080px) {
-  .traits {
+  .trait {
     grid-template-columns: 1fr;
   }
 }
@@ -622,6 +652,12 @@ body.page-region {
 
   .stats {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .stat {
+    padding: 0;
+    border-left: 0;
   }
 
   .region-head__side {

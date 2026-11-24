@@ -502,27 +502,88 @@
   letter-spacing: 0.08em;
 }
 
-.region__keywords {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin: 0 0 24px;
+/* 이 지역에서 볼 수 있는 콘텐츠 3개: 번호 + 얇은 구분선 */
+.region__contents {
+  margin: 0 0 22px;
   padding: 0;
   list-style: none;
+  counter-reset: content;
 }
 
-.region__keywords li {
-  padding: 2px 10px;
+.region__contents li {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--lobby-line);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  counter-increment: content;
+}
+
+.region__contents li:first-child {
+  border-top: 1px solid var(--lobby-line);
+}
+
+.region__contents li::before {
+  content: counter(content, decimal-leading-zero);
+  flex: none;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--c-accent);
+}
+
+/* ---------- 지역 풍경 미리보기 (16:9) ---------- */
+.region-preview {
+  position: relative;
+  flex: none;
+  margin: 0 0 18px;
+  aspect-ratio: 16 / 9;
   border: 1px solid var(--lobby-line);
-  border-radius: 3px;
-  font-size: 0.88rem;
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--lobby-chip);
 }
 
-/* --- 입장하기 버튼 (장식은 양 끝에만) --- */
+.region-preview__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(2.2); /* 임시: 월드맵 배경에서 섬 주변만 확대 */
+  transform-origin: var(--px, 50%) var(--py, 50%);
+}
+
+.region-preview__bg.is-custom {
+  transform: none;
+}
+
+.region-preview__island {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: 46%;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.25));
+}
+
+.region-preview__note {
+  position: absolute;
+  right: 8px;
+  bottom: 6px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--lobby-panel);
+  color: var(--c-text-dim);
+  font-size: 0.7rem;
+}
+
 .enter-btn {
   position: relative;
   flex: none;
-  margin-top: auto;
+  margin-top: auto; /* 남는 높이는 입장 버튼 위에 둔다 (미리보기·콘텐츠 안내로 대부분 채워짐) */
   height: 50px;
   border: 1px solid var(--c-frame);
   border-radius: 2px;
@@ -681,6 +742,46 @@
 /* ==========================================================================
    6. 모션 감소
    ========================================================================== */
+/* 화면이 낮으면 미리보기와 글을 조금 줄여 입장 버튼이 첫 화면에 보이게 한다 */
+@media (min-width: 901px) and (max-height: 820px) {
+  .region-preview {
+    aspect-ratio: 21 / 9;
+    margin-bottom: 12px;
+  }
+
+  .panel__nav {
+    margin: 12px 0 10px;
+  }
+
+  .region__name {
+    margin: 2px 0 6px;
+    font-size: clamp(1.3rem, 1.9vw, 1.7rem);
+  }
+
+  .region__status {
+    margin-bottom: 10px;
+  }
+
+  .region__desc {
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .region__contents {
+    margin-bottom: 14px;
+  }
+
+  .region__contents li {
+    padding: 4px 0;
+    font-size: 0.9rem;
+  }
+
+  .panel__hint {
+    margin: 6px 0 10px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .island__body {
     animation: none !important;

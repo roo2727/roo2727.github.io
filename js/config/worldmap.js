@@ -14,6 +14,9 @@
  *   hit    : 클릭 영역 (이미지 기준 %, 타원). 이미지의 투명한 여백은 클릭되지 않도록
  *            실제 섬 몸통 부분만 지정한다. 새 이미지로 바꾸면 이 값만 맞춰 주면 된다.
  *   images : { day, night } 낮/밤 이미지
+ *   preview: { day, night } 정보 패널 위쪽의 풍경 일러스트 (16:9 권장).
+ *            null 이면 월드맵 배경과 섬 그림으로 임시 미리보기를 만든다.
+ *            예) preview: { day: IMG + 'previews/intro-day.jpg', night: IMG + 'previews/intro-night.jpg' }
  *
  * 섬 순서 = 방향키로 이동하는 순서 = 지역 번호.
  */
@@ -36,7 +39,8 @@
       images: {
         day: IMG + 'islands/' + id + '-day.svg',
         night: IMG + 'islands/' + id + '-night.svg'
-      }
+      },
+      preview: null // 실제 풍경 일러스트를 받으면 { day: ..., night: ... } 로 지정
     };
   }
 

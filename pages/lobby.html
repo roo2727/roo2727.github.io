@@ -90,13 +90,23 @@
       </button>
     </div>
 
+    <!-- 선택 지역 풍경 미리보기. 실제 일러스트는 js/config/worldmap.js 의 preview 로 지정한다.
+         지정하지 않으면 월드맵 배경 + 섬 그림으로 임시 화면을 만든다. -->
+    <figure class="region-preview" id="region-preview" aria-hidden="true">
+      <img class="region-preview__bg only-day" id="preview-bg-day" alt="">
+      <img class="region-preview__bg only-night" id="preview-bg-night" alt="">
+      <img class="region-preview__island only-day" id="preview-island-day" alt="">
+      <img class="region-preview__island only-night" id="preview-island-night" alt="">
+      <figcaption class="region-preview__note" id="preview-note" data-i18n="lobby.previewNote">임시 이미지</figcaption>
+    </figure>
+
     <section class="panel__body" id="region-info" aria-live="polite">
       <p class="region__tagline" id="region-tagline"></p>
       <h2 class="region__name" id="region-name"></h2>
       <p class="region__status" id="region-status"></p>
       <p class="region__desc" id="region-desc"></p>
-      <h3 class="region__label" data-i18n="lobby.keywords">키워드</h3>
-      <ul class="region__keywords" id="region-keywords"></ul>
+      <h3 class="region__label" data-i18n="lobby.contents">이 지역에서 볼 수 있는 것</h3>
+      <ol class="region__contents" id="region-contents"></ol>
     </section>
 
     <button class="enter-btn" id="enter-btn" type="button">

@@ -37,7 +37,12 @@
     name: $('region-name'),
     status: $('region-status'),
     desc: $('region-desc'),
-    keywords: $('region-keywords'),
+    contents: $('region-contents'),
+    previewBgDay: $('preview-bg-day'),
+    previewBgNight: $('preview-bg-night'),
+    previewIslandDay: $('preview-island-day'),
+    previewIslandNight: $('preview-island-night'),
+    previewNote: $('preview-note'),
     enter: $('enter-btn'),
     progressValue: $('progress-value'),
     progressBar: $('progress-bar'),
@@ -61,17 +66,43 @@
     el.status.textContent = t(visited ? 'lobby.visited' : 'lobby.unvisited');
     el.status.classList.toggle('is-visited', visited);
 
-    el.keywords.innerHTML = '';
-    t(key + 'keywords').split(',').forEach(function (word) {
+    // 이 지역에서 볼 수 있는 콘텐츠 3개 (문구: region.<id>.contents, '|' 로 구분)
+    el.contents.innerHTML = '';
+    t(key + 'contents').split('|').forEach(function (item) {
       var li = doc.createElement('li');
-      li.textContent = word.trim();
-      el.keywords.appendChild(li);
+      li.textContent = item.trim();
+      el.contents.appendChild(li);
     });
+
+    renderPreview(r);
 
     if (animate && !reduceMotion.matches) {
       el.info.classList.remove('is-fresh');
       void el.info.offsetWidth; // 애니메이션 재시작
       el.info.classList.add('is-fresh');
+    }
+  }
+
+  /* ---------- 풍경 미리보기 ----------
+     r.preview = { day, night } 가 있으면 그 일러스트를 쓰고,
+     없으면 월드맵 배경을 섬 위치 쪽으로 잘라 보여 주고 그 위에 섬 그림을 올린다 (임시). */
+  var cfg = LIFE.config.worldmap;
+  function renderPreview(r) {
+    var custom = r.preview && r.preview.day && r.preview.night;
+    el.previewBgDay.src = custom ? r.preview.day : cfg.background.day;
+    el.previewBgNight.src = custom ? r.preview.night : cfg.background.night;
+    var pos = custom ? '50% 50%' : r.x + '% ' + r.y + '%';
+    [el.previewBgDay, el.previewBgNight].forEach(function (img) {
+      img.style.objectPosition = pos;
+      img.style.setProperty('--px', custom ? '50%' : r.x + '%');
+      img.style.setProperty('--py', custom ? '50%' : r.y + '%');
+    });
+    el.previewBgDay.classList.toggle('is-custom', !!custom);
+    el.previewBgNight.classList.toggle('is-custom', !!custom);
+    el.previewIslandDay.hidden = el.previewIslandNight.hidden = el.previewNote.hidden = !!custom;
+    if (!custom) {
+      el.previewIslandDay.src = r.images.day;
+      el.previewIslandNight.src = r.images.night;
     }
   }
 
