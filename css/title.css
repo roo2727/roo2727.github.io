@@ -284,7 +284,8 @@
    inset:0 / 100% 로 겹쳐 원본 조립 형태(assembled.png)를 그대로 재현한다.
 
    최초 접속 타임라인 (초)
-     0.3 L · 0.5 I · 0.7 F · 0.9 E          글자 형성
+     0.3 L · 0.5 I · 0.7 F · 0.9 E          글자 형성 (TITLE 1 방식: 흐림·확대 → 선명)
+     2.6~                                   글자 위로 빛이 지나감 (7초 주기)
      1.1 바깥 반달선 · 1.3 안쪽 반달선       선 그리기 (stroke-dashoffset)
      1.6 중앙 태양/별 · 1.8~1.95 궤도 별     등장
      2.0 왼쪽 · 2.15 오른쪽 장식             바깥으로 펼쳐짐
@@ -329,41 +330,63 @@
   overflow: visible;
 }
 
-/* ---------- 글자: 아래에서 위로 차오르는 마스크 + 투명도 + 미세한 빛 ---------- */
+/* ---------- 글자: 첫 번째 타이틀(TITLE 1)과 같은 형성 연출 ----------
+   흐릿하고 크게 번진 상태에서 글자 하나씩 제자리로 내려앉으며 선명해진다.
+   transform-origin 은 각 글자 이미지의 중심(원본 좌표 기준) */
 .logo__letter {
   opacity: 0;
-  -webkit-mask-image: linear-gradient(to top, #000 45%, transparent 55%);
-  mask-image: linear-gradient(to top, #000 45%, transparent 55%);
-  -webkit-mask-size: 100% 300%;
-  mask-size: 100% 300%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: 0 10%;
-  mask-position: 0 10%;
-  animation: letter-form 0.95s cubic-bezier(0.3, 0.6, 0.2, 1) forwards;
+  animation: char-form 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
 }
 
-.logo__letter--l { animation-delay: 0.3s; }
-.logo__letter--i { animation-delay: 0.5s; }
-.logo__letter--f { animation-delay: 0.7s; }
-.logo__letter--e { animation-delay: 0.9s; }
+.logo__letter--l { animation-delay: 0.3s; transform-origin: 25.6% 70.2%; }
+.logo__letter--i { animation-delay: 0.5s; transform-origin: 41.3% 73.9%; }
+.logo__letter--f { animation-delay: 0.7s; transform-origin: 56.5% 73.9%; }
+.logo__letter--e { animation-delay: 0.9s; transform-origin: 73.9% 73.9%; }
 
-@keyframes letter-form {
+@keyframes char-form {
   0% {
     opacity: 0;
-    -webkit-mask-position: 0 10%;
-    mask-position: 0 10%;
-    filter: brightness(1.9) blur(1.5px);
+    filter: blur(18px);
+    transform: translateY(5%) scale(1.35);
   }
-  30% {
+  55% {
     opacity: 1;
+    filter: blur(3px);
   }
   100% {
     opacity: 1;
-    -webkit-mask-position: 0 72%;
-    mask-position: 0 72%;
-    filter: brightness(1) blur(0);
+    filter: blur(0);
+    transform: none;
   }
+}
+
+/* ---------- 완성 후 은은하게 지나가는 빛 (letters-only 모양으로 마스킹) ---------- */
+.logo__shine {
+  opacity: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.95) 49%, rgba(255, 255, 255, 0.4) 52%, transparent 60%);
+  background-size: 300% 100%;
+  background-position: 100% 0;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+  animation: fade-to 0.01s linear 2.6s forwards, shine 7s ease-in-out 2.6s infinite;
+}
+
+.logo__theme--day .logo__shine {
+  -webkit-mask-image: url('../assets/ui/logo/day/letters-only.png');
+  mask-image: url('../assets/ui/logo/day/letters-only.png');
+}
+
+.logo__theme--night .logo__shine {
+  -webkit-mask-image: url('../assets/ui/logo/night/letters-only.png');
+  mask-image: url('../assets/ui/logo/night/letters-only.png');
+}
+
+@keyframes shine {
+  0%   { background-position: 100% 0; }
+  32%  { background-position: 0% 0; }
+  100% { background-position: 0% 0; }
 }
 
 /* ---------- 반달선: 실제로 그려지는 선 ---------- */
@@ -864,6 +887,10 @@
 
   .logo__aura::before {
     animation: none !important;
+  }
+
+  .logo__shine {
+    display: none;
   }
 
   .illustration__layer .illustration__media {
