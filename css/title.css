@@ -823,7 +823,7 @@
 
 :root[lang='ko'] .menu-btn__label {
   font-family: var(--font-ko-display);
-  font-weight: 400; /* 빛의계승자체 Regular */
+  font-weight: var(--font-ko-display-weight);
   letter-spacing: 0.1em;
 }
 

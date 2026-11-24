@@ -1,0 +1,10 @@
+던파 연단된 칼날 (DNFForgedBlade) — 네오플 글꼴 저작권 안내
+
+Copyright (c) 2023, NEOPLE Inc. (https://www.neople.co.kr),
+with Reserved Font Name ForgedBlade_TTF.ttf, ForgedBlade_OTF.otf, DNFBitBit_ver2_TTF.ttf, DNFBitBit_ver2_OTF.otf.
+
+제공되는 서체의 지적 재산권을 포함한 모든 권리는 ㈜ 네오플에 있습니다.
+
+- 출처: https://df.nexon.com/data/font
+- 사용 방식: 네오플 공식 웹폰트 주소(https://cdn.df.nexon.com/img/common/font/)를 그대로 불러옴.
+  폰트 파일은 이 저장소에 포함하지 않으며, 수정·편집하지 않은 배포 형태 그대로 사용함.

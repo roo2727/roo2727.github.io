@@ -26,29 +26,36 @@
 @property --c-fade        { syntax: '<color>'; inherits: true; initial-value: #02060c; }
 @property --c-chip        { syntax: '<color>'; inherits: true; initial-value: rgba(10, 40, 50, 0.55); }
 
-/* 빛의계승자체 (펀플로·산돌, 무료 / 상업적 사용 가능, 웹사이트 임베딩 '조건부 허용').
-   폰트 파일은 저장소에 포함하지 않는다. 설치되어 있으면 local(), 없으면 assets/fonts/ 의 파일,
-   그것도 없으면 Gowun Batang 으로 대체된다. assets/fonts/README.md 참고. */
+/* 던파 연단된 칼날 (네오플 공식 웹폰트)
+   Copyright (c) 2023, NEOPLE Inc. (https://www.neople.co.kr),
+   with Reserved Font Name ForgedBlade_TTF.ttf, ForgedBlade_OTF.otf, DNFBitBit_ver2_TTF.ttf, DNFBitBit_ver2_OTF.otf.
+   제공되는 서체의 지적 재산권을 포함한 모든 권리는 ㈜ 네오플에 있습니다.
+   출처: https://df.nexon.com/data/font  (assets/fonts/NOTICE-DNFForgedBlade.txt 참고) */
 @font-face {
-  font-family: 'HeirofLight';
+  font-family: 'DNFForgedBlade';
   font-style: normal;
-  font-weight: 400;
+  font-weight: 300;
   font-display: swap;
-  src:
-    local('Sandoll HeirofLight Regular'),
-    local('SandollHeirofLight-Regular'),
-    local('빛의계승자체 Regular'),
-    url('../assets/fonts/HeirofLight-Regular.woff2') format('woff2'),
-    url('../assets/fonts/HeirofLight-Regular.otf') format('opentype');
+  src: url('https://cdn.df.nexon.com/img/common/font/DNFForgedBlade-Light.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'DNFForgedBlade';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('https://cdn.df.nexon.com/img/common/font/DNFForgedBlade-Medium.otf') format('opentype');
 }
 
 :root {
   --theme-duration: 1.5s;
   --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* 영문 메인 UI: Cinzel Medium / 한글 메인 UI: 빛의계승자체 Regular / 본문·보조 UI: Pretendard */
+  /* 영문 메인 UI: Cinzel Medium / 한글 메인 UI: 던파 연단된 칼날 Medium (후보 비교 중) / 본문·보조 UI: Pretendard
+     한글 메인 UI 폰트는 js/dev/font-preview.js 에서 임시로 바꿀 수 있다 (확정 후 제거 예정). */
   --font-display: 'Cinzel', 'Cormorant Garamond', 'Times New Roman', serif;
-  --font-ko-display: 'HeirofLight', 'Gowun Batang', 'Nanum Myeongjo', serif;
+  --font-ko-display: 'DNFForgedBlade', 'Gowun Batang', 'Nanum Myeongjo', serif;
+  --font-ko-display-weight: 500;
   --font-body: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
   --font-ko: var(--font-body);
 
