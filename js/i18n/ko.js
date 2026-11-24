@@ -1,0 +1,120 @@
+/** LIFE — 한국어 문구 */
+(function (global) {
+  'use strict';
+  var LIFE = (global.LIFE = global.LIFE || {});
+  LIFE.messages = LIFE.messages || {};
+  LIFE.messages.ko = {
+    'meta.title': 'LIFE — 포트폴리오',
+    'meta.lobby': 'LIFE — 월드맵',
+
+    'title.start': '시작하기',
+    'title.menu': '타이틀 메뉴',
+
+    'settings.language': '언어',
+    'settings.languageGroup': '언어 선택',
+    'settings.night': '밤 테마',
+
+    'lobby.mapTitle': '월드맵',
+    'lobby.mapHint': '탐험할 섬을 선택하세요',
+    'lobby.regions': '지역 목록',
+    'lobby.panel': '지역 정보',
+    'lobby.prev': '이전 지역',
+    'lobby.next': '다음 지역',
+    'lobby.enter': '입장하기',
+    'lobby.visited': '방문함',
+    'lobby.unvisited': '미방문',
+    'lobby.keywords': '키워드',
+    'lobby.contents': '이 지역에서 볼 수 있는 것',
+    'lobby.previewNote': '임시 이미지',
+    'lobby.progress': '탐험 진행도',
+    'lobby.complete': '모든 지역을 탐험했어요',
+    'lobby.keyHint': '← → 지역 이동 · Enter 입장',
+    'lobby.back': '타이틀',
+    'lobby.settings': '설정',
+
+    'region.intro.name': '자기소개',
+    'region.intro.tagline': 'ABOUT ME',
+    'region.intro.desc': '이름과 성격, 좌우명처럼 처음 만나는 사람에게 건네는 인사가 머무는 섬입니다.',
+    'region.intro.keywords': '프로필, 성격, 좌우명',
+    'region.intro.contents': '자기소개 이야기|기본 정보와 성격·장단점|가치관과 좌우명',
+    'region.school.name': '학교 및 전공',
+    'region.school.tagline': 'SCHOOL & MAJOR',
+    'region.school.desc': '다니고 있는 학교와 전공, 그리고 지금 배우고 있는 것들을 기록하는 학문의 섬입니다.',
+    'region.school.keywords': '학교, 전공, 수강 과목',
+    'region.school.contents': '학교와 전공 소개|지금 듣고 있는 과목|배우며 느낀 점',
+    'region.interests.name': '관심 분야',
+    'region.interests.tagline': 'INTERESTS',
+    'region.interests.desc': '요즘 마음이 끌리는 기술과 주제를 관측하는 천문대입니다.',
+    'region.interests.keywords': '기술, 탐구, 호기심',
+    'region.interests.contents': '관심 있는 기술과 분야|관심을 갖게 된 계기|더 알아보고 싶은 주제',
+    'region.activities.name': '활동 및 경험',
+    'region.activities.tagline': 'ACTIVITIES',
+    'region.activities.desc': '프로젝트, 동아리, 대외활동처럼 직접 부딪히며 쌓은 경험이 모인 야영지입니다.',
+    'region.activities.keywords': '프로젝트, 동아리, 경험',
+    'region.activities.contents': '프로젝트 경험|동아리와 대외활동|경험에서 배운 점',
+    'region.hobbies.name': '취미 생활',
+    'region.hobbies.tagline': 'HOBBIES',
+    'region.hobbies.desc': '쉬는 날 즐기는 일과 좋아하는 것들이 자라는 숲의 섬입니다.',
+    'region.hobbies.keywords': '취미, 휴식, 취향',
+    'region.hobbies.contents': '즐겨 하는 취미|좋아하는 것들|쉬는 날의 하루',
+    'region.future.name': '미래 목표',
+    'region.future.tagline': 'FUTURE GOALS',
+    'region.future.desc': '앞으로 이루고 싶은 꿈과 목표를 비추는, 가장 높은 곳의 등대입니다.',
+    'region.future.keywords': '꿈, 목표, 계획',
+    'region.future.contents': '이루고 싶은 꿈|단기·장기 목표|목표를 위한 계획',
+    'region.wip': '이 지역의 이야기는 준비 중입니다.',
+    'region.backToMap': '월드맵으로 돌아가기',
+
+    'common.wip': '준비 중',
+    'common.backToTitle': '타이틀로 돌아가기',
+
+    /* ---------- 상세 페이지 공통 (css/detail.css, js/pages/detail.js) ---------- */
+    'detail.backToMap': '월드맵',
+    'detail.prev': '이전 지역',
+    'detail.next': '다음 지역',
+    'detail.progress': '지역 진행',
+    'detail.page': '페이지',
+    'detail.pageNav': '지역 이동',
+    'detail.themeToggle': '낮/밤 테마 전환',
+
+    /* ---------- 01 자기소개 (pages/regions/intro.html) ----------
+       '[ ]' 로 표시된 값은 직접 채워 주세요. */
+    'about.kicker': 'CHAPTER 01 · ABOUT ME',
+    'about.title': '나라는 세계의 시작',
+    'about.subtitle': '아이디어를 하나의 세계로.',
+    'about.lead': '게임 개발자를 꿈꾸는 컴퓨터공학도',
+    'about.kw1': '탐구',
+    'about.kw2': '도전',
+    'about.kw3': '성장',
+    'about.keywords': '나를 표현하는 키워드',
+
+    'about.basic': '기본 정보',
+    'about.label.name': '이름',
+    'about.label.school': '학교',
+    'about.label.major': '전공',
+    'about.label.grade': '학년',
+    'about.label.dream': '희망 직업',
+    'about.value.name': '[이름]',
+    'about.value.school': '[학교]',
+    'about.value.major': '컴퓨터공학과',
+    'about.value.grade': '2학년',
+    'about.value.dream': '게임 개발자',
+
+    'about.intro': '자기소개',
+    'about.intro1': '안녕하세요. 게임 개발자를 꿈꾸며 컴퓨터공학을 공부하고 있습니다. 게임을 즐기는 것에서 출발해, 이제는 직접 게임을 기획하고 개발하며 새로운 세계를 만들어가는 과정에 매력을 느끼고 있습니다.',
+    'about.intro2': '아직 배워야 할 것이 많지만, 새로운 기술을 탐구하고 머릿속의 아이디어를 실제 결과물로 구현하는 것을 좋아합니다.',
+
+    'about.traits': '성격 및 장단점',
+    'about.trait.personality': '성격',
+    'about.trait.strength': '장점',
+    'about.trait.growth': '보완점',
+    'about.trait.personalityText': '새로운 것에 호기심이 많으며, 관심 있는 분야에 깊게 몰입하는 편입니다.',
+    'about.trait.strengthText': '원하는 결과가 나오지 않더라도 문제의 원인을 찾고 개선하려고 노력합니다.',
+    'about.trait.growthText': '결과물의 완성도를 중요하게 생각하다 보니 세부적인 부분에 많은 시간을 투자할 때가 있습니다.',
+
+    'about.motto': '좌우명',
+    'about.motto1': '상상에 머무르지 않고,',
+    'about.motto2a': '직접',
+    'about.motto2b': ' 만들어 나가자.'
+  };
+})(window);

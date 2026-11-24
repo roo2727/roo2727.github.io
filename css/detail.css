@@ -1,0 +1,958 @@
+/* ==========================================================================
+   LIFE — detail.css
+   지역 상세 페이지 공통 디자인 시스템 (시네마틱 판타지 인터페이스)
+   여섯 지역 페이지가 함께 쓰고, 지역별 배치는 css/regions/<id>.css 에서 정한다.
+
+   목차
+     0. 색 토큰 (낮: 하늘빛·아이보리·금빛 / 밤: 네이비·청록·은빛)
+     1. 배경 일러스트와 가독성 그라데이션
+     2. 페이지 틀 · 공통 헤더 · 공통 하단
+     3. 버튼 (월드맵 복귀, 이전·다음 지역) · 언어/테마 조작
+     4. 페이지 제목과 장식
+     5. 키워드 태그
+     6. 섹션 제목 · 본문 · 정보 행 · 문장 행
+     7. 인용문 / 좌우명 강조 프레임
+     8. 페이지 진행 표시
+     9. 반응형 · 모션 감소
+
+   원칙: 장식(별, 곡선, 프레임)은 aria-hidden SVG 또는 CSS 로만 그리고, 글은 항상 실제 HTML 텍스트.
+         특별한 프레임은 키워드·좌우명·주요 버튼에만 쓴다.
+   ========================================================================== */
+
+/* ---------- 0. 색 토큰 ---------- */
+@property --d-ink       { syntax: '<color>'; inherits: true; initial-value: #eef4fb; }
+@property --d-text      { syntax: '<color>'; inherits: true; initial-value: #d6dfeb; }
+@property --d-dim       { syntax: '<color>'; inherits: true; initial-value: #a3b3c8; }
+@property --d-accent    { syntax: '<color>'; inherits: true; initial-value: #74e0d4; }
+@property --d-orn       { syntax: '<color>'; inherits: true; initial-value: #cdd8e4; }
+@property --d-line      { syntax: '<color>'; inherits: true; initial-value: rgba(205, 216, 228, 0.32); }
+@property --d-btn-bg    { syntax: '<color>'; inherits: true; initial-value: rgba(9, 24, 48, 0.78); }
+@property --d-btn-line  { syntax: '<color>'; inherits: true; initial-value: rgba(150, 222, 214, 0.8); }
+@property --d-btn-ink   { syntax: '<color>'; inherits: true; initial-value: #eef4fb; }
+@property --d-shade     { syntax: '<color>'; inherits: true; initial-value: rgba(8, 18, 42, 0.74); }
+@property --d-shade-0   { syntax: '<color>'; inherits: true; initial-value: rgba(8, 18, 42, 0); }
+@property --d-chip      { syntax: '<color>'; inherits: true; initial-value: rgba(9, 24, 48, 0.62); }
+@property --d-tag-1     { syntax: '<color>'; inherits: true; initial-value: #0d1f3c; }
+@property --d-tag-2     { syntax: '<color>'; inherits: true; initial-value: #132a4c; }
+
+:root,
+:root[data-theme='night'] {
+  --d-ink: #eef4fb;
+  --d-text: #d6dfeb;
+  --d-dim: #a3b3c8;
+  --d-accent: #74e0d4;
+  --d-orn: #cdd8e4;
+  --d-line: rgba(205, 216, 228, 0.32);
+  --d-btn-bg: rgba(9, 24, 48, 0.78);
+  --d-btn-line: rgba(150, 222, 214, 0.8);
+  --d-btn-ink: #eef4fb;
+  --d-shade: rgba(8, 18, 42, 0.74);
+  --d-shade-0: rgba(8, 18, 42, 0);
+  --d-chip: rgba(9, 24, 48, 0.62);
+  --d-tag-1: #0d1f3c;
+  --d-tag-2: #132a4c;
+  --d-base: #0b1731; /* 모바일에서 일러스트 아래로 이어지는 바탕색 */
+}
+
+:root[data-theme='day'] {
+  --d-ink: #1c4847;
+  --d-text: #2b3943;
+  --d-dim: #566872;
+  --d-accent: #2c7a72;
+  --d-orn: #c19a48;
+  --d-line: rgba(60, 100, 100, 0.28);
+  --d-btn-bg: #3d756f;
+  --d-btn-line: #d2b26a;
+  --d-btn-ink: #f8f3e4;
+  --d-shade: rgba(247, 250, 254, 0.86);
+  --d-shade-0: rgba(247, 250, 254, 0);
+  --d-chip: rgba(255, 253, 246, 0.82);
+  --d-tag-1: #fffdf6;
+  --d-tag-2: #f2f6f7;
+  --d-base: #f3f7fb;
+}
+
+.page-detail {
+  transition:
+    --d-ink var(--theme-duration) var(--ease-soft),
+    --d-text var(--theme-duration) var(--ease-soft),
+    --d-dim var(--theme-duration) var(--ease-soft),
+    --d-accent var(--theme-duration) var(--ease-soft),
+    --d-orn var(--theme-duration) var(--ease-soft),
+    --d-line var(--theme-duration) var(--ease-soft),
+    --d-btn-bg var(--theme-duration) var(--ease-soft),
+    --d-btn-line var(--theme-duration) var(--ease-soft),
+    --d-btn-ink var(--theme-duration) var(--ease-soft),
+    --d-shade var(--theme-duration) var(--ease-soft),
+    --d-shade-0 var(--theme-duration) var(--ease-soft),
+    --d-chip var(--theme-duration) var(--ease-soft),
+    --d-tag-1 var(--theme-duration) var(--ease-soft),
+    --d-tag-2 var(--theme-duration) var(--ease-soft);
+}
+
+/* 상세 페이지는 세로 스크롤을 허용한다 (base.css 기본값은 hidden) */
+body.page-detail {
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: var(--c-fade);
+}
+
+/* ==========================================================================
+   1. 배경 일러스트와 가독성 그라데이션
+   - 지역마다 .detail-bg 안에 낮·밤 이미지를 한 장씩 둔다 (.only-day / .only-night 교차 페이드)
+   - --bg-focus : 화면 비율이 달라 잘릴 때 남길 위치 (기본: 왼쪽의 캐릭터 쪽)
+   - --shade-from / --shade-to : 정보 영역 그라데이션이 시작·짙어지는 가로 위치
+   ========================================================================== */
+.detail-bg {
+  --bg-focus: 22% 50%;
+  --shade-from: 30%;
+  --shade-to: 50%;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.detail-bg__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--bg-focus);
+}
+
+.detail-bg__shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, var(--d-shade-0) var(--shade-from), color-mix(in srgb, var(--d-shade) 70%, transparent) var(--shade-to), var(--d-shade) 100%),
+    linear-gradient(0deg, color-mix(in srgb, var(--d-shade) 55%, transparent) 0%, var(--d-shade-0) 16%);
+}
+
+/* ==========================================================================
+   2. 페이지 틀 · 공통 헤더 · 공통 하단
+   ========================================================================== */
+.detail {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: clamp(16px, 2.4vh, 28px) clamp(16px, 2.6vw, 48px) clamp(18px, 2.6vh, 30px);
+  color: var(--d-text);
+  font-family: var(--font-body);
+}
+
+.detail-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.detail-head__side {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 1.4vw, 22px);
+}
+
+.detail-head__rule {
+  width: 1px;
+  height: 22px;
+  background: var(--d-orn);
+  opacity: 0.6;
+}
+
+.detail-head__page {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 1.5vw, 1.45rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--d-ink);
+  white-space: nowrap;
+}
+
+.detail-foot {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 2vw, 32px);
+  margin-top: auto;
+  padding-top: clamp(20px, 3vh, 36px);
+}
+
+/* ==========================================================================
+   3. 버튼 · 언어/테마 조작
+   ========================================================================== */
+/* 양 끝이 뾰족한 판타지 버튼. 테두리는 바깥 모양(배경색 = 테두리색) 위에
+   같은 모양을 1.5px 안쪽에 겹쳐 그린다. */
+.d-btn {
+  --cut: 16px;
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-width: clamp(150px, 13vw, 220px);
+  height: clamp(42px, 4.6vh, 50px);
+  padding: 0 calc(var(--cut) + 14px);
+  clip-path: polygon(var(--cut) 0, calc(100% - var(--cut)) 0, 100% 50%, calc(100% - var(--cut)) 100%, var(--cut) 100%, 0 50%);
+  background: var(--d-btn-line);
+  color: var(--d-btn-ink);
+  font-family: var(--font-ko-display);
+  font-weight: var(--font-ko-display-weight);
+  font-size: clamp(1rem, 1.25vw, 1.2rem);
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.3s, filter 0.3s;
+}
+
+.d-btn::before {
+  content: '';
+  position: absolute;
+  inset: 1.5px;
+  z-index: -1;
+  clip-path: polygon(calc(var(--cut) - 1px) 0, calc(100% - var(--cut) + 1px) 0, 100% 50%, calc(100% - var(--cut) + 1px) 100%, calc(var(--cut) - 1px) 100%, 0 50%);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--d-btn-bg) 88%, #fff), var(--d-btn-bg) 55%);
+}
+
+:root[lang='en'] .d-btn {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.d-btn--small {
+  --cut: 13px;
+  min-width: 0;
+  height: 40px;
+  padding: 0 26px;
+  font-size: 1.02rem;
+}
+
+.d-btn:hover,
+.d-btn:focus-visible {
+  outline: none;
+  background: var(--d-accent);
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--d-accent) 45%, transparent));
+}
+
+.d-btn__arrow {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 언어 전환: base.css 의 .seg 를 상세 페이지 색에 맞춘다 */
+.page-detail .seg {
+  gap: 0;
+  padding: 2px;
+  border-color: var(--d-btn-line);
+  background: var(--d-chip);
+}
+
+.page-detail .seg__btn {
+  min-width: 2.8em;
+  padding: 3px 12px;
+  font-size: 0.95rem;
+  color: var(--d-dim);
+}
+
+.page-detail .seg__btn[aria-pressed='true'] {
+  color: var(--d-btn-ink);
+  background: var(--d-btn-bg);
+  border-color: var(--d-btn-line);
+  box-shadow: none;
+}
+
+/* 테마 전환: 밤이면 달, 낮이면 해 아이콘 */
+.theme-btn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  color: var(--d-ink);
+  transition: background-color 0.3s;
+}
+
+.theme-btn svg {
+  grid-area: 1 / 1;
+  width: 28px;
+  height: 28px;
+}
+
+.theme-btn .only-night { fill: currentColor; }
+.theme-btn .only-day {
+  fill: none;
+  stroke: var(--d-orn);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.theme-btn:hover,
+.theme-btn:focus-visible {
+  outline: none;
+  background: color-mix(in srgb, var(--d-accent) 16%, transparent);
+}
+
+.seg__btn:focus-visible {
+  outline: 2px solid var(--d-accent);
+  outline-offset: 1px;
+}
+
+/* ==========================================================================
+   4. 페이지 제목과 장식
+   ========================================================================== */
+.d-star {
+  fill: var(--d-orn);
+}
+
+.d-kicker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(0.8rem, 1vw, 1rem);
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  color: var(--d-ink);
+}
+
+.d-kicker::before,
+.d-kicker::after {
+  content: '';
+  width: clamp(40px, 7vw, 120px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--d-orn));
+}
+
+.d-kicker::after {
+  background: linear-gradient(270deg, transparent, var(--d-orn));
+}
+
+.d-title {
+  position: relative;
+  text-align: center;
+}
+
+.d-title__main {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  margin: 0.2em 0 0.1em;
+  font-family: var(--font-ko-display);
+  font-weight: var(--font-ko-display-weight);
+  font-size: clamp(2.1rem, 3.5vw, 3.4rem);
+  line-height: 1.15;
+  letter-spacing: 0.04em;
+  color: var(--d-ink);
+}
+
+:root[lang='en'] .d-title__main {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.d-title__star {
+  width: 0.95em;
+  height: 0.95em;
+  flex: none;
+}
+
+/* 제목 아래를 감싸는 곡선: 장식 전용. 크기·위치는 지역 CSS 에서 바꿀 수 있다 */
+.d-title__swoosh {
+  position: absolute;
+  left: 4%;
+  right: 6%;
+  top: 30%;
+  width: 90%;
+  height: 52%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.d-title__swoosh path {
+  fill: none;
+  stroke: var(--d-orn);
+  stroke-width: 1.2;
+  opacity: 0.85;
+  vector-effect: non-scaling-stroke;
+}
+
+.d-title__swoosh .d-star {
+  fill: var(--d-orn);
+  stroke: none;
+}
+
+.d-title__sub {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin: 0.25em 0 0.2em;
+  font-family: var(--font-ko-display);
+  font-weight: var(--font-ko-display-weight);
+  font-size: clamp(1.2rem, 1.75vw, 1.7rem);
+  letter-spacing: 0.04em;
+  color: var(--d-ink);
+}
+
+:root[lang='en'] .d-title__sub {
+  font-family: var(--font-display);
+  font-weight: 500;
+}
+
+/* 부제 양옆: 마름모 + 선 */
+.d-rule {
+  position: relative;
+  width: clamp(36px, 5vw, 90px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--d-orn));
+}
+
+.d-rule::after {
+  content: '';
+  position: absolute;
+  right: -4px;
+  top: -4px;
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--d-orn);
+  transform: rotate(45deg);
+}
+
+.d-rule--right {
+  background: linear-gradient(270deg, transparent, var(--d-orn));
+}
+
+.d-rule--right::after {
+  right: auto;
+  left: -4px;
+}
+
+.d-title__lead {
+  margin: 0;
+  font-size: clamp(0.95rem, 1.1vw, 1.1rem);
+  color: var(--d-text);
+}
+
+/* ==========================================================================
+   5. 키워드 태그: 원형 문장(紋章) + 끝이 뾰족한 이름표
+   ========================================================================== */
+.d-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px clamp(20px, 4vw, 70px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.d-tag {
+  --h: clamp(40px, 4.6vh, 48px);
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: calc(var(--h) * 0.6);
+}
+
+.d-tag__emblem {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: calc(var(--h) * 1.22);
+  height: calc(var(--h) * 1.22);
+  border: 1.5px solid var(--d-orn);
+  border-radius: 50%;
+  background: var(--d-tag-1);
+  box-shadow: inset 0 0 0 3px var(--d-tag-1), inset 0 0 0 4px color-mix(in srgb, var(--d-orn) 45%, transparent);
+  transform: translate(-30%, -50%);
+}
+
+.d-tag__emblem svg {
+  width: 62%;
+  height: 62%;
+  fill: none;
+  stroke: var(--d-ink);
+  stroke-width: 1.3;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.d-tag__emblem svg .fill {
+  fill: var(--d-ink);
+}
+
+:root[data-theme='day'] .d-tag__emblem svg {
+  stroke: var(--d-accent);
+}
+
+:root[data-theme='day'] .d-tag__emblem svg .fill {
+  fill: var(--d-accent);
+}
+
+.d-tag__label {
+  --cut: 18px;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  min-width: clamp(110px, 9vw, 150px);
+  height: var(--h);
+  padding: 0 calc(var(--cut) + 12px) 0 calc(var(--h) * 0.85);
+  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% 50%, calc(100% - var(--cut)) 100%, 0 100%);
+  background: var(--d-orn);
+  font-family: var(--font-ko-display);
+  font-weight: var(--font-ko-display-weight);
+  font-size: clamp(1.05rem, 1.4vw, 1.35rem);
+  letter-spacing: 0.08em;
+  color: var(--d-ink);
+}
+
+.d-tag__label::before {
+  content: '';
+  position: absolute;
+  inset: 1.2px;
+  z-index: -1;
+  clip-path: polygon(0 0, calc(100% - var(--cut) + 0.6px) 0, 100% 50%, calc(100% - var(--cut) + 0.6px) 100%, 0 100%);
+  background: linear-gradient(90deg, var(--d-tag-1), var(--d-tag-2));
+}
+
+:root[lang='en'] .d-tag__label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* ==========================================================================
+   6. 섹션 제목 · 본문 · 정보 행 · 문장 행
+   ========================================================================== */
+.d-sec {
+  min-width: 0;
+}
+
+/* 섹션 제목: 마름모 + 제목 + 오른쪽으로 사라지는 선 */
+.d-sec__title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 clamp(10px, 1.6vh, 18px);
+  font-family: var(--font-ko-display);
+  font-weight: var(--font-ko-display-weight);
+  font-size: clamp(1.25rem, 1.6vw, 1.55rem);
+  letter-spacing: 0.04em;
+  color: var(--d-ink);
+}
+
+.d-sec__title::before {
+  content: '';
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border: 1.5px solid var(--d-ink);
+  transform: rotate(45deg);
+}
+
+.d-sec__title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  margin-left: 12px;
+  background: linear-gradient(90deg, var(--d-line), transparent);
+}
+
+:root[lang='en'] .d-sec__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+/* 본문: Pretendard Regular 16~18px, 줄간격 1.75 */
+.d-prose p {
+  margin: 0 0 0.6em;
+  font-size: clamp(1rem, 1.05vw, 1.0625rem);
+  line-height: 1.75;
+  color: var(--d-text);
+  word-break: keep-all;
+}
+
+.d-prose p:last-child {
+  margin-bottom: 0;
+}
+
+/* 정보 행: 아이콘 · 항목 | 값 */
+.d-facts {
+  margin: 0;
+}
+
+.d-fact {
+  display: grid;
+  grid-template-columns: 26px minmax(4.5em, max-content) 1fr;
+  align-items: center;
+  column-gap: 12px;
+  padding: clamp(4px, 0.6vh, 7px) 0;
+  border-bottom: 1px solid var(--d-line);
+}
+
+.d-fact dt {
+  display: contents;
+  font-size: 0.95rem;
+  color: var(--d-dim);
+}
+
+.d-fact dd {
+  margin: 0;
+  padding-left: 16px;
+  border-left: 1px solid var(--d-line);
+  font-size: clamp(1rem, 1.1vw, 1.1rem);
+  font-weight: 500;
+  color: var(--d-ink);
+}
+
+.d-icon {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: var(--d-ink);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 문장 행: 원형 문장 · 항목 | 설명 */
+.d-traits {
+  margin: 0;
+}
+
+.d-trait {
+  display: grid;
+  grid-template-columns: 42px minmax(3.6em, max-content) 1fr;
+  align-items: center;
+  column-gap: 14px;
+  padding: clamp(6px, 0.9vh, 10px) 0;
+  border-bottom: 1px solid var(--d-line);
+}
+
+.d-trait:last-child {
+  border-bottom: 0;
+}
+
+.d-trait dt {
+  display: contents;
+  font-family: var(--font-ko-display);
+  font-weight: var(--font-ko-display-weight);
+  font-size: clamp(1.05rem, 1.25vw, 1.2rem);
+  color: var(--d-ink);
+}
+
+:root[lang='en'] .d-trait dt {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.d-trait dd {
+  margin: 0;
+  padding-left: 16px;
+  border-left: 1px solid var(--d-line);
+  font-size: clamp(1rem, 1.02vw, 1.0625rem);
+  line-height: 1.65;
+  color: var(--d-text);
+  word-break: keep-all;
+}
+
+.d-emblem {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1.3px solid var(--d-orn);
+  border-radius: 50%;
+}
+
+.d-emblem--bare {
+  border-color: transparent;
+}
+
+.d-emblem svg {
+  width: 70%;
+  height: 70%;
+  fill: none;
+  stroke: var(--d-ink);
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.d-emblem svg .fill {
+  fill: var(--d-ink);
+  stroke: none;
+}
+
+:root[data-theme='day'] .d-emblem svg { stroke: var(--d-accent); }
+:root[data-theme='day'] .d-emblem svg .fill { fill: var(--d-accent); }
+
+/* ==========================================================================
+   7. 인용문 / 좌우명 강조 프레임
+   ========================================================================== */
+.d-quote {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: clamp(140px, 17vh, 180px);
+  margin: clamp(14px, 2vh, 22px) 0 0;
+  padding: clamp(26px, 3.4vh, 36px) clamp(26px, 3vw, 44px);
+}
+
+.d-quote__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.d-quote__frame path {
+  fill: color-mix(in srgb, var(--d-chip) 55%, transparent);
+  stroke: var(--d-orn);
+  stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
+}
+
+.d-quote__frame path.thin {
+  fill: none;
+  stroke-width: 0.8;
+  opacity: 0.6;
+}
+
+.d-quote__star {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 34px;
+  height: 34px;
+  transform: translate(-50%, -48%);
+}
+
+.d-quote__peaks {
+  position: absolute;
+  left: 50%;
+  bottom: 6px;
+  width: 46%;
+  height: auto;
+  transform: translateX(-50%);
+  fill: color-mix(in srgb, var(--d-accent) 55%, transparent);
+  opacity: 0.85;
+}
+
+.d-quote__text {
+  position: relative;
+  margin: 0;
+  text-align: center;
+}
+
+.d-quote__text p {
+  margin: 0;
+  font-family: var(--font-ko-display);
+  font-weight: var(--font-ko-display-weight);
+  font-size: clamp(1.25rem, 1.75vw, 1.7rem);
+  line-height: 1.55;
+  letter-spacing: 0.02em;
+  color: var(--d-ink);
+  word-break: keep-all;
+}
+
+.d-quote__text p::before,
+.d-quote__text p::after {
+  font-family: var(--font-display);
+  font-size: 1.4em;
+  line-height: 0;
+  vertical-align: -0.2em;
+  color: var(--d-ink);
+}
+
+.d-quote__text p::before { content: '\201C\2009'; }
+.d-quote__text p::after  { content: '\2009\201D'; }
+
+/* 강조 낱말 (밤: 청록, 낮: 진한 청록) */
+.d-quote__text em {
+  font-style: normal;
+  color: var(--d-accent);
+}
+
+:root[lang='en'] .d-quote__text p {
+  font-family: var(--font-display);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   8. 페이지 진행 표시 (하단 마름모 6개 + 오른쪽으로 이어지는 선)
+   ========================================================================== */
+.d-progress {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: clamp(12px, 1.4vw, 20px);
+  margin: 0;
+  padding: 0 0 0 clamp(0px, 20vw, 380px);
+  list-style: none;
+}
+
+.d-progress::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  margin-left: 8px;
+  background: linear-gradient(90deg, var(--d-line), transparent);
+}
+
+.d-progress__dot {
+  display: block;
+  width: 11px;
+  height: 11px;
+  border: 1.4px solid var(--d-orn);
+  transform: rotate(45deg);
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.d-progress__dot.is-visited {
+  border-color: var(--d-ink);
+}
+
+.d-progress__dot[aria-current='page'] {
+  width: 15px;
+  height: 15px;
+  border-color: var(--d-ink);
+  background: var(--d-ink);
+}
+
+:root[data-theme='day'] .d-progress__dot[aria-current='page'] {
+  border-color: var(--d-accent);
+  background: var(--d-accent);
+}
+
+.d-progress__dot:hover,
+.d-progress__dot:focus-visible {
+  outline: none;
+  transform: rotate(45deg) scale(1.25);
+  background: color-mix(in srgb, var(--d-accent) 40%, transparent);
+}
+
+/* ==========================================================================
+   9. 반응형 · 모션 감소
+   ========================================================================== */
+@media (max-width: 900px) {
+  /* 모바일: 위쪽에 일러스트를 보여 주고 정보는 아래로 이어서 배치 */
+  /* 일러스트는 첫 화면 높이만큼만 깔고 페이지와 함께 스크롤된다. 그 아래는 바탕색으로 이어진다 */
+  body.page-detail {
+    background: var(--d-base);
+  }
+
+  .detail-bg {
+    --bg-focus: 18% 40%;
+    position: absolute;
+    height: 100svh;
+    bottom: auto;
+  }
+
+  .detail-bg__shade {
+    background: linear-gradient(180deg, transparent 0, transparent 16%, color-mix(in srgb, var(--d-base) 80%, transparent) 46%, var(--d-base) 100%);
+  }
+
+  .d-progress {
+    justify-content: center;
+    padding: 0;
+  }
+
+  .d-progress::after {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .detail-foot {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .d-progress {
+    order: -1;
+    flex-basis: 100%;
+  }
+
+  .d-btn {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .detail-head__side {
+    gap: 6px;
+  }
+
+  .detail-head__rule {
+    display: none;
+  }
+
+  .detail-head__page {
+    font-size: 1rem;
+  }
+
+  .theme-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .theme-btn svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .page-detail .seg__btn {
+    min-width: 2.2em;
+    padding: 2px 8px;
+    font-size: 0.85rem;
+  }
+
+  .d-btn--small {
+    padding: 0 20px;
+  }
+
+  /* 좁은 화면: 문장 행은 [문장·항목] 아래에 설명을 둔다 */
+  .d-trait {
+    grid-template-columns: 42px 1fr;
+    row-gap: 6px;
+  }
+
+  .d-trait dd {
+    grid-column: 1 / -1;
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-detail,
+  .d-btn,
+  .d-progress__dot {
+    transition: none;
+  }
+}

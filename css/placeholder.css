@@ -1,0 +1,87 @@
+/* ==========================================================================
+   LIFE — placeholder.css
+   아직 기획 중인 페이지(메인 로비, 자기소개)용 임시 화면
+   ========================================================================== */
+
+.page-placeholder {
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+  background:
+    radial-gradient(90% 70% at 50% 0%, color-mix(in srgb, var(--c-accent) 22%, transparent), transparent 70%),
+    var(--c-fade);
+  transition: background-color var(--theme-duration) var(--ease-soft);
+}
+
+.placeholder-card {
+  width: min(560px, 100%);
+  padding: clamp(28px, 6vw, 48px);
+  text-align: center;
+  border: 1px solid color-mix(in srgb, var(--c-frame) 60%, transparent);
+  border-radius: 6px;
+  background: linear-gradient(180deg, var(--c-panel-1), var(--c-panel-2));
+  color: var(--c-label);
+  box-shadow: 0 0 40px color-mix(in srgb, var(--c-glow) 25%, transparent);
+}
+
+.placeholder-card__badge {
+  display: inline-block;
+  margin-bottom: 14px;
+  padding: 2px 12px;
+  border: 1px solid var(--c-accent);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  color: var(--c-accent);
+}
+
+.placeholder-card h1 {
+  margin: 0 0 12px;
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  letter-spacing: 0.08em;
+}
+
+:root[lang='ko'] .placeholder-card h1 {
+  font-family: var(--font-ko-display);
+  font-weight: var(--font-ko-display-weight);
+}
+
+.placeholder-card p {
+  margin: 0 0 28px;
+  color: var(--c-text-dim);
+}
+
+:root[data-theme='night'] .placeholder-card p {
+  color: var(--c-text-dim);
+}
+
+.placeholder-card__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.placeholder-link {
+  display: inline-block;
+  padding: 8px 20px;
+  border: 1px solid var(--c-frame);
+  border-radius: 3px;
+  text-decoration: none;
+  transition: box-shadow 0.3s, border-color 0.3s;
+}
+
+.placeholder-link:hover,
+.placeholder-link:focus-visible {
+  border-color: var(--c-frame-hi);
+  box-shadow: 0 0 14px var(--c-glow);
+}
+
+.placeholder-card__tagline {
+  margin: 0 0 4px !important;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.24em;
+  color: var(--c-accent) !important;
+}

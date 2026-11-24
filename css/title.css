@@ -1,0 +1,1070 @@
+/* ==========================================================================
+   LIFE — title.css
+   첫 번째 페이지: RPG 타이틀 화면
+   레이어 순서: world(하늘) → particles → illustration → veil → title-ui
+   ========================================================================== */
+
+.page-title {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* START 버튼 전용 색 (낮·밤 전환 시 함께 1.5초 보간) */
+@property --btn-idle-1   { syntax: '<color>'; inherits: true; initial-value: rgba(34, 48, 56, 0.88); }
+@property --btn-idle-2   { syntax: '<color>'; inherits: true; initial-value: rgba(14, 22, 30, 0.92); }
+@property --btn-charge-1 { syntax: '<color>'; inherits: true; initial-value: #49dccb; }
+@property --btn-charge-2 { syntax: '<color>'; inherits: true; initial-value: #11727b; }
+
+.page-title {
+  transition:
+    --btn-idle-1 var(--theme-duration) var(--ease-soft),
+    --btn-idle-2 var(--theme-duration) var(--ease-soft),
+    --btn-charge-1 var(--theme-duration) var(--ease-soft),
+    --btn-charge-2 var(--theme-duration) var(--ease-soft);
+}
+
+:root[data-theme='night'] .page-title {
+  --btn-idle-1: rgba(34, 48, 56, 0.88);
+  --btn-idle-2: rgba(14, 22, 30, 0.92);
+  --btn-charge-1: #49dccb;
+  --btn-charge-2: #11727b;
+}
+
+:root[data-theme='day'] .page-title {
+  --btn-idle-1: rgba(246, 242, 232, 0.92);
+  --btn-idle-2: rgba(221, 213, 195, 0.9);
+  --btn-charge-1: #ffe49c;
+  --btn-charge-2: #cf9a36;
+}
+
+/* ==========================================================================
+   1. 배경 세계
+   ========================================================================== */
+.world {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.sky {
+  position: absolute;
+  inset: 0;
+  transition: opacity var(--theme-duration) var(--ease-soft);
+}
+
+:root[data-theme='day'] .sky--night,
+:root[data-theme='night'] .sky--day {
+  opacity: 0;
+}
+
+/* ---------- 낮 하늘 ---------- */
+.sky--day {
+  background:
+    radial-gradient(120% 70% at 80% 12%, rgba(255, 244, 205, 0.95) 0%, rgba(255, 244, 205, 0) 55%),
+    linear-gradient(180deg, #6fb2e8 0%, #9fd0f1 30%, #d6ecf5 58%, #f8e7c4 80%, #f3d39f 100%);
+}
+
+/* 호수 */
+.sky--day::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 28%;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0 1px, transparent 1px 9px),
+    linear-gradient(180deg, rgba(150, 205, 228, 0.85), rgba(104, 170, 205, 0.95));
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 30%);
+  mask-image: linear-gradient(180deg, transparent, #000 30%);
+}
+
+.sun {
+  position: absolute;
+  top: 9%;
+  right: 16%;
+  width: 22vmin;
+  height: 22vmin;
+}
+
+.sun__core {
+  position: absolute;
+  inset: 22%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fffef6 0%, #fff4cc 55%, #ffe39a 100%);
+  box-shadow:
+    0 0 40px 18px rgba(255, 238, 180, 0.9),
+    0 0 140px 70px rgba(255, 226, 150, 0.45);
+}
+
+.sun__rays {
+  position: absolute;
+  inset: -70%;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 246, 210, 0.42) 0deg 4deg, rgba(255, 246, 210, 0) 4deg 18deg);
+  -webkit-mask-image: radial-gradient(circle, #000 18%, transparent 68%);
+  mask-image: radial-gradient(circle, #000 18%, transparent 68%);
+  animation: spin 140s linear infinite;
+}
+
+.cloud {
+  position: absolute;
+  width: 30vw;
+  height: 9vw;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0));
+  filter: blur(2px);
+  animation: drift 160s linear infinite;
+}
+
+.cloud::before,
+.cloud::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0));
+}
+
+.cloud::before { width: 55%; height: 120%; left: 14%; top: -45%; }
+.cloud::after  { width: 45%; height: 100%; right: 10%; top: -30%; }
+
+.cloud--1 { top: 10%; left: -8%; animation-duration: 190s; }
+.cloud--2 { top: 30%; left: 32%; width: 22vw; height: 6vw; opacity: 0.8; animation-duration: 150s; animation-delay: -60s; }
+.cloud--3 { top: 6%;  left: 58%; width: 26vw; height: 7vw; opacity: 0.7; animation-duration: 210s; animation-delay: -120s; }
+.cloud--4 { top: 52%; left: 70%; width: 34vw; height: 8vw; opacity: 0.85; animation-duration: 240s; animation-delay: -30s; }
+
+/* ---------- 밤 하늘 ---------- */
+.sky--night {
+  background:
+    radial-gradient(80% 60% at 82% 18%, rgba(120, 170, 220, 0.35) 0%, rgba(120, 170, 220, 0) 60%),
+    linear-gradient(180deg, #02081a 0%, #071a36 35%, #0d2c50 65%, #0f3550 82%, #0a2236 100%);
+}
+
+.sky--night::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 28%;
+  background:
+    radial-gradient(12% 100% at 80% 0%, rgba(190, 225, 255, 0.35), transparent 70%),
+    repeating-linear-gradient(180deg, rgba(160, 210, 255, 0.12) 0 1px, transparent 1px 9px),
+    linear-gradient(180deg, rgba(10, 40, 70, 0.9), rgba(4, 16, 32, 1));
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 30%);
+  mask-image: linear-gradient(180deg, transparent, #000 30%);
+}
+
+.moon {
+  position: absolute;
+  top: 4%;
+  right: 6%;
+  width: 40vmin;
+  height: 40vmin;
+}
+
+.moon__glow {
+  position: absolute;
+  inset: -40%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(200, 225, 255, 0.45) 0%, rgba(160, 200, 255, 0.12) 40%, transparent 68%);
+  animation: breathe 7s ease-in-out infinite alternate;
+}
+
+.moon__body {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(18% 14% at 34% 36%, rgba(150, 170, 200, 0.45), transparent 70%),
+    radial-gradient(12% 10% at 62% 58%, rgba(150, 170, 200, 0.4), transparent 70%),
+    radial-gradient(20% 16% at 58% 30%, rgba(170, 190, 215, 0.35), transparent 70%),
+    radial-gradient(9% 8% at 40% 70%, rgba(150, 170, 200, 0.4), transparent 70%),
+    radial-gradient(circle at 40% 38%, #ffffff 0%, #e6eef8 45%, #b9c8dc 100%);
+  box-shadow: 0 0 60px 10px rgba(200, 225, 255, 0.4);
+}
+
+.mist {
+  position: absolute;
+  height: 14vh;
+  width: 60vw;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(70, 100, 150, 0.45), transparent);
+  filter: blur(6px);
+  animation: drift 200s linear infinite;
+}
+.mist--1 { top: 12%; left: 10%; }
+.mist--2 { top: 48%; left: 40%; width: 70vw; animation-duration: 260s; animation-delay: -90s; }
+
+/* 하단 안개: 테마 색과 맞춰 바닥을 정리 */
+.horizon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 18%;
+  background: linear-gradient(180deg, transparent, var(--c-veil));
+}
+
+/* ==========================================================================
+   2. 파티클 · 일러스트 · 가독성 베일
+   ========================================================================== */
+.particles {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.illustration {
+  position: fixed;
+  right: 0;
+  bottom: -3%;
+  z-index: 2;
+  width: 60vw;
+  height: 103%;
+  pointer-events: none;
+}
+
+.illustration__layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--theme-duration) var(--ease-soft);
+}
+
+:root[data-theme='day'] .illustration__layer[data-variant='day'],
+:root[data-theme='night'] .illustration__layer[data-variant='night'] {
+  opacity: 1;
+}
+
+.illustration__media {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: right bottom;
+}
+
+.illustration__layer.motion-float .illustration__media {
+  animation: float 9s ease-in-out infinite alternate;
+}
+
+.veil {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 60% at 0% 20%, var(--c-veil), transparent 70%),
+    linear-gradient(90deg, var(--c-veil) 0%, transparent 48%);
+}
+
+/* ==========================================================================
+   3. 타이틀 UI 레이아웃
+   ========================================================================== */
+.title-ui {
+  /* 좌측 UI 컨테이너: 로고 · START · 설정 줄이 하나의 세로 중심축을 공유한다.
+     --logo-w: 로고 너비 (이전 대비 약 18% 확대)
+     --btn-w : START 버튼 너비 (이전 480px → 576px, 20% 확대. 로고보다 넓어지지 않음) */
+  --logo-w: clamp(330px, 44.8vw, 780px);
+  --btn-w: min(576px, var(--logo-w));
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--logo-w) * 0.065);
+  width: calc(var(--logo-w) + clamp(20px, 5.5vw, 110px));
+  height: 100%;
+  padding: clamp(24px, 6vh, 80px) 0 clamp(40px, 12vh, 140px) clamp(20px, 5.5vw, 110px);
+}
+
+/* ---------- 레이아웃 A / B (임시 비교, js/dev/layout-preview.js) ----------
+   두 안 모두 크기와 세로 중심축(로고의 실제 그림 중심 = 버튼 중심)은 같고, 세로 간격만 다르다.
+   A (기본): 위 규칙 그대로. 세 요소를 한 묶음으로 화면 가운데보다 약간 위에, 로고-버튼 간격 좁게.
+   B: 로고는 좌측 상단, START 와 설정 줄은 좌측 중하단에 두어 둘을 떨어뜨린다.
+      화면이 낮아지면 최소 간격(A 와 같은 값)까지만 붙는다. */
+:root[data-layout='b'] .title-ui {
+  justify-content: space-between;
+  padding-top: clamp(32px, 8vh, 110px);
+  padding-bottom: clamp(48px, 15vh, 170px);
+}
+
+/* ==========================================================================
+   4. LIFE 로고 — 레이어 리소스 (assets/ui/logo/day, night)
+   모든 레이어는 730 × 270 공통 캔버스. 투명 여백을 자르지 않고
+   inset:0 / 100% 로 겹쳐 원본 조립 형태(assembled.png)를 그대로 재현한다.
+
+   최초 접속 타임라인 (초)
+     0.3 L · 0.5 I · 0.7 F · 0.9 E          글자 형성 (TITLE 1 방식: 흐림·확대 → 선명)
+     2.6~                                   글자 위로 빛이 지나감 (7초 주기)
+     1.1 바깥 반달선 · 1.3 안쪽 반달선       선 그리기 (밤: stroke-dashoffset / 낮: PNG 원형 마스크)
+     1.6 중앙 태양/별 · 1.8~1.95 궤도 별     등장
+     2.0 왼쪽 · 2.15 오른쪽 장식             바깥으로 펼쳐짐
+     2.3 물 반사 · 2.6 START · 2.9 설정 UI
+   낮·밤 두 벌은 동시에 같은 타임라인으로 재생되고, 테마 전환은 교차 페이드만 한다.
+   (전환할 때마다 등장 연출이 반복되지 않음)
+   ========================================================================== */
+.logo {
+  position: relative;
+  display: block;
+  flex: none;
+  width: var(--logo-w);
+  margin: 0;
+  line-height: 0;
+  /* 시각적 중심 보정: 730px 캔버스에서 글자(L 왼쪽 x120 ~ E 오른쪽 x600)와
+     양옆 장식(x13 ~ x707)의 실제 중심은 x360 으로, 캔버스 중심(x365)보다 5px 왼쪽에 있다.
+     투명 여백이 아닌 보이는 그림의 중심이 축에 오도록 오른쪽으로 5/730 만큼 옮긴다. */
+  translate: 0.685% 0;
+}
+
+.logo__stage {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 730 / 270;
+}
+
+.logo__theme,
+.logo__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.logo__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.logo__arc {
+  overflow: visible;
+}
+
+/* ---------- 글자: 첫 번째 타이틀(TITLE 1)과 같은 형성 연출 ----------
+   흐릿하고 크게 번진 상태에서 글자 하나씩 제자리로 내려앉으며 선명해진다.
+   transform-origin 은 각 글자 이미지의 중심(원본 좌표 기준) */
+.logo__letter {
+  opacity: 0;
+  animation: char-form 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
+.logo__letter--l { animation-delay: 0.3s; transform-origin: 26.2% 61.7%; }
+.logo__letter--i { animation-delay: 0.5s; transform-origin: 42.5% 66.8%; }
+.logo__letter--f { animation-delay: 0.7s; transform-origin: 56.9% 66.8%; }
+.logo__letter--e { animation-delay: 0.9s; transform-origin: 75.5% 66.8%; }
+
+@keyframes char-form {
+  0% {
+    opacity: 0;
+    filter: blur(18px);
+    transform: translateY(5%) scale(1.35);
+  }
+  55% {
+    opacity: 1;
+    filter: blur(3px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
+  }
+}
+
+/* ---------- 완성 후 은은하게 지나가는 빛 (letters-only 모양으로 마스킹) ---------- */
+.logo__shine {
+  opacity: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.95) 49%, rgba(255, 255, 255, 0.4) 52%, transparent 60%);
+  background-size: 300% 100%;
+  background-position: 100% 0;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+  animation: fade-to 0.01s linear 2.6s forwards, shine 7s ease-in-out 2.6s infinite;
+}
+
+.logo__theme--day .logo__shine {
+  -webkit-mask-image: url('../assets/ui/logo/day/letters-only.png');
+  mask-image: url('../assets/ui/logo/day/letters-only.png');
+}
+
+.logo__theme--night .logo__shine {
+  -webkit-mask-image: url('../assets/ui/logo/night/letters-only.png');
+  mask-image: url('../assets/ui/logo/night/letters-only.png');
+}
+
+@keyframes shine {
+  0%   { background-position: 100% 0; }
+  32%  { background-position: 0% 0; }
+  100% { background-position: 0% 0; }
+}
+
+/* ---------- 반달선: 실제로 그려지는 선 ---------- */
+.logo__arc path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: arc-draw 1.1s cubic-bezier(0.45, 0, 0.25, 1) forwards;
+}
+
+.logo__arc--outer path { animation-delay: 1.1s; }
+.logo__arc--inner path { animation-delay: 1.3s; animation-duration: 0.95s; }
+
+@keyframes arc-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ---------- 중앙 태양(낮) / 별(밤) ---------- */
+.logo__center {
+  opacity: 0;
+  animation: center-in 0.9s var(--ease-soft) 1.6s forwards;
+}
+
+@keyframes center-in {
+  0%   { opacity: 0; filter: brightness(2.2); }
+  100% { opacity: 1; filter: brightness(1); }
+}
+
+/* 중앙 뒤의 빛 (리소스와 별개인 CSS 광원, 중심 = 원본 좌표 355, 75) */
+.logo__aura {
+  opacity: 0;
+  pointer-events: none;
+  animation: fade-to 1.2s var(--ease-soft) 1.7s forwards;
+}
+
+.logo__aura::before {
+  content: '';
+  position: absolute;
+  left: 48.63%;
+  top: 27.78%;
+  width: 34%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* 낮: 태양에서 빛이 퍼진다 */
+.logo__theme--day .logo__aura::before {
+  background:
+    repeating-conic-gradient(from 0deg, rgba(255, 240, 200, 0.5) 0deg 3deg, rgba(255, 240, 200, 0) 3deg 15deg);
+  -webkit-mask-image: radial-gradient(circle, #000 8%, transparent 62%);
+  mask-image: radial-gradient(circle, #000 8%, transparent 62%);
+  animation: sun-rays 36s linear infinite, sun-breathe 5s ease-in-out infinite alternate;
+  /* 빛살 강도: 기존 대비 약 70% (sun-breathe 의 투명도 범위 0.7~1 → 0.49~0.7) */
+}
+
+/* 밤: 은은한 달빛·별빛 후광 */
+.logo__theme--night .logo__aura::before {
+  width: 26%;
+  background: radial-gradient(circle, rgba(200, 235, 255, 0.45) 0%, rgba(120, 200, 230, 0.15) 35%, transparent 65%);
+  animation: night-glow 4.5s ease-in-out infinite alternate;
+}
+
+@keyframes sun-rays {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes sun-breathe {
+  from { opacity: 0.49; }
+  to   { opacity: 0.7; }
+}
+
+@keyframes night-glow {
+  from { opacity: 0.55; }
+  to   { opacity: 1; }
+}
+
+/* 밤 중앙 별은 등장 후 은은하게 빛난다 */
+.logo__theme--night .logo__center .logo__img {
+  animation: star-glow 4.5s ease-in-out 2.6s infinite alternate;
+}
+
+@keyframes star-glow {
+  from { filter: drop-shadow(0 0 0 rgba(180, 235, 255, 0)); }
+  to   { filter: drop-shadow(0 0 6px rgba(180, 235, 255, 0.7)); }
+}
+
+/* ---------- 궤도 위 개별 별: 순차 등장 후 각자 반짝임 ---------- */
+.logo__star {
+  opacity: 0;
+}
+
+.logo__star--2 { animation: fade-to 0.6s var(--ease-soft) 1.8s forwards; }
+.logo__star--1 { animation: fade-to 0.6s var(--ease-soft) 1.95s forwards; }
+
+.logo__star .logo__img {
+  animation: twinkle 2.8s ease-in-out 2.6s infinite;
+}
+
+.logo__star--1 .logo__img { animation-duration: 3.4s; animation-delay: 3.1s; }
+
+.logo__theme--day .logo__star .logo__img {
+  animation-duration: 5s; /* 낮에는 더 느리고 은은하게 */
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 1; filter: brightness(1); }
+  45%      { opacity: 0.45; filter: brightness(0.9); }
+  55%      { opacity: 1; filter: brightness(1.6); }
+}
+
+/* ---------- 좌우 장식: 안쪽에서 바깥으로 펼쳐짐 (각각 독립) ---------- */
+.logo__side {
+  opacity: 0;
+}
+
+.logo__side--left {
+  clip-path: inset(0 84.38% 0 15.62%);  /* 안쪽 끝 x=114 에서 시작 */
+  animation: side-open 0.9s cubic-bezier(0.3, 0.6, 0.2, 1) 2s forwards;
+}
+
+.logo__side--right {
+  clip-path: inset(0 16.85% 0 83.15%);  /* 안쪽 끝 x=607 에서 시작 */
+  animation: side-open 0.9s cubic-bezier(0.3, 0.6, 0.2, 1) 2.15s forwards;
+}
+
+@keyframes side-open {
+  0%   { opacity: 0; }
+  25%  { opacity: 1; }
+  100% { opacity: 1; clip-path: inset(0 0 0 0); }
+}
+
+@keyframes fade-to {
+  to { opacity: 1; }
+}
+
+/* ---------- 글자 레이어 좌표계 (LIFE-logo-rebuilt-v4: 1400 × 600) ----------
+   새 글자는 1400 × 600 캔버스, 기준선 y=533. 로고 스테이지(730 × 270)에 맞춰
+   글자 폭(x 224~1183)이 기존 글자 자리(x 120~600)에, 기준선이 y=263 에 오도록 배치.
+   배율 0.5005 → 캔버스 원점 (7.9, -3.8), 크기 700.7 × 300.3 */
+.logo__theme .logo__letter,
+.logo__theme .logo__shine,
+.logo__reflection {
+  inset: auto;
+  left: 1.08%;
+  top: -1.41%;
+  width: 95.99%;
+  height: 111.22%;
+}
+
+/* ---------- 낮 반달선 (PNG, 2172 × 724 캔버스, 두 장 같은 좌표계) ----------
+   바깥 반달선 양 끝(원본 x 170 / 1980, y 627)이 L 왼쪽~E 오른쪽(스테이지 x 130~600),
+   글자 중간 높이(y 195)에 오도록 배율 0.26 으로 배치. 꼭대기는 스테이지 (365, 69.7).
+   원점 (82.6, 32), 크기 564.7 × 188.2 */
+.logo__arcimg {
+  inset: auto;
+  left: 11.32%;
+  top: 11.85%;
+  width: 77.36%;
+  height: 69.7%;
+  --arc-sweep: 0deg;
+  -webkit-mask-image: conic-gradient(from 298deg at var(--arc-cx) var(--arc-cy), #000 0deg, #000 calc(var(--arc-sweep) - 4deg), transparent var(--arc-sweep));
+  mask-image: conic-gradient(from 298deg at var(--arc-cx) var(--arc-cy), #000 0deg, #000 calc(var(--arc-sweep) - 4deg), transparent var(--arc-sweep));
+  animation: arc-sweep 1.1s cubic-bezier(0.45, 0, 0.25, 1) 1.1s forwards;
+}
+
+/* 원호 중심 (원본 좌표 기준 측정값): 바깥 (1086, 1256), 안쪽 (1086, 1057) */
+.logo__arcimg--outer { --arc-cx: 50%; --arc-cy: 173.5%; }
+.logo__arcimg--inner { --arc-cx: 50%; --arc-cy: 146%; animation-delay: 1.3s; animation-duration: 0.95s; }
+
+@property --arc-sweep { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+
+@keyframes arc-sweep {
+  from { --arc-sweep: 0deg; }
+  to   { --arc-sweep: 128deg; }
+}
+
+/* ---------- 낮 반달선 가운데 장식 (887 × 1774) ----------
+   원형 중심(이미지 50%, 46.7%)을 바깥 반달선 꼭대기(스테이지 365, 69.7)에 맞춤, 높이 150 기준 */
+.logo__center--sun {
+  inset: auto;
+  left: 44.86%;
+  top: -0.11%;
+  width: 10.27%;
+  height: 55.56%;
+}
+
+/* 낮 궤도 별: 새 바깥 반달선 위로 옮김 (원 중심 365, 358.6 / 반지름 288.9) */
+.logo__theme--day .logo__star--1 { transform: translate(-0.34%, 2.96%); }
+.logo__theme--day .logo__star--2 { transform: translate(-2.36%, -27.07%); }
+
+.logo__theme--day .logo__aura::before {
+  left: 50%;
+  top: 25.8%;
+}
+
+/* ---------- 물 반사: letters-only.png, 글자 기준선(원본 y=533 → 88.83%)에서 뒤집기 ---------- */
+.logo__reflection {
+  position: absolute;
+  opacity: 0;
+  transform: scaleY(-1);
+  transform-origin: 50% 88.83%;
+  -webkit-mask-image: linear-gradient(to top, transparent 9%, rgba(0, 0, 0, 0.9) 11.5%, rgba(0, 0, 0, 0.35) 28%, transparent 52%);
+  mask-image: linear-gradient(to top, transparent 9%, rgba(0, 0, 0, 0.9) 11.5%, rgba(0, 0, 0, 0.35) 28%, transparent 52%);
+  filter: url('#water-ripple') blur(0.5px);
+  pointer-events: none;
+  animation:
+    reflection-in 1.2s var(--ease-soft) 2.3s forwards,
+    ripple 5s ease-in-out infinite alternate;
+}
+
+@keyframes reflection-in {
+  to { opacity: 0.55; }
+}
+
+/* 밤 반사는 기존 투명도(0.42) 그대로: 0.55 × 0.764 ≈ 0.42 */
+.logo__reflection .only-night {
+  opacity: 0.764;
+}
+
+/* ==========================================================================
+   4-1. 낮 로고 미세 조정 (이미지는 그대로, 효과 수치만)
+   - 글자: 금빛 외곽선을 또렷하게(얇은 금색 윤곽), 내부 하늘·구름 대비 소폭 상승
+   - 태양: 중심부 선명하게, 뒤 빛살 강도 약 30% 감소
+   - 반달선·양옆 장식: 가시성 소폭 상승
+   - 물 반사: 0.42 → 0.55
+   * 등장 애니메이션이 바깥 span 의 filter 를 쓰므로 보정은 안쪽 img 에 적용
+   ========================================================================== */
+.logo__theme--day .logo__letter .logo__img {
+  filter:
+    contrast(1.12) saturate(1.1)
+    drop-shadow(0 0 0.6px rgba(150, 102, 28, 0.95))
+    drop-shadow(0 0 0.3px rgba(120, 80, 20, 0.8));
+}
+
+.logo__theme--day .logo__center--sun .logo__img {
+  filter: contrast(1.12) saturate(1.08);
+}
+
+.logo__theme--day .logo__arcimg .logo__img {
+  filter: contrast(1.25) saturate(1.15) drop-shadow(0 0 0.5px rgba(150, 102, 28, 0.7));
+}
+
+.logo__theme--day .logo__side .logo__img {
+  filter: contrast(1.2) saturate(1.1) drop-shadow(0 0 0.5px rgba(120, 80, 20, 0.7));
+}
+
+.logo__reflection .only-day {
+  filter: contrast(1.08);
+}
+
+@keyframes ripple {
+  0%   { transform: scaleY(-1) translateX(0) scaleX(1); }
+  50%  { transform: scaleY(-0.97) translateX(0.2%) scaleX(1.01); }
+  100% { transform: scaleY(-1.02) translateX(-0.2%) scaleX(0.995); }
+}
+
+/* ==========================================================================
+   5. 메뉴 (START 버튼 + 설정)
+   ========================================================================== */
+.title-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(16px, 2.8vh, 28px);
+  width: var(--btn-w);
+}
+
+/* START 2.6초, 언어·낮밤 설정 2.9초에 차례로 등장 */
+.title-menu > .menu-btn,
+.title-menu > .settings-row {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: menu-in 1s var(--ease-soft) forwards;
+}
+
+.title-menu > .menu-btn     { animation-delay: 2.6s; }
+.title-menu > .settings-row { animation-delay: 2.9s; }
+
+@keyframes menu-in {
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------- START 버튼 ---------- */
+.menu-btn {
+  --glow-a: color-mix(in srgb, var(--c-glow) 35%, transparent);
+  --glow-b: color-mix(in srgb, var(--c-glow) 0%, transparent);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 500 / 84;
+  color: var(--c-label);
+  font-family: var(--font-display);
+  /* 글자는 버튼과 같은 비율(20%)로 커진다: 이전 clamp(1.125rem, 1.89vw, 1.71rem) × 1.2 */
+  font-size: clamp(1.35rem, 2.27vw, 2.05rem);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.menu-btn:focus-visible {
+  outline: none;
+}
+
+.menu-btn__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35));
+  transition: filter 0.4s var(--ease-soft);
+}
+
+/* 기본 상태: 저채도 내부색 / 충전 색: 낮 금빛, 밤 청록빛 */
+.stop-panel-1  { stop-color: var(--btn-idle-1); }
+.stop-panel-2  { stop-color: var(--btn-idle-2); }
+.stop-charge-1 { stop-color: var(--btn-charge-1); }
+.stop-charge-2 { stop-color: var(--btn-charge-2); }
+
+.frame-panel { fill: url(#btn-panel); }
+
+/* 테두리: 이전 버전 디자인 */
+.frame-outer {
+  fill: none;
+  stroke: var(--c-frame);
+  stroke-width: 2.2;
+  vector-effect: non-scaling-stroke;
+  transition: stroke 0.4s;
+}
+
+.frame-inner {
+  fill: none;
+  stroke: var(--c-frame);
+  stroke-width: 1;
+  opacity: 0.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.frame-orn path {
+  fill: none;
+  stroke: var(--c-frame);
+  stroke-width: 1.6;
+  vector-effect: non-scaling-stroke;
+}
+
+.frame-orn .frame-gem {
+  fill: var(--c-accent-2);
+}
+
+/* --- 마력 충전 (약 0.48초, 왼쪽 → 오른쪽) --- */
+.frame-charge {
+  transform: translateX(0);
+}
+
+.menu-btn.is-charging .frame-charge {
+  transform: translateX(530px);
+  transition: transform 0.48s cubic-bezier(0.4, 0.1, 0.35, 1);
+}
+
+.frame-charge__fill {
+  fill: url(#btn-charge);
+}
+
+/* 충전 영역 안의 은은한 물결: 앞쪽으로 흘러든다 */
+.frame-charge__flow path {
+  fill: none;
+  stroke: var(--btn-charge-1);
+  stroke-width: 1;
+  opacity: 0.22;
+  vector-effect: non-scaling-stroke;
+}
+
+.menu-btn.is-charging .frame-charge__flow {
+  animation: charge-flow 0.6s linear infinite;
+}
+
+@keyframes charge-flow {
+  from { transform: translateX(0); }
+  to   { transform: translateX(80px); }
+}
+
+/* 아주 작은 빛 입자 */
+.frame-charge__motes .mote {
+  fill: var(--btn-charge-1);
+  opacity: 0;
+}
+
+.menu-btn.is-charging .frame-charge__motes .mote {
+  animation: mote-drift 0.7s ease-out var(--d, 0s) infinite;
+}
+
+@keyframes mote-drift {
+  0%   { opacity: 0;    transform: translateX(-10px); }
+  40%  { opacity: 0.9; }
+  100% { opacity: 0;    transform: translateX(24px); }
+}
+
+/* 경계면: 흰 실선 대신 부드러운 빛 번짐 + 아주 옅은 선 */
+.frame-charge__glow {
+  fill: none;
+  stroke: var(--btn-charge-1);
+  stroke-width: 12;
+  opacity: 0.45;
+}
+
+.frame-charge__edge {
+  fill: none;
+  stroke: var(--c-frame-hi);
+  stroke-width: 0.8;
+  opacity: 0.25;
+  vector-effect: non-scaling-stroke;
+}
+
+/* 아이콘과 글자는 같은 색, 버튼 세로 중앙에 맞춘다 */
+.menu-btn__icon {
+  position: absolute;
+  left: 17%;
+  top: 50%;
+  width: 0.72em;
+  height: 0.72em;
+  transform: translateY(-50%);
+  fill: currentColor;
+}
+
+/* START 글자: 기존 대비 90% 크기, 자간 0.10em, 과한 그림자·발광 없음 */
+.menu-btn__label {
+  position: relative;
+  display: block;
+  padding-left: 0.4em;
+  line-height: 1;
+  font-weight: 500; /* Cinzel Medium */
+  letter-spacing: 0.1em;
+}
+
+:root[lang='ko'] .menu-btn__label {
+  font-family: var(--font-ko-display);
+  font-weight: var(--font-ko-display-weight);
+  letter-spacing: 0.1em;
+}
+
+.page-title .menu-btn { color: #e8f0f8; transition: color var(--theme-duration) var(--ease-soft); }
+:root[data-theme='day'] .page-title .menu-btn { color: #795b32; }
+
+/* 마우스 오버 / 키보드 포커스: 은은한 테두리 빛만 (강한 발광은 충전 완료 때만) */
+.menu-btn:hover .menu-btn__frame,
+.menu-btn:focus-visible .menu-btn__frame {
+  filter:
+    drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35))
+    drop-shadow(0 0 5px var(--glow-a));
+  transition: filter 0.3s var(--ease-soft);
+}
+
+.menu-btn:hover .frame-outer,
+.menu-btn:focus-visible .frame-outer,
+.menu-btn:hover .frame-orn path,
+.menu-btn:focus-visible .frame-orn path {
+  stroke: var(--c-frame-hi);
+}
+
+/* 충전 완료: 테두리 발광 강화 후 페이지 전환 (크기 변화 없음) */
+.menu-btn.is-charged .menu-btn__frame {
+  filter:
+    drop-shadow(0 0 3px var(--c-frame-hi))
+    drop-shadow(0 0 14px var(--c-glow))
+    brightness(1.12);
+  transition: filter 0.15s ease-out;
+}
+
+.menu-btn.is-charged .frame-charge__glow {
+  opacity: 0.7;
+}
+
+.menu-btn[aria-disabled='true'] {
+  cursor: default;
+}
+
+/* ---------- 언어 · 테마 설정 줄 ---------- */
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 12px 16px;
+  width: 100%;
+  padding: 0 5%;
+  color: var(--c-text);
+  font-size: 1.1rem; /* 이전 1.02rem → 약 8% 확대 */
+}
+
+.settings-row::before,
+.settings-row::after {
+  content: '';
+  flex: 1 1 0;
+  min-width: 12px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--c-frame));
+  opacity: 0.6;
+}
+.settings-row::after {
+  background: linear-gradient(270deg, transparent, var(--c-frame));
+}
+
+.settings-row__divider {
+  width: 1px;
+  height: 20px;
+  background: var(--c-frame);
+  opacity: 0.5;
+}
+
+.setting {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.setting__icon {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--c-text);
+  stroke-width: 1.5;
+}
+
+.setting__icon--theme svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--c-text);
+  stroke-width: 1.5;
+}
+.setting__icon--theme .only-night {
+  fill: var(--c-accent-2);
+  stroke: none;
+}
+
+.setting__label {
+  text-shadow: 0 0 8px var(--c-veil);
+}
+
+/* 타이틀 화면에서만 언어·테마 조작을 약 8% 키운다 (디자인은 그대로, 로비 등 다른 페이지는 영향 없음) */
+.settings-row .seg__btn {
+  font-size: 0.93rem;
+  padding: 1px 10px;
+}
+
+.settings-row .switch {
+  width: 50px;
+  height: 26px;
+}
+
+.settings-row .switch__thumb {
+  width: 20px;
+  height: 20px;
+}
+
+.settings-row .switch[aria-checked='true'] .switch__thumb {
+  transform: translateX(24px);
+}
+
+/* ==========================================================================
+   6. 공용 키프레임
+   ========================================================================== */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes drift {
+  from { transform: translateX(-10vw); }
+  50%  { transform: translateX(10vw); }
+  to   { transform: translateX(-10vw); }
+}
+
+@keyframes breathe {
+  from { opacity: 0.75; transform: scale(0.97); }
+  to   { opacity: 1;    transform: scale(1.03); }
+}
+
+@keyframes float {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-1.6%); }
+}
+
+@keyframes fade-in {
+  to { opacity: 1; }
+}
+
+/* ==========================================================================
+   7. 반응형
+   ========================================================================== */
+@media (max-width: 900px) {
+  .title-ui {
+    --logo-w: min(88vw, 620px);
+    width: 100%;
+    padding-right: clamp(20px, 5.5vw, 110px);
+  }
+
+  .illustration {
+    width: 100vw;
+    opacity: 0.45;
+  }
+
+  .veil {
+    background: linear-gradient(90deg, var(--c-veil) 0%, color-mix(in srgb, var(--c-veil) 40%, transparent) 100%);
+  }
+
+}
+
+@media (max-width: 540px) {
+  .settings-row {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .settings-row::before,
+  .settings-row::after,
+  .settings-row__divider {
+    display: none;
+  }
+
+}
+
+@media (max-height: 620px) {
+  .title-ui {
+    --logo-w: clamp(300px, 85vh, 660px);
+    --btn-w: min(576px, var(--logo-w), 80vh);
+  }
+}
+
+/* ==========================================================================
+   8. 모션 감소
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .menu-btn.is-charging .frame-charge {
+    transition: none;
+  }
+
+  .logo__aura::before {
+    animation: none !important;
+  }
+
+  .logo__theme--day .logo__aura::before {
+    opacity: 0.6;
+  }
+
+  .logo__shine {
+    display: none;
+  }
+
+  .illustration__layer .illustration__media {
+    animation: none !important;
+  }
+}
