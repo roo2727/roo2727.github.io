@@ -58,6 +58,53 @@
     'region.backToMap': '월드맵으로 돌아가기',
 
     'common.wip': '준비 중',
-    'common.backToTitle': '타이틀로 돌아가기'
+    'common.backToTitle': '타이틀로 돌아가기',
+
+    /* ---------- 01 자기소개 페이지 (pages/regions/intro.html) ----------
+       아래 '[ ]' 로 표시된 문구는 임시 내용입니다. 실제 내용으로 바꿔 주세요. */
+    'about.back': '월드맵',
+    'about.page': '페이지',
+    'about.pageNav': '페이지 이동',
+    'about.next': '다음: 학교 및 전공',
+    'about.profileAlt': '프로필 이미지 (임시)',
+    'about.profileImage': '프로필 이미지',
+    'about.level': 'Lv. 21',
+    'about.class': '견습 모험가',
+    'about.name': '[이름]',
+    'about.nameEn': '[English Name]',
+    'about.oneLine': '[나를 한 줄로 소개하는 문장을 적어 주세요]',
+    'about.keywordsTitle': '키워드',
+    'about.keyword1': '#[키워드 1]',
+    'about.keyword2': '#[키워드 2]',
+    'about.keyword3': '#[키워드 3]',
+
+    'about.basic': '기본 정보',
+    'about.basicEn': 'STATUS',
+    'about.label.name': '이름',
+    'about.label.school': '학교',
+    'about.label.major': '전공',
+    'about.label.grade': '학년',
+    'about.value.school': '[학교 이름]',
+    'about.value.major': '[전공 이름]',
+    'about.value.grade': '[ ]학년',
+
+    'about.story': '간단한 자기소개',
+    'about.storyEn': 'STORY',
+    'about.story1': '[첫 번째 문단] 안녕하세요. 이곳에는 내가 어떤 사람인지, 지금 무엇에 관심을 두고 있는지 두세 문장으로 소개해 주세요.',
+    'about.story2': '[두 번째 문단] 이 포트폴리오를 통해 보여 주고 싶은 모습이나, 앞으로의 방향을 짧게 덧붙이면 좋습니다.',
+
+    'about.traits': '성격 및 장단점',
+    'about.traitsEn': 'TRAITS',
+    'about.trait.personality': '성격',
+    'about.trait.strength': '장점',
+    'about.trait.growth': '보완하고 싶은 점',
+    'about.trait.personalityText': '[나의 성격을 한두 문장으로 적어 주세요]',
+    'about.trait.strengthText': '[나의 장점과 그것이 드러난 경험을 짧게 적어 주세요]',
+    'about.trait.growthText': '[보완하고 싶은 점과 노력하고 있는 방법을 적어 주세요]',
+
+    'about.motto': '가치관 및 좌우명',
+    'about.mottoEn': 'CREED',
+    'about.mottoQuote': '[좌우명을 적어 주세요]',
+    'about.mottoText': '[이 좌우명을 갖게 된 이유와, 생활 속에서 어떻게 지키고 있는지 짧게 적어 주세요]'
   };
 })(window);

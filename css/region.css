@@ -1,0 +1,645 @@
+/* ==========================================================================
+   LIFE — region.css
+   지역 상세 페이지 (01 자기소개부터 사용)
+   콘셉트: RPG 캐릭터 정보창. 얇은 판타지 프레임과 소제목 장식만 쓰고 가독성을 우선한다.
+   낮/밤은 같은 레이아웃이고 색만 바뀐다 (밤: 청록·은빛 / 낮: 금빛·아이보리).
+   ========================================================================== */
+
+/* ---------- 색 (테마 전환 시 base.css 의 공용 색과 함께 1.5초 보간) ---------- */
+@property --r-card      { syntax: '<color>'; inherits: true; initial-value: rgba(8, 22, 34, 0.72); }
+@property --r-card-2    { syntax: '<color>'; inherits: true; initial-value: rgba(6, 30, 40, 0.6); }
+@property --r-line      { syntax: '<color>'; inherits: true; initial-value: rgba(185, 199, 210, 0.28); }
+@property --r-line-hi   { syntax: '<color>'; inherits: true; initial-value: rgba(95, 227, 211, 0.55); }
+@property --r-tag       { syntax: '<color>'; inherits: true; initial-value: rgba(95, 227, 211, 0.12); }
+@property --r-heading   { syntax: '<color>'; inherits: true; initial-value: #eaf6f8; }
+@property --r-body      { syntax: '<color>'; inherits: true; initial-value: #d3e0e8; }
+@property --r-veil      { syntax: '<color>'; inherits: true; initial-value: rgba(2, 8, 18, 0.72); }
+
+:root,
+:root[data-theme='night'] {
+  --r-card: rgba(8, 22, 34, 0.72);
+  --r-card-2: rgba(6, 30, 40, 0.6);
+  --r-line: rgba(185, 199, 210, 0.28);
+  --r-line-hi: rgba(95, 227, 211, 0.55);
+  --r-tag: rgba(95, 227, 211, 0.12);
+  --r-heading: #eaf6f8;
+  --r-body: #d3e0e8;
+  --r-veil: rgba(2, 8, 18, 0.72);
+}
+
+:root[data-theme='day'] {
+  --r-card: rgba(255, 252, 243, 0.86);
+  --r-card-2: rgba(250, 240, 214, 0.75);
+  --r-line: rgba(160, 120, 50, 0.3);
+  --r-line-hi: rgba(197, 143, 38, 0.6);
+  --r-tag: rgba(197, 143, 38, 0.12);
+  --r-heading: #4a3612;
+  --r-body: #4b3d26;
+  --r-veil: rgba(255, 249, 235, 0.55);
+}
+
+.page-region {
+  transition:
+    --r-card var(--theme-duration) var(--ease-soft),
+    --r-card-2 var(--theme-duration) var(--ease-soft),
+    --r-line var(--theme-duration) var(--ease-soft),
+    --r-line-hi var(--theme-duration) var(--ease-soft),
+    --r-tag var(--theme-duration) var(--ease-soft),
+    --r-heading var(--theme-duration) var(--ease-soft),
+    --r-body var(--theme-duration) var(--ease-soft),
+    --r-veil var(--theme-duration) var(--ease-soft);
+}
+
+/* 이 페이지는 내용이 길 수 있으므로 세로 스크롤을 허용한다 (base.css 는 hidden) */
+body.page-region {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* ==========================================================================
+   1. 배경
+   ========================================================================== */
+.region-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.region-bg__img {
+  position: absolute;
+  inset: -2%;
+  width: 104%;
+  height: 104%;
+  object-fit: cover;
+  filter: blur(3px) saturate(0.9);
+}
+
+.region-bg__veil {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 80% at 30% 0%, transparent 0%, var(--r-veil) 70%),
+    var(--r-veil);
+}
+
+/* ==========================================================================
+   2. 페이지 틀
+   ========================================================================== */
+.region {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(18px, 2.6vh, 28px);
+  width: min(1240px, 100% - 48px);
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: clamp(18px, 3vh, 32px) 0 clamp(24px, 4vh, 40px);
+  color: var(--r-body);
+  font-family: var(--font-body);
+}
+
+/* ---------- 상단 헤더: [돌아가기] [제목] [설정 · 페이지 번호] ---------- */
+.region-head {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--r-line);
+}
+
+.region-head > :first-child {
+  justify-self: start;
+}
+
+.region-head__title {
+  text-align: center;
+}
+
+.region-head__en {
+  margin: 0 0 2px;
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  color: var(--c-accent);
+}
+
+.region-head__ko {
+  margin: 0;
+  font-family: var(--font-ko-display);
+  font-weight: var(--font-ko-display-weight);
+  font-size: clamp(1.7rem, 2.6vw, 2.3rem);
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  color: var(--r-heading);
+}
+
+:root[lang='en'] .region-head__ko {
+  font-family: var(--font-display);
+  font-weight: 500;
+}
+
+.region-head__side {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.region-settings {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.region-head__page {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  color: var(--c-text-dim);
+  white-space: nowrap;
+}
+
+.region-head__page b {
+  font-weight: 600;
+  font-size: 1.2em;
+  color: var(--c-accent);
+}
+
+/* ---------- 버튼 (헤더·하단 공용) ---------- */
+.region-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border: 1px solid var(--r-line-hi);
+  border-radius: 3px;
+  background: var(--r-tag);
+  color: var(--r-heading);
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
+}
+
+.region-btn--ghost {
+  border-color: var(--r-line);
+  background: transparent;
+}
+
+.region-btn:hover,
+.region-btn:focus-visible {
+  border-color: var(--c-accent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--c-glow) 40%, transparent);
+  outline: none;
+}
+
+.region-btn__icon {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- 하단 내비게이션 ---------- */
+.region-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--r-line);
+}
+
+/* ==========================================================================
+   3. 카드 (각 정보 섹션은 약하게 구분된 패널)
+   ========================================================================== */
+.card {
+  position: relative;
+  padding: clamp(18px, 2vw, 26px) clamp(18px, 2.2vw, 30px);
+  border: 1px solid var(--r-line);
+  border-radius: 4px;
+  background: linear-gradient(180deg, var(--r-card), var(--r-card-2));
+  backdrop-filter: blur(6px);
+}
+
+/* 얇은 판타지 프레임: 안쪽 선 한 줄 + 네 모서리의 작은 마름모 */
+.card--framed::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px solid var(--r-line);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* 네 모서리의 작은 마름모 (HTML 의 .corner 4개) */
+.corner {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  transform: rotate(45deg);
+  border: 1px solid var(--c-accent);
+  background: var(--r-card);
+  pointer-events: none;
+}
+
+.corner--tl { top: 2px; left: 2px; }
+.corner--tr { top: 2px; right: 2px; }
+.corner--bl { bottom: 2px; left: 2px; }
+.corner--br { bottom: 2px; right: 2px; }
+
+/* ---------- 소제목 장식: 작은 마름모 + 한글 제목 + 영문 + 오른쪽으로 사라지는 선 ---------- */
+.sec-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.sec-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--r-line-hi), transparent);
+  opacity: 0.7;
+}
+
+.sec-title__gem {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  transform: rotate(45deg);
+  border: 1px solid var(--c-accent);
+  background: var(--r-tag);
+}
+
+.sec-title h2 {
+  margin: 0;
+  font-family: var(--font-ko-display);
+  font-weight: var(--font-ko-display-weight);
+  font-size: 1.18rem;
+  letter-spacing: 0.06em;
+  color: var(--r-heading);
+}
+
+:root[lang='en'] .sec-title h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.sec-title__en {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  color: var(--c-text-dim);
+}
+
+/* ==========================================================================
+   4. 자기소개 레이아웃: 좌측 35% 프로필 / 우측 65% 정보
+   ========================================================================== */
+.about {
+  display: grid;
+  grid-template-columns: 35fr 65fr;
+  gap: clamp(18px, 2vw, 28px);
+  align-items: start;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 1.8vh, 20px);
+  min-width: 0;
+}
+
+/* ---------- 프로필 카드 ---------- */
+.profile {
+  position: sticky;
+  top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-top: clamp(24px, 3vw, 36px);
+  padding-bottom: clamp(24px, 3vw, 36px);
+}
+
+.profile__portrait {
+  position: relative;
+  width: min(220px, 70%);
+  aspect-ratio: 5 / 6;
+  margin-bottom: 18px;
+  border: 1px solid var(--r-line-hi);
+  border-radius: 3px;
+  background:
+    radial-gradient(80% 60% at 50% 30%, var(--r-tag), transparent 70%),
+    var(--r-card-2);
+  box-shadow: inset 0 0 0 4px var(--r-card), inset 0 0 0 5px var(--r-line);
+  overflow: hidden;
+}
+
+.profile__portrait svg,
+.profile__portrait img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile__portrait svg {
+  fill: color-mix(in srgb, var(--c-text-dim) 35%, transparent);
+}
+
+.profile__badge {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  padding: 2px 12px;
+  border: 1px solid var(--r-line-hi);
+  border-radius: 999px;
+  background: var(--r-card);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  color: var(--c-accent);
+  white-space: nowrap;
+}
+
+.profile__class {
+  margin: 0 0 4px;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  color: var(--c-accent);
+}
+
+.profile__name {
+  margin: 0;
+  font-family: var(--font-ko-display);
+  font-weight: var(--font-ko-display-weight);
+  font-size: clamp(1.6rem, 2.2vw, 2rem);
+  letter-spacing: 0.06em;
+  line-height: 1.25;
+  color: var(--r-heading);
+}
+
+.profile__name-en {
+  margin: 4px 0 0;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  letter-spacing: 0.18em;
+  color: var(--c-text-dim);
+}
+
+.profile__divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70%;
+  margin: 18px 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--r-line-hi), transparent);
+}
+
+.profile__divider span {
+  width: 7px;
+  height: 7px;
+  transform: rotate(45deg);
+  background: var(--c-accent);
+}
+
+.profile__oneline {
+  margin: 0 0 22px;
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: var(--r-heading);
+  word-break: keep-all;
+}
+
+.profile__label {
+  margin: 0 0 10px;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--c-text-dim);
+}
+
+/* ---------- 키워드 태그 ---------- */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tag {
+  padding: 5px 14px;
+  border: 1px solid var(--r-line-hi);
+  border-radius: 999px;
+  background: var(--r-tag);
+  font-size: 0.9rem;
+  color: var(--r-heading);
+}
+
+/* ---------- 1. 기본 정보 ---------- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 24px;
+  margin: 0;
+}
+
+.stat {
+  display: grid;
+  grid-template-columns: 5.5em 1fr;
+  align-items: baseline;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--r-line);
+}
+
+.stat dt {
+  font-size: 0.88rem;
+  color: var(--c-text-dim);
+}
+
+.stat dd {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 500;
+  color: var(--r-heading);
+}
+
+/* ---------- 2. 자기소개 본문 ---------- */
+.prose p {
+  margin: 0 0 0.9em;
+  font-size: 1rem;
+  line-height: 1.8;
+  word-break: keep-all;
+}
+
+.prose p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- 3. 성격 및 장단점 ---------- */
+.traits {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.trait {
+  padding: 14px 16px;
+  border: 1px solid var(--r-line);
+  border-top: 2px solid var(--r-line-hi);
+  border-radius: 3px;
+  background: var(--r-tag);
+}
+
+.trait__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--r-heading);
+}
+
+.trait__icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  fill: none;
+  stroke: var(--c-accent);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.trait p {
+  margin: 0;
+  font-size: 0.94rem;
+  line-height: 1.7;
+  word-break: keep-all;
+}
+
+/* ---------- 4. 가치관 및 좌우명: 강조된 인용문 ---------- */
+.motto {
+  margin: 0;
+}
+
+.motto__quote {
+  position: relative;
+  margin: 0 0 14px;
+  padding: 18px 24px 18px 56px;
+  border-left: 2px solid var(--c-accent);
+  background: linear-gradient(90deg, var(--r-tag), transparent 85%);
+}
+
+.motto__quote::before {
+  content: '\201C';
+  position: absolute;
+  left: 16px;
+  top: 2px;
+  font-family: var(--font-display);
+  font-size: 3.2rem;
+  line-height: 1;
+  color: var(--c-accent);
+  opacity: 0.7;
+}
+
+.motto__quote p {
+  margin: 0;
+  font-family: var(--font-ko-display);
+  font-weight: var(--font-ko-display-weight);
+  font-size: clamp(1.2rem, 1.7vw, 1.45rem);
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+  color: var(--r-heading);
+  word-break: keep-all;
+}
+
+:root[lang='en'] .motto__quote p {
+  font-family: var(--font-display);
+  font-weight: 500;
+}
+
+.motto__text {
+  font-size: 0.98rem;
+  line-height: 1.8;
+  word-break: keep-all;
+}
+
+/* ==========================================================================
+   5. 반응형 (데스크톱 우선)
+   ========================================================================== */
+@media (max-width: 1080px) {
+  .traits {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 860px) {
+  .about {
+    grid-template-columns: 1fr;
+  }
+
+  .profile {
+    position: static;
+  }
+
+  .region-head {
+    grid-template-columns: 1fr auto;
+  }
+
+  .region-head__title {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
+
+@media (max-width: 560px) {
+  .region {
+    width: min(1240px, 100% - 32px);
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .region-head__side {
+    gap: 10px;
+  }
+
+  .region-foot .region-btn {
+    padding: 8px 12px;
+    font-size: 0.88rem;
+  }
+}
+
+/* ==========================================================================
+   6. 모션 감소
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .page-region,
+  .region-btn {
+    transition: none;
+  }
+}

@@ -58,6 +58,52 @@
     'region.backToMap': 'Back to World Map',
 
     'common.wip': 'Coming soon',
-    'common.backToTitle': 'Back to Title'
+    'common.backToTitle': 'Back to Title',
+
+    /* ---------- 01 About Me page (pages/regions/intro.html) ---------- */
+    'about.back': 'World Map',
+    'about.page': 'Page',
+    'about.pageNav': 'Page navigation',
+    'about.next': 'Next: School & Major',
+    'about.profileAlt': 'Profile image (placeholder)',
+    'about.profileImage': 'Profile image',
+    'about.level': 'Lv. 21',
+    'about.class': 'Apprentice Adventurer',
+    'about.name': '[Name]',
+    'about.nameEn': '[English Name]',
+    'about.oneLine': '[One sentence that introduces you]',
+    'about.keywordsTitle': 'Keywords',
+    'about.keyword1': '#[Keyword 1]',
+    'about.keyword2': '#[Keyword 2]',
+    'about.keyword3': '#[Keyword 3]',
+
+    'about.basic': 'Basic Info',
+    'about.basicEn': 'STATUS',
+    'about.label.name': 'Name',
+    'about.label.school': 'School',
+    'about.label.major': 'Major',
+    'about.label.grade': 'Year',
+    'about.value.school': '[School]',
+    'about.value.major': '[Major]',
+    'about.value.grade': '[ ] year',
+
+    'about.story': 'About Me',
+    'about.storyEn': 'STORY',
+    'about.story1': '[First paragraph] Introduce who you are and what you are interested in right now, in two or three sentences.',
+    'about.story2': '[Second paragraph] Add what you want to show through this portfolio, or where you are heading next.',
+
+    'about.traits': 'Personality',
+    'about.traitsEn': 'TRAITS',
+    'about.trait.personality': 'Personality',
+    'about.trait.strength': 'Strengths',
+    'about.trait.growth': 'To improve',
+    'about.trait.personalityText': '[Describe your personality in a sentence or two]',
+    'about.trait.strengthText': '[Your strengths and an experience that shows them]',
+    'about.trait.growthText': '[What you want to improve and how you are working on it]',
+
+    'about.motto': 'Values & Motto',
+    'about.mottoEn': 'CREED',
+    'about.mottoQuote': '[Your motto]',
+    'about.mottoText': '[Why this motto matters to you and how you live by it]'
   };
 })(window);
