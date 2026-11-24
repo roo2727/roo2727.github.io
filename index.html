@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ko" data-theme="night">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="LIFE — RPG 타이틀 화면 콘셉트의 자기소개 포트폴리오">
+  <title data-i18n="meta.title">LIFE — 포트폴리오</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=Gowun+Batang:wght@400;700&display=swap">
+
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/title.css">
+
+  <!-- 저장된 테마·언어를 첫 렌더 전에 적용 -->
+  <script src="js/core/storage.js"></script>
+  <script src="js/core/boot.js"></script>
+</head>
+<body class="page-title">
+
+  <!-- ===== 배경 세계 (장식) ===== -->
+  <div class="world" aria-hidden="true">
+    <div class="sky sky--day">
+      <div class="sun"><div class="sun__rays"></div><div class="sun__core"></div></div>
+      <div class="cloud cloud--1"></div>
+      <div class="cloud cloud--2"></div>
+      <div class="cloud cloud--3"></div>
+      <div class="cloud cloud--4"></div>
+    </div>
+    <div class="sky sky--night">
+      <div class="moon"><div class="moon__glow"></div><div class="moon__body"></div></div>
+      <div class="mist mist--1"></div>
+      <div class="mist mist--2"></div>
+    </div>
+    <div class="horizon"></div>
+  </div>
+
+  <canvas class="particles" id="particles" aria-hidden="true"></canvas>
+
+  <!-- ===== 우측 일러스트 영역: js/config/illustration.js 에서 리소스 지정 ===== -->
+  <div class="illustration" id="illustration" aria-hidden="true"></div>
+
+  <div class="veil" aria-hidden="true"></div>
+
+  <!-- ===== 타이틀 UI ===== -->
+  <main class="title-ui">
+
+    <h1 class="logo" id="logo">
+      <span class="visually-hidden">LIFE</span>
+
+      <span class="logo__row" aria-hidden="true">
+        <span class="logo__wing logo__wing--l"></span>
+        <span class="logo__word">
+          <span class="logo__crest" aria-hidden="true">
+            <!-- 밤: 별과 별자리 -->
+            <svg class="logo__ornament only-night" viewBox="0 0 400 150" fill="none">
+              <path class="orn-line" d="M70 150 A150 150 0 0 1 330 150" />
+              <path class="orn-line orn-line--faint" d="M110 150 A110 112 0 0 1 290 150" />
+              <g class="orn-constellation">
+                <path d="M262 46 L292 62 L318 52 L338 78" />
+                <circle cx="262" cy="46" r="2" /><circle cx="292" cy="62" r="2.4" />
+                <circle cx="318" cy="52" r="1.8" /><circle cx="338" cy="78" r="2.2" />
+              </g>
+              <path class="orn-star" d="M200 4 L206 62 L238 74 L206 86 L200 148 L194 86 L162 74 L194 62 Z" />
+              <circle class="orn-gem" cx="200" cy="74" r="4" />
+              <path class="orn-star orn-star--sm" d="M118 52 L120 62 L130 64 L120 66 L118 76 L116 66 L106 64 L116 62 Z" />
+            </svg>
+            <!-- 낮: 태양과 구름 문양 -->
+            <svg class="logo__ornament only-day" viewBox="0 0 400 150" fill="none">
+              <path class="orn-line" d="M70 150 A150 150 0 0 1 330 150" />
+              <path class="orn-line orn-line--faint" d="M110 150 A110 112 0 0 1 290 150" />
+              <g class="orn-rays">
+                <path d="M200 10 V36 M200 112 V138 M136 74 H162 M238 74 H264 M155 29 L173 47 M227 101 L245 119 M245 29 L227 47 M173 101 L155 119" />
+              </g>
+              <circle class="orn-sun" cx="200" cy="74" r="24" />
+              <circle class="orn-sun-core" cx="200" cy="74" r="9" />
+              <path class="orn-cloud" d="M276 70 q8 -14 22 -6 q10 -12 24 0 q14 -2 12 12 H274 q-8 -2 2 -6 Z" />
+              <path class="orn-cloud" d="M70 92 q6 -10 18 -4 q8 -10 20 0 q10 0 8 10 H68 q-6 -2 2 -6 Z" />
+            </svg>
+          </span>
+          <span class="logo__chars">
+            <span class="logo__char" style="--i:0">L</span><span class="logo__char" style="--i:1">I</span><span class="logo__char" style="--i:2">F</span><span class="logo__char" style="--i:3">E</span>
+          </span>
+          <span class="logo__shine">
+            <span class="logo__char-ghost">L</span><span class="logo__char-ghost">I</span><span class="logo__char-ghost">F</span><span class="logo__char-ghost">E</span>
+          </span>
+          <span class="logo__reflection">
+            <span class="logo__char" style="--i:0">L</span><span class="logo__char" style="--i:1">I</span><span class="logo__char" style="--i:2">F</span><span class="logo__char" style="--i:3">E</span>
+          </span>
+          <span class="logo__waterline"></span>
+        </span>
+        <span class="logo__wing logo__wing--r"></span>
+      </span>
+    </h1>
+
+    <div class="title-menu" role="group" data-i18n-attr="aria-label:title.menu" aria-label="타이틀 메뉴">
+
+      <button class="menu-btn" id="start-btn" type="button">
+        <svg class="menu-btn__frame" viewBox="0 0 500 84" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="btn-panel" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" class="stop-panel-1" />
+              <stop offset="1" class="stop-panel-2" />
+            </linearGradient>
+            <linearGradient id="btn-sheen" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#fff" stop-opacity="0" />
+              <stop offset="0.5" stop-color="#fff" stop-opacity="0.55" />
+              <stop offset="1" stop-color="#fff" stop-opacity="0" />
+            </linearGradient>
+            <clipPath id="btn-clip">
+              <path d="M52 6 H448 L476 42 L448 78 H52 L24 42 Z" />
+            </clipPath>
+          </defs>
+          <path class="frame-panel" d="M52 6 H448 L476 42 L448 78 H52 L24 42 Z" />
+          <g clip-path="url(#btn-clip)">
+            <rect class="frame-sheen" x="-160" y="0" width="140" height="84" />
+          </g>
+          <path class="frame-outer" d="M52 6 H448 L476 42 L448 78 H52 L24 42 Z" />
+          <path class="frame-inner" d="M58 12 H442 L464 42 L442 72 H58 L36 42 Z" />
+          <g class="frame-orn">
+            <path d="M24 42 Q34 26 52 20 M24 42 Q34 58 52 64" />
+            <path d="M476 42 Q466 26 448 20 M476 42 Q466 58 448 64" />
+            <path class="frame-gem" d="M11 42 L17 32 L23 42 L17 52 Z" />
+            <path class="frame-gem" d="M489 42 L483 32 L477 42 L483 52 Z" />
+            <path d="M0 42 H11 M489 42 H500" />
+          </g>
+        </svg>
+        <svg class="menu-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5 L20 12 L6 20.5 Z" /></svg>
+        <span class="menu-btn__label" data-i18n="title.start">시작하기</span>
+      </button>
+
+      <div class="settings-row">
+        <div class="setting" role="group" data-i18n-attr="aria-label:settings.languageGroup" aria-label="언어 선택">
+          <svg class="setting__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" /><path d="M3 12 H21 M12 3 C8 7 8 17 12 21 M12 3 C16 7 16 17 12 21" />
+          </svg>
+          <span class="setting__label" data-i18n="settings.language" aria-hidden="true">언어</span>
+          <span class="seg">
+            <button class="seg__btn" type="button" data-lang="ko" aria-pressed="true" lang="ko" aria-label="한국어">KR</button>
+            <span class="seg__sep" aria-hidden="true">/</span>
+            <button class="seg__btn" type="button" data-lang="en" aria-pressed="false" lang="en" aria-label="English">EN</button>
+          </span>
+        </div>
+
+        <span class="settings-row__divider" aria-hidden="true"></span>
+
+        <div class="setting">
+          <span class="setting__icon setting__icon--theme" aria-hidden="true">
+            <svg class="only-night" viewBox="0 0 24 24"><path d="M15.5 3.2 A9 9 0 1 0 20.8 15.4 A7 7 0 0 1 15.5 3.2 Z" /></svg>
+            <svg class="only-day" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5" /><path d="M12 2 V5 M12 19 V22 M2 12 H5 M19 12 H22 M4.9 4.9 L7 7 M17 17 L19.1 19.1 M19.1 4.9 L17 7 M7 17 L4.9 19.1" /></svg>
+          </span>
+          <span class="setting__label" id="theme-label" data-i18n="settings.night">밤 테마</span>
+          <button class="switch" id="theme-switch" type="button" role="switch" aria-checked="true" aria-labelledby="theme-label">
+            <span class="switch__thumb"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 로고 반사광의 물결 왜곡 필터 -->
+  <svg class="svg-defs" aria-hidden="true" focusable="false">
+    <filter id="water-ripple" x="-10%" y="-20%" width="120%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.006 0.09" numOctaves="2" seed="7" result="noise">
+        <animate attributeName="baseFrequency" dur="9s" values="0.006 0.09; 0.009 0.12; 0.006 0.09" repeatCount="indefinite" />
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="10" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
+
+  <div class="screen-fade" aria-hidden="true"></div>
+
+  <script src="js/i18n/ko.js"></script>
+  <script src="js/i18n/en.js"></script>
+  <script src="js/core/i18n.js"></script>
+  <script src="js/core/theme.js"></script>
+  <script src="js/core/transition.js"></script>
+  <script src="js/core/session.js"></script>
+  <script src="js/config/illustration.js"></script>
+  <script src="js/title/particles.js"></script>
+  <script src="js/title/illustration.js"></script>
+  <script src="js/title/title.js"></script>
+</body>
+</html>

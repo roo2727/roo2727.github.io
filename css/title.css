@@ -1,0 +1,876 @@
+/* ==========================================================================
+   LIFE — title.css
+   첫 번째 페이지: RPG 타이틀 화면
+   레이어 순서: world(하늘) → particles → illustration → veil → title-ui
+   ========================================================================== */
+
+.page-title {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* ==========================================================================
+   1. 배경 세계
+   ========================================================================== */
+.world {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.sky {
+  position: absolute;
+  inset: 0;
+  transition: opacity var(--theme-duration) var(--ease-soft);
+}
+
+:root[data-theme='day'] .sky--night,
+:root[data-theme='night'] .sky--day {
+  opacity: 0;
+}
+
+/* ---------- 낮 하늘 ---------- */
+.sky--day {
+  background:
+    radial-gradient(120% 70% at 80% 12%, rgba(255, 244, 205, 0.95) 0%, rgba(255, 244, 205, 0) 55%),
+    linear-gradient(180deg, #6fb2e8 0%, #9fd0f1 30%, #d6ecf5 58%, #f8e7c4 80%, #f3d39f 100%);
+}
+
+/* 호수 */
+.sky--day::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 28%;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0 1px, transparent 1px 9px),
+    linear-gradient(180deg, rgba(150, 205, 228, 0.85), rgba(104, 170, 205, 0.95));
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 30%);
+  mask-image: linear-gradient(180deg, transparent, #000 30%);
+}
+
+.sun {
+  position: absolute;
+  top: 9%;
+  right: 16%;
+  width: 22vmin;
+  height: 22vmin;
+}
+
+.sun__core {
+  position: absolute;
+  inset: 22%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fffef6 0%, #fff4cc 55%, #ffe39a 100%);
+  box-shadow:
+    0 0 40px 18px rgba(255, 238, 180, 0.9),
+    0 0 140px 70px rgba(255, 226, 150, 0.45);
+}
+
+.sun__rays {
+  position: absolute;
+  inset: -70%;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 246, 210, 0.42) 0deg 4deg, rgba(255, 246, 210, 0) 4deg 18deg);
+  -webkit-mask-image: radial-gradient(circle, #000 18%, transparent 68%);
+  mask-image: radial-gradient(circle, #000 18%, transparent 68%);
+  animation: spin 140s linear infinite;
+}
+
+.cloud {
+  position: absolute;
+  width: 30vw;
+  height: 9vw;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0));
+  filter: blur(2px);
+  animation: drift 160s linear infinite;
+}
+
+.cloud::before,
+.cloud::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0));
+}
+
+.cloud::before { width: 55%; height: 120%; left: 14%; top: -45%; }
+.cloud::after  { width: 45%; height: 100%; right: 10%; top: -30%; }
+
+.cloud--1 { top: 10%; left: -8%; animation-duration: 190s; }
+.cloud--2 { top: 30%; left: 32%; width: 22vw; height: 6vw; opacity: 0.8; animation-duration: 150s; animation-delay: -60s; }
+.cloud--3 { top: 6%;  left: 58%; width: 26vw; height: 7vw; opacity: 0.7; animation-duration: 210s; animation-delay: -120s; }
+.cloud--4 { top: 52%; left: 70%; width: 34vw; height: 8vw; opacity: 0.85; animation-duration: 240s; animation-delay: -30s; }
+
+/* ---------- 밤 하늘 ---------- */
+.sky--night {
+  background:
+    radial-gradient(80% 60% at 82% 18%, rgba(120, 170, 220, 0.35) 0%, rgba(120, 170, 220, 0) 60%),
+    linear-gradient(180deg, #02081a 0%, #071a36 35%, #0d2c50 65%, #0f3550 82%, #0a2236 100%);
+}
+
+.sky--night::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 28%;
+  background:
+    radial-gradient(12% 100% at 80% 0%, rgba(190, 225, 255, 0.35), transparent 70%),
+    repeating-linear-gradient(180deg, rgba(160, 210, 255, 0.12) 0 1px, transparent 1px 9px),
+    linear-gradient(180deg, rgba(10, 40, 70, 0.9), rgba(4, 16, 32, 1));
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 30%);
+  mask-image: linear-gradient(180deg, transparent, #000 30%);
+}
+
+.moon {
+  position: absolute;
+  top: 4%;
+  right: 6%;
+  width: 40vmin;
+  height: 40vmin;
+}
+
+.moon__glow {
+  position: absolute;
+  inset: -40%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(200, 225, 255, 0.45) 0%, rgba(160, 200, 255, 0.12) 40%, transparent 68%);
+  animation: breathe 7s ease-in-out infinite alternate;
+}
+
+.moon__body {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(18% 14% at 34% 36%, rgba(150, 170, 200, 0.45), transparent 70%),
+    radial-gradient(12% 10% at 62% 58%, rgba(150, 170, 200, 0.4), transparent 70%),
+    radial-gradient(20% 16% at 58% 30%, rgba(170, 190, 215, 0.35), transparent 70%),
+    radial-gradient(9% 8% at 40% 70%, rgba(150, 170, 200, 0.4), transparent 70%),
+    radial-gradient(circle at 40% 38%, #ffffff 0%, #e6eef8 45%, #b9c8dc 100%);
+  box-shadow: 0 0 60px 10px rgba(200, 225, 255, 0.4);
+}
+
+.mist {
+  position: absolute;
+  height: 14vh;
+  width: 60vw;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(70, 100, 150, 0.45), transparent);
+  filter: blur(6px);
+  animation: drift 200s linear infinite;
+}
+.mist--1 { top: 12%; left: 10%; }
+.mist--2 { top: 48%; left: 40%; width: 70vw; animation-duration: 260s; animation-delay: -90s; }
+
+/* 하단 안개: 테마 색과 맞춰 바닥을 정리 */
+.horizon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 18%;
+  background: linear-gradient(180deg, transparent, var(--c-veil));
+}
+
+/* ==========================================================================
+   2. 파티클 · 일러스트 · 가독성 베일
+   ========================================================================== */
+.particles {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.illustration {
+  position: fixed;
+  right: 0;
+  bottom: -3%;
+  z-index: 2;
+  width: 60vw;
+  height: 103%;
+  pointer-events: none;
+}
+
+.illustration__layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--theme-duration) var(--ease-soft);
+}
+
+:root[data-theme='day'] .illustration__layer[data-variant='day'],
+:root[data-theme='night'] .illustration__layer[data-variant='night'] {
+  opacity: 1;
+}
+
+.illustration__media {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: right bottom;
+}
+
+.illustration__layer.motion-float .illustration__media {
+  animation: float 9s ease-in-out infinite alternate;
+}
+
+.veil {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 60% at 0% 20%, var(--c-veil), transparent 70%),
+    linear-gradient(90deg, var(--c-veil) 0%, transparent 48%);
+}
+
+/* ==========================================================================
+   3. 타이틀 UI 레이아웃
+   ========================================================================== */
+.title-ui {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: min(640px, 46vw);
+  height: 100%;
+  padding: clamp(40px, 9vh, 110px) 0 clamp(40px, 13vh, 150px) clamp(20px, 5.5vw, 110px);
+}
+
+/* ==========================================================================
+   4. LIFE 로고
+   ========================================================================== */
+.logo {
+  --logo-size: clamp(4.2rem, 10vw, 10.5rem);
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--logo-size);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.logo__row {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.12em;
+  margin-top: 0.55em;
+}
+
+.logo__word {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+}
+
+.logo__chars,
+.logo__shine,
+.logo__reflection {
+  display: block;
+}
+
+/* --- 글자가 서서히 형성되는 애니메이션 --- */
+.logo__char {
+  display: inline-block;
+  opacity: 0;
+  color: transparent;
+  background: linear-gradient(180deg, var(--c-logo-hi) 8%, var(--c-logo-mid) 46%, var(--c-logo-lo) 62%, var(--c-logo-hi) 96%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: char-form 1.8s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  animation-delay: calc(0.4s + var(--i) * 0.3s);
+}
+
+.logo__chars {
+  filter:
+    drop-shadow(0 2px 0 var(--c-logo-edge))
+    drop-shadow(0 0 22px var(--c-glow));
+}
+
+@keyframes char-form {
+  0% {
+    opacity: 0;
+    filter: blur(18px);
+    transform: translateY(0.12em) scale(1.35);
+  }
+  55% {
+    opacity: 1;
+    filter: blur(3px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
+  }
+}
+
+/* --- 완성 후 은은하게 지나가는 빛 --- */
+.logo__shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  color: transparent;
+  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.95) 49%, rgba(255, 255, 255, 0.4) 52%, transparent 60%);
+  background-size: 300% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.logo__char-ghost {
+  display: inline-block;
+}
+
+.logo.is-formed .logo__shine {
+  opacity: 1;
+  animation: shine 7s ease-in-out 0.3s infinite;
+}
+
+@keyframes shine {
+  0% { background-position: 100% 0; }
+  32% { background-position: 0% 0; }
+  100% { background-position: 0% 0; }
+}
+
+/* --- 물에 비친 반사 --- */
+.logo__reflection {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  margin-top: -0.3em;
+  opacity: 0.42;
+  transform: scaleY(-1);
+  transform-origin: 50% 50%;
+  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.35) 35%, transparent 72%);
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.35) 35%, transparent 72%);
+  filter: url('#water-ripple') blur(0.6px);
+  pointer-events: none;
+  animation: ripple 5s ease-in-out infinite alternate;
+}
+
+@keyframes ripple {
+  0%   { transform: scaleY(-1) translateX(0) scaleX(1); }
+  50%  { transform: scaleY(-0.97) translateX(0.01em) scaleX(1.012); }
+  100% { transform: scaleY(-1.02) translateX(-0.01em) scaleX(0.994); }
+}
+
+.logo__waterline {
+  position: absolute;
+  top: 100%;
+  left: -12%;
+  right: -12%;
+  height: 2px;
+  margin-top: -0.3em;
+  background: linear-gradient(90deg, transparent, var(--c-accent) 30%, var(--c-frame-hi) 50%, var(--c-accent) 70%, transparent);
+  box-shadow: 0 0 12px var(--c-glow);
+  opacity: 0;
+  transform: scaleX(0.2);
+  transition: opacity 1.4s var(--ease-soft), transform 1.8s var(--ease-soft);
+}
+
+.logo.is-formed .logo__waterline {
+  opacity: 0.6;
+  transform: none;
+}
+
+/* --- 날개 장식 (—✦ LIFE ✦—) --- */
+.logo__wing {
+  position: relative;
+  width: 0.55em;
+  height: 1px;
+  opacity: 0;
+  animation: fade-in 1.6s var(--ease-soft) 1.6s forwards;
+}
+
+.logo__wing--l { background: linear-gradient(90deg, transparent, var(--c-frame)); }
+.logo__wing--r { background: linear-gradient(270deg, transparent, var(--c-frame)); }
+
+.logo__wing::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 0.09em;
+  height: 0.09em;
+  background: var(--c-frame-hi);
+  box-shadow: 0 0 10px var(--c-glow);
+  transform: translateY(-50%) rotate(45deg);
+}
+.logo__wing--l::after { right: 0.12em; }
+.logo__wing--r::after { left: 0.12em; }
+
+/* --- 상단 문장(별/태양) 장식 --- */
+.logo__crest {
+  position: absolute;
+  left: 50%;
+  bottom: 68%;
+  width: 2.6em;
+  height: 0.98em;
+  transform: translateX(-50%);
+  opacity: 0;
+  animation: crest-in 2s var(--ease-soft) 1.4s forwards;
+  pointer-events: none;
+}
+
+.logo__crest .logo__ornament {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.orn-line {
+  stroke: var(--c-frame);
+  stroke-width: 1.4;
+  opacity: 0.85;
+}
+.orn-line--faint { opacity: 0.35; }
+
+.orn-star {
+  fill: var(--c-frame-hi);
+  filter: drop-shadow(0 0 6px var(--c-glow));
+}
+.orn-star--sm { opacity: 0.8; }
+
+.orn-gem {
+  fill: var(--c-accent);
+  filter: drop-shadow(0 0 6px var(--c-glow));
+}
+
+.orn-constellation path {
+  stroke: var(--c-accent-2);
+  stroke-width: 0.8;
+  stroke-dasharray: 3 3;
+  opacity: 0.6;
+}
+.orn-constellation circle { fill: var(--c-frame-hi); }
+
+.orn-rays path {
+  stroke: var(--c-accent);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+.orn-sun {
+  fill: none;
+  stroke: var(--c-frame);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 8px var(--c-glow));
+}
+.orn-sun-core { fill: var(--c-frame-hi); }
+.orn-cloud {
+  fill: var(--c-accent-2);
+  stroke: var(--c-frame);
+  stroke-width: 1.2;
+  opacity: 0.9;
+}
+
+.only-night .orn-star:first-of-type,
+.orn-rays {
+  transform-origin: 200px 74px;
+}
+.orn-rays {
+  animation: spin 40s linear infinite;
+}
+
+@keyframes crest-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(0.08em) scale(0.92); }
+  to   { opacity: 1; transform: translateX(-50%); }
+}
+
+/* ==========================================================================
+   5. 메뉴 (START 버튼 + 설정)
+   ========================================================================== */
+.title-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(18px, 3.2vh, 30px);
+  opacity: 0;
+  transform: translateY(14px);
+  animation: menu-in 1.2s var(--ease-soft) 2.2s forwards;
+}
+
+@keyframes menu-in {
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------- START 버튼 ---------- */
+.menu-btn {
+  --glow-a: color-mix(in srgb, var(--c-glow) 35%, transparent);
+  --glow-b: color-mix(in srgb, var(--c-glow) 0%, transparent);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(480px, 100%);
+  aspect-ratio: 500 / 84;
+  color: var(--c-label);
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.1vw, 1.9rem);
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.25s var(--ease-soft);
+}
+
+.menu-btn:focus-visible {
+  outline: none;
+}
+
+.menu-btn__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0 4px var(--glow-a)) drop-shadow(0 0 14px var(--glow-b));
+  transition: filter 0.4s var(--ease-soft);
+  animation: idle-glow 3.4s ease-in-out infinite alternate;
+}
+
+@keyframes idle-glow {
+  from { filter: drop-shadow(0 0 3px var(--glow-a)) drop-shadow(0 0 0 transparent); }
+  to   { filter: drop-shadow(0 0 6px var(--glow-a)) drop-shadow(0 0 16px var(--glow-a)); }
+}
+
+.stop-panel-1 { stop-color: var(--c-panel-1); }
+.stop-panel-2 { stop-color: var(--c-panel-2); }
+
+.frame-panel { fill: url(#btn-panel); }
+
+.frame-outer {
+  fill: none;
+  stroke: var(--c-frame);
+  stroke-width: 2.2;
+  vector-effect: non-scaling-stroke;
+  transition: stroke 0.4s;
+}
+
+.frame-inner {
+  fill: none;
+  stroke: var(--c-frame);
+  stroke-width: 1;
+  opacity: 0.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.frame-orn path {
+  fill: none;
+  stroke: var(--c-frame);
+  stroke-width: 1.6;
+  vector-effect: non-scaling-stroke;
+}
+
+.frame-orn .frame-gem {
+  fill: var(--c-accent-2);
+}
+
+.frame-sheen {
+  fill: url(#btn-sheen);
+  opacity: 0.35;
+}
+
+.menu-btn__icon {
+  position: absolute;
+  left: 17%;
+  top: 50%;
+  width: 0.8em;
+  height: 0.8em;
+  transform: translateY(-50%);
+  fill: currentColor;
+  filter: drop-shadow(0 0 6px var(--c-glow));
+}
+
+.menu-btn__label {
+  position: relative;
+  padding-left: 0.4em;
+  text-shadow: 0 0 12px var(--c-glow);
+}
+
+:root[lang='ko'] .menu-btn__label {
+  font-family: var(--font-ko);
+  font-weight: 700;
+  letter-spacing: 0.32em;
+}
+
+/* 마우스 오버 / 키보드 포커스: 테두리 발광 */
+.menu-btn:hover .menu-btn__frame,
+.menu-btn:focus-visible .menu-btn__frame {
+  animation: none;
+  filter:
+    drop-shadow(0 0 3px var(--c-glow))
+    drop-shadow(0 0 12px var(--c-glow))
+    drop-shadow(0 0 28px var(--glow-a));
+}
+
+.menu-btn:hover .frame-outer,
+.menu-btn:focus-visible .frame-outer,
+.menu-btn:hover .frame-orn path,
+.menu-btn:focus-visible .frame-orn path {
+  stroke: var(--c-frame-hi);
+}
+
+.menu-btn:hover .frame-sheen,
+.menu-btn:focus-visible .frame-sheen {
+  animation: sheen 1.6s var(--ease-soft) infinite;
+}
+
+@keyframes sheen {
+  from { transform: translateX(0); }
+  to   { transform: translateX(700px); }
+}
+
+.menu-btn:active {
+  transform: scale(0.985);
+}
+
+.menu-btn.is-pressed .menu-btn__frame {
+  filter:
+    drop-shadow(0 0 6px var(--c-frame-hi))
+    drop-shadow(0 0 30px var(--c-glow))
+    brightness(1.3);
+}
+
+/* ---------- 언어 · 테마 설정 줄 ---------- */
+.settings-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 12px 14px;
+  width: min(480px, 100%);
+  padding: 0 5%;
+  color: var(--c-text);
+  font-size: 1.02rem;
+}
+
+.settings-row::before,
+.settings-row::after {
+  content: '';
+  flex: 1 1 0;
+  min-width: 12px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--c-frame));
+  opacity: 0.6;
+}
+.settings-row::after {
+  background: linear-gradient(270deg, transparent, var(--c-frame));
+}
+
+.settings-row__divider {
+  width: 1px;
+  height: 18px;
+  background: var(--c-frame);
+  opacity: 0.5;
+}
+
+.setting {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.setting__icon {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: var(--c-text);
+  stroke-width: 1.5;
+}
+
+.setting__icon--theme svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--c-text);
+  stroke-width: 1.5;
+}
+.setting__icon--theme .only-night {
+  fill: var(--c-accent-2);
+  stroke: none;
+}
+
+.setting__label {
+  text-shadow: 0 0 8px var(--c-veil);
+}
+
+.seg {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid color-mix(in srgb, var(--c-frame) 60%, transparent);
+  border-radius: 999px;
+  background: var(--c-chip);
+}
+
+.seg__sep {
+  opacity: 0.45;
+  font-size: 0.85em;
+}
+
+.seg__btn {
+  min-width: 2.4em;
+  padding: 1px 9px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 0.86rem;
+  letter-spacing: 0.06em;
+  color: var(--c-text-dim);
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.seg__btn:hover {
+  color: var(--c-text);
+}
+
+.seg__btn[aria-pressed='true'] {
+  color: var(--c-label);
+  background: color-mix(in srgb, var(--c-accent) 32%, transparent);
+  border-color: var(--c-accent);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--c-glow) 50%, transparent);
+}
+
+.switch {
+  position: relative;
+  width: 46px;
+  height: 24px;
+  border: 1px solid color-mix(in srgb, var(--c-frame) 70%, transparent);
+  border-radius: 999px;
+  background: var(--c-chip);
+  transition: background-color 0.4s;
+}
+
+.switch[aria-checked='true'] {
+  background: color-mix(in srgb, var(--c-accent) 45%, transparent);
+}
+
+.switch__thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--c-frame-hi);
+  box-shadow: 0 0 10px var(--c-glow);
+  transition: transform 0.5s var(--ease-soft);
+}
+
+.switch[aria-checked='true'] .switch__thumb {
+  transform: translateX(22px);
+}
+
+/* ==========================================================================
+   6. 공용 키프레임
+   ========================================================================== */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes drift {
+  from { transform: translateX(-10vw); }
+  50%  { transform: translateX(10vw); }
+  to   { transform: translateX(-10vw); }
+}
+
+@keyframes breathe {
+  from { opacity: 0.75; transform: scale(0.97); }
+  to   { opacity: 1;    transform: scale(1.03); }
+}
+
+@keyframes float {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-1.6%); }
+}
+
+@keyframes fade-in {
+  to { opacity: 1; }
+}
+
+/* ==========================================================================
+   7. 반응형
+   ========================================================================== */
+@media (max-width: 900px) {
+  .title-ui {
+    width: 100%;
+    padding-right: clamp(20px, 5.5vw, 110px);
+  }
+
+  .illustration {
+    width: 100vw;
+    opacity: 0.45;
+  }
+
+  .veil {
+    background: linear-gradient(90deg, var(--c-veil) 0%, color-mix(in srgb, var(--c-veil) 40%, transparent) 100%);
+  }
+
+  .logo {
+    --logo-size: clamp(3.6rem, 20vw, 7rem);
+  }
+}
+
+@media (max-width: 540px) {
+  .settings-row {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .settings-row::before,
+  .settings-row::after,
+  .settings-row__divider {
+    display: none;
+  }
+
+  .title-menu {
+    align-items: center;
+    width: 100%;
+  }
+}
+
+@media (max-height: 620px) {
+  .logo {
+    --logo-size: clamp(3.4rem, 16vh, 7rem);
+  }
+}
+
+/* ==========================================================================
+   8. 모션 감소
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .logo__shine {
+    display: none;
+  }
+
+  .illustration__layer .illustration__media {
+    animation: none !important;
+  }
+}
